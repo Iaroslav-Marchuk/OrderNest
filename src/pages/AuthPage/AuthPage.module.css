@@ -1,0 +1,118 @@
+.section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-image: url('../../assets/auth-bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.header {
+  height: 85px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.headerSpan {
+  font-size: 32px;
+  color: var(--color-accent-pale);
+}
+
+.wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.leftSide {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  margin-bottom: 40px;
+  font-size: 56px;
+}
+
+.span {
+  color: var(--color-accent-medium);
+}
+
+.text {
+  width: 420px;
+  font-size: 20px;
+  line-height: 1.2;
+  margin-bottom: 60px;
+  /* color: var(--color-text-secondary); */
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.item {
+  display: flex;
+  gap: 20px;
+}
+
+.itemIcon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--color-bg-border);
+  border-radius: 10px;
+  background: var(--color-bg-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent-hover);
+}
+
+.itemTitle {
+  margin-bottom: 8px;
+}
+
+.rigthSide {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.formCard {
+  width: 420px;
+  padding: 40px;
+  border: 1px solid var(--color-bg-border);
+  border-radius: 14px;
+  background: var(--color-bg-surface);
+}
+
+.formTitle {
+  text-align: center;
+  margin-bottom: 8px;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.subtitle {
+  text-align: center;
+  margin-bottom: 24px;
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--color-text-secondary);
+  margin-bottom: 60px;
+}
+
+.rights {
+  font-size: 14px;
+}
