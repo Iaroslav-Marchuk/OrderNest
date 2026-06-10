@@ -16,7 +16,9 @@ const initialValues: LoginUserReq = {
 };
 
 const validationSchema = Yup.object().shape({
-  tel: Yup.string().required('Required field'),
+  tel: Yup.string()
+    .matches(/^\d{9}$/, 'Must be 9 digits')
+    .required('Required field'),
   password: Yup.string().required('Required field'),
 });
 
@@ -31,11 +33,7 @@ function LoginForm() {
       toast.success(`Welcome, ${data.user.name}!`);
       navigate(data.user.role === 'admin' ? '/admin' : '/');
     },
-    // onError: () => {
-    //   toast.error('Invalid phone or password');
-    // },
-    onError: error => {
-      console.log('error:', error);
+    onError: () => {
       toast.error('Invalid phone or password');
     },
   });

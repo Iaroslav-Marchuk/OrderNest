@@ -58,20 +58,3 @@
     background-position: -200% 0;
   }
 }
-
-.state {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 100%;
-  min-height: 300px;
-
-  margin-top: 40px;
-
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--color-warning);
-
-  text-align: center;
-}

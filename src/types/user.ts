@@ -20,6 +20,27 @@ export interface User {
   updatedAt: string;
 }
 
+export interface UserResponse {
+  users: User[];
+  page: number;
+  perPage: number;
+  totalItems: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+export interface GetUsersParams {
+  page?: number;
+  perPage?: number;
+  sortBy?: string;
+  sortOrder?: string;
+  name?: string;
+  tel?: string;
+  role?: string;
+  isActive?: boolean;
+}
+
 export interface CreateUserReq {
   name: string;
   tel: string;

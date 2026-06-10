@@ -6,34 +6,26 @@ import {
 import type { User } from '../../types/user';
 import UserRow from '../UserRow/UserRow';
 import css from './UsersTable.module.css';
-import { useState } from 'react';
 
-type SortField = 'name' | 'role' | 'status' | 'updatedAt';
-type SortOrder = 'asc' | 'desc';
-
-// interface UsersTableProps {
-//   sortBy: SortField | null;
-//   sortOrder: SortOrder;
-//   onSortChange: (field: SortField, order: SortOrder) => void;
-// }
+export type SortField = 'name' | 'role' | 'createdAt';
 
 interface UsersTableProps {
   users: User[];
   isLoading: boolean;
   isError: boolean;
+  sortBy: string;
+  sortOrder: string;
+  onSortChange: (field: SortField) => void;
 }
 
-function UsersTable({ users, isLoading, isError }: UsersTableProps) {
-  const [sortBy, setSortBy] = useState<SortField | null>(null);
-  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
-
-  const handleSortClick = (field: SortField) => {
-    const newOrder = sortBy === field && sortOrder === 'asc' ? 'desc' : 'asc';
-    setSortBy(field);
-    setSortOrder(newOrder);
-    // TODO: підключити реальне сортування
-  };
-
+function UsersTable({
+  users,
+  isLoading,
+  isError,
+  sortBy,
+  sortOrder,
+  onSortChange,
+}: UsersTableProps) {
   const getSortIcon = (field: SortField) => {
     if (sortBy === field) {
       return sortOrder === 'asc' ? (
@@ -45,25 +37,24 @@ function UsersTable({ users, isLoading, isError }: UsersTableProps) {
     return <ArrowDownUp size={14} strokeWidth={1.5} />;
   };
 
+  if (isError) return <p className={css.state}> Something went wrong!</p>;
+
+  if (!isLoading && users.length === 0)
+    return <p className={css.state}> No users found!</p>;
+
   return (
     <table className={css.table}>
       <thead className={css.header}>
         <tr>
           <th className={css.th}>#</th>
           <th className={css.th}>
-            <button
-              className={css.thBtn}
-              onClick={() => handleSortClick('name')}
-            >
+            <button className={css.thBtn} onClick={() => onSortChange('name')}>
               User's name {getSortIcon('name')}
             </button>
           </th>
           <th className={css.th}>Telephone Number</th>
           <th className={css.th}>
-            <button
-              className={css.thBtn}
-              onClick={() => handleSortClick('role')}
-            >
+            <button className={css.thBtn} onClick={() => onSortChange('role')}>
               Role {getSortIcon('role')}
             </button>
           </th>
@@ -71,9 +62,9 @@ function UsersTable({ users, isLoading, isError }: UsersTableProps) {
           <th className={css.th}>
             <button
               className={css.thBtn}
-              onClick={() => handleSortClick('updatedAt')}
+              onClick={() => onSortChange('createdAt')}
             >
-              Last Activity {getSortIcon('updatedAt')}
+              Created At {getSortIcon('createdAt')}
             </button>
           </th>
           <th className={css.th}>Actions</th>
@@ -108,21 +99,6 @@ function UsersTable({ users, isLoading, isError }: UsersTableProps) {
               </tr>
             ))}
 
-          {isError && (
-            <tr>
-              <td colSpan={7} className={css.state}>
-                Something went wrong
-              </td>
-            </tr>
-          )}
-
-          {!isLoading && !isError && users.length === 0 && (
-            <tr>
-              <td colSpan={7} className={css.state}>
-                No users found
-              </td>
-            </tr>
-          )}
           {!isLoading &&
             !isError &&
             users.map((user, index) => (

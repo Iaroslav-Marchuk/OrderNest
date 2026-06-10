@@ -1,4 +1,3 @@
-import { useSearchParams } from 'react-router-dom';
 import type { UserRole } from '../../types/user';
 import css from './UsersRoleFilter.module.css';
 
@@ -14,24 +13,18 @@ const roles: { value: RoleFilter; label: string }[] = [
   { value: 'guest', label: 'Guest' },
 ];
 
-function UsersRoleFilter() {
-  const [query, setQuery] = useSearchParams();
-  const current = query.get('role') || 'all';
+interface UsersRoleFilterProps {
+  value: string;
+  onChange: (value: string) => void;
+}
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setQuery(prev => {
-      const params = new URLSearchParams(prev);
-      if (e.target.value === 'all') {
-        params.delete('role');
-      } else {
-        params.set('role', e.target.value);
-      }
-      return params;
-    });
-  };
-
+function UsersRoleFilter({ value, onChange }: UsersRoleFilterProps) {
   return (
-    <select className={css.select} value={current} onChange={handleChange}>
+    <select
+      className={css.select}
+      value={value}
+      onChange={e => onChange(e.target.value)}
+    >
       {roles.map(r => (
         <option key={r.value} value={r.value}>
           {r.label}

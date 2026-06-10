@@ -1,18 +1,26 @@
 import type {
   CreateUserReq,
+  GetUsersParams,
   PatchUserReq,
   ResetPasswordReq,
   User,
+  UserResponse,
 } from '../types/user';
 import { axiosInstance } from './axiosInstance';
 
-export const getAllUsersApi = async (): Promise<User[]> => {
+export const getAllUsersApi = async (
+  params: GetUsersParams
+): Promise<UserResponse> => {
+  const cleanParams = Object.fromEntries(
+    Object.entries(params).filter(
+      ([, v]) => v !== '' && v !== undefined && v !== null
+    )
+  );
   const { data } = await axiosInstance.get<{
     message: string;
-    data: { allUsers: User[] };
-  }>('/users');
-
-  return data.data.allUsers;
+    data: UserResponse;
+  }>('/users', { params: cleanParams });
+  return data.data;
 };
 
 export const getUserByIdApi = async (userId: string): Promise<User> => {

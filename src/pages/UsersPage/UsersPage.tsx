@@ -1,6 +1,7 @@
 import { Plus } from 'lucide-react';
-import UsersSearchBox from '../../components/UsersSearchBox/UsersSearchBox';
-import UsersTable from '../../components/UsersTable/UsersTable';
+import UsersTable, {
+  type SortField,
+} from '../../components/UsersTable/UsersTable';
 import css from './UsersPage.module.css';
 import { useState } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
@@ -10,68 +11,178 @@ import UsersStatusFilter from '../../components/UsersStatusFilter/UsersStatusFil
 import { getAllUsersApi } from '../../services/usersApi';
 import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
 import UserForm from '../../components/UserForm/UserForm';
-
-const MOCK_TOTAL_PAGES = 5;
-const MOCK_TOTAL_USERS = 42;
-const MOCK_PER_PAGE = 10;
+import SearchBox from '../../components/SearchBox/SearchBox';
+import { useSearchParams } from 'react-router-dom';
 
 function UsersPage() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['allUsers'],
-    queryFn: getAllUsersApi,
-    placeholderData: keepPreviousData,
-  });
-
-  const allUsers = data ?? [];
-  const totalUsers = allUsers.length;
-  const activeUsers = allUsers.filter(u => u.isActive).length;
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const queryParams = {
+    page: Number(searchParams.get('page') || 1),
+    perPage: Number(searchParams.get('perPage') || 20),
+    sortBy: searchParams.get('sortBy') || 'createdAt',
+    sortOrder: searchParams.get('sortOrder') || 'asc',
 
-  const from = (currentPage - 1) * MOCK_PER_PAGE + 1;
-  const to = Math.min(currentPage * MOCK_PER_PAGE, MOCK_TOTAL_USERS);
+    name: searchParams.get('name') || '',
+    tel: searchParams.get('tel') || '',
+    role: searchParams.get('role') || '',
+    isActive: searchParams.get('isActive')
+      ? searchParams.get('isActive') === 'true'
+      : undefined,
+  };
+
+  const { page, perPage, sortBy, sortOrder, name, tel, role, isActive } =
+    queryParams;
+  const inputValue = name || tel || '';
+  const roleValue = role || 'all';
+
+  const handleSetPage = (page: number) => {
+    const params = Object.fromEntries(searchParams.entries());
+
+    setSearchParams({
+      ...params,
+      page: String(page),
+    });
+  };
+
+  const handleInputChange = (value: string) => {
+    setSearchParams(prev => {
+      const params = new URLSearchParams(prev);
+
+      if (!value) {
+        params.delete('name');
+        params.delete('tel');
+      } else if (/^\d+$/.test(value)) {
+        params.set('tel', value);
+        params.delete('name');
+      } else {
+        params.set('name', value);
+        params.delete('tel');
+      }
+
+      params.set('page', '1');
+      return params;
+    });
+  };
+
+  const handleClearSearch = () => {
+    const params = new URLSearchParams(searchParams);
+
+    params.delete('name');
+    params.delete('tel');
+    params.set('page', '1');
+
+    setSearchParams(params);
+  };
+
+  const handleRoleChange = (value: string) => {
+    setSearchParams(prev => {
+      const params = new URLSearchParams(prev);
+      if (value === 'all') {
+        params.delete('role');
+      } else {
+        params.set('role', value);
+      }
+      return params;
+    });
+  };
+
+  const handleStatusChange = (value: string) => {
+    setSearchParams(prev => {
+      const params = new URLSearchParams(prev);
+      if (value === 'all') {
+        params.delete('isActive');
+      } else {
+        params.set('isActive', value === 'active' ? 'true' : 'false');
+      }
+      return params;
+    });
+  };
+
+  const handleSortChange = (field: SortField) => {
+    setSearchParams(prev => {
+      const params = new URLSearchParams(prev);
+      const newOrder = sortBy === field && sortOrder === 'asc' ? 'desc' : 'asc';
+      params.set('sortBy', field);
+      params.set('sortOrder', newOrder);
+      return params;
+    });
+  };
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['allUsers', queryParams],
+    queryFn: () => getAllUsersApi(queryParams),
+    placeholderData: keepPreviousData,
+  });
+
+  const allUsers = data?.users ?? [];
+  const totalUsers = data?.totalItems ?? 0;
+  const totalPages = data?.totalPages ?? 0;
+
+  const from = (page - 1) * perPage + 1;
+  const to = Math.min(page * perPage, totalUsers);
 
   return (
     <div className={css.wrapper}>
       <div className={css.top}>
         <div>
           <span className={css.title}>User's List</span>
-          <p className={css.subtitle}>
-            {totalUsers} users · {activeUsers} active
-          </p>
+          <p className={css.subtitle}>{totalUsers} users</p>
         </div>
 
         <div className={css.topWrapper}>
-          <UsersSearchBox />
-          <UsersRoleFilter />
-          <UsersStatusFilter />
+          <SearchBox
+            placeholder="User's name ou telephone..."
+            value={inputValue}
+            onChange={handleInputChange}
+            onClear={handleClearSearch}
+          />
+          <UsersRoleFilter value={roleValue} onChange={handleRoleChange} />
+          <UsersStatusFilter
+            value={
+              isActive === undefined ? 'all' : isActive ? 'active' : 'inactive'
+            }
+            onChange={handleStatusChange}
+          />
           <button type="button" className={css.btn} onClick={openModal}>
             <Plus />
             <span>Create New User</span>
           </button>
         </div>
       </div>
-      <UsersTable users={allUsers} isLoading={isLoading} isError={isError} />
+      <UsersTable
+        users={allUsers}
+        isLoading={isLoading}
+        isError={isError}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onSortChange={handleSortChange}
+      />
+
       <div className={css.bottom}>
-        <span className={css.counter}>
-          {from}–{to} of {totalUsers}
-        </span>
-        <Pagination
-          totalPages={MOCK_TOTAL_PAGES}
-          currentPage={currentPage}
-          onPageChange={setCurrentPage}
-        />
+        {totalUsers > 0 && (
+          <span className={css.counter}>
+            {from}–{to} of {totalUsers}
+          </span>
+        )}
+
+        {totalPages > 1 && (
+          <Pagination
+            totalPages={totalPages}
+            currentPage={page}
+            onPageChange={handleSetPage}
+          />
+        )}
       </div>
 
       {isModalOpen && (
-        <ModalOverlay
-          onClose={closeModal}
-          children={<UserForm onClose={closeModal} />}
-        />
+        <ModalOverlay onClose={closeModal}>
+          <UserForm onClose={closeModal} />
+        </ModalOverlay>
       )}
     </div>
   );
