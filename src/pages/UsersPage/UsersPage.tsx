@@ -1,6 +1,6 @@
 import { Plus } from 'lucide-react';
 import UsersTable, {
-  type SortField,
+  type UsersSortField,
 } from '../../components/UsersTable/UsersTable';
 import css from './UsersPage.module.css';
 import { useState } from 'react';
@@ -13,6 +13,7 @@ import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
 import UserForm from '../../components/UserForm/UserForm';
 import SearchBox from '../../components/SearchBox/SearchBox';
 import { useSearchParams } from 'react-router-dom';
+import type { SortOrder } from '../../types/common';
 
 function UsersPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,9 +25,8 @@ function UsersPage() {
   const queryParams = {
     page: Number(searchParams.get('page') || 1),
     perPage: Number(searchParams.get('perPage') || 20),
-    sortBy: searchParams.get('sortBy') || 'createdAt',
-    sortOrder: searchParams.get('sortOrder') || 'asc',
-
+    sortBy: (searchParams.get('sortBy') || 'createdAt') as UsersSortField,
+    sortOrder: (searchParams.get('sortOrder') || 'asc') as SortOrder,
     name: searchParams.get('name') || '',
     tel: searchParams.get('tel') || '',
     role: searchParams.get('role') || '',
@@ -87,6 +87,7 @@ function UsersPage() {
       } else {
         params.set('role', value);
       }
+      params.set('page', '1');
       return params;
     });
   };
@@ -99,11 +100,12 @@ function UsersPage() {
       } else {
         params.set('isActive', value === 'active' ? 'true' : 'false');
       }
+      params.set('page', '1');
       return params;
     });
   };
 
-  const handleSortChange = (field: SortField) => {
+  const handleSortChange = (field: UsersSortField) => {
     setSearchParams(prev => {
       const params = new URLSearchParams(prev);
       const newOrder = sortBy === field && sortOrder === 'asc' ? 'desc' : 'asc';
@@ -160,6 +162,8 @@ function UsersPage() {
         isError={isError}
         sortBy={sortBy}
         sortOrder={sortOrder}
+        page={page}
+        perPage={perPage}
         onSortChange={handleSortChange}
       />
 

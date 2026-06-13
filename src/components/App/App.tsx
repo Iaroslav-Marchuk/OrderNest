@@ -19,7 +19,13 @@ const AdminPage = lazy(() => import('../../pages/AdminPage/AdminPage'));
 const ArchivePage = lazy(() => import('../../pages/ArchivePage/ArchivePage'));
 const AuthPage = lazy(() => import('../../pages/AuthPage/AuthPage'));
 const ClientsPage = lazy(() => import('../../pages/ClientsPage/ClientsPage'));
-const GlassPage = lazy(() => import('../../pages/GlassPage/GlassPage'));
+const GlassCategoriesPage = lazy(
+  () => import('../../pages/GlassCategoriesPage/GlassCategoriesPage')
+);
+const GlassTypesPage = lazy(
+  () => import('../../pages/GlassTypesPage/GlassTypesPage')
+);
+
 const MainPage = lazy(() => import('../../pages/MainPage/MainPage'));
 const NotFoundPage = lazy(
   () => import('../../pages/NotFoundPage/NotFoundPage')
@@ -65,7 +71,11 @@ function App() {
             <Route path="/admin/users" element={<UsersPage />} />
             <Route path="/admin/users/activity" element={<ActivityPage />} />
             <Route path="/admin/clients" element={<ClientsPage />} />
-            <Route path="/admin/glass" element={<GlassPage />} />
+            <Route
+              path="/admin/glassCategories"
+              element={<GlassCategoriesPage />}
+            />
+            <Route path="/admin/glassTypes" element={<GlassTypesPage />} />
             <Route path="/admin/settings" element={<SettingsPage />} />
             <Route path="/admin/profile" element={<ProfilePage />} />
           </Route>

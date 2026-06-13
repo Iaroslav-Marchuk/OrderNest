@@ -6,27 +6,32 @@ import {
 import type { User } from '../../types/user';
 import UserRow from '../UserRow/UserRow';
 import css from './UsersTable.module.css';
+import type { SortOrder } from '../../types/common';
 
-export type SortField = 'name' | 'role' | 'createdAt';
+export type UsersSortField = 'name' | 'role' | 'createdAt';
 
 interface UsersTableProps {
   users: User[];
   isLoading: boolean;
   isError: boolean;
-  sortBy: string;
-  sortOrder: string;
-  onSortChange: (field: SortField) => void;
+  page: number;
+  perPage: number;
+  sortBy: UsersSortField;
+  sortOrder: SortOrder;
+  onSortChange: (field: UsersSortField) => void;
 }
 
 function UsersTable({
   users,
   isLoading,
   isError,
+  page,
+  perPage,
   sortBy,
   sortOrder,
   onSortChange,
 }: UsersTableProps) {
-  const getSortIcon = (field: SortField) => {
+  const getSortIcon = (field: UsersSortField) => {
     if (sortBy === field) {
       return sortOrder === 'asc' ? (
         <ArrowUpNarrowWide size={14} strokeWidth={1.5} />
@@ -102,7 +107,11 @@ function UsersTable({
           {!isLoading &&
             !isError &&
             users.map((user, index) => (
-              <UserRow key={user._id} user={user} index={index + 1} />
+              <UserRow
+                key={user._id}
+                user={user}
+                index={(page - 1) * perPage + index + 1}
+              />
             ))}
         </>
       </tbody>

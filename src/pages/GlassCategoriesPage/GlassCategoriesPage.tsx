@@ -1,19 +1,19 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import css from './ClientsPage.module.css';
-import { getAllClientsApi } from '../../services/clientsApi';
-import { useState } from 'react';
-import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
-import ClientForm from '../../components/ClientForm/ClientForm';
-import Pagination from '../../components/Pagination/Pagination';
 import { Plus } from 'lucide-react';
-import ClientsTable, {
-  type ClientsSortField,
-} from '../../components/ClientsTable/ClientsTable';
+import css from './GlassCategoriesPage.module.css';
+import GlassCategoryTable, {
+  type GlassCategorySortField,
+} from '../../components/GlassCategoryTable/GlassCategoryTable';
+import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
+import { useState } from 'react';
+import GlassCategoryForm from '../../components/GlassCategoryForm/GlassCategoryForm';
 import SearchBox from '../../components/SearchBox/SearchBox';
 import { useSearchParams } from 'react-router-dom';
 import type { SortOrder } from '../../types/common';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import Pagination from '../../components/Pagination/Pagination';
+import { getAllGlassCategoriesApi } from '../../services/glassCategoriesApi';
 
-function ClientsPage() {
+function GlassCategoriesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,12 +23,13 @@ function ClientsPage() {
   const queryParams = {
     page: Number(searchParams.get('page') || 1),
     perPage: Number(searchParams.get('perPage') || 20),
-    sortBy: (searchParams.get('sortBy') || 'createdAt') as ClientsSortField,
+    sortBy: (searchParams.get('sortBy') ||
+      'createdAt') as GlassCategorySortField,
     sortOrder: (searchParams.get('sortOrder') || 'asc') as SortOrder,
-    name: searchParams.get('name') || '',
+    label: searchParams.get('label') || '',
   };
 
-  const { page, perPage, sortBy, sortOrder, name } = queryParams;
+  const { page, perPage, sortBy, sortOrder, label } = queryParams;
 
   const handleSetPage = (page: number) => {
     const params = Object.fromEntries(searchParams.entries());
@@ -44,9 +45,9 @@ function ClientsPage() {
       const params = new URLSearchParams(prev);
 
       if (!value) {
-        params.delete('name');
+        params.delete('label');
       } else {
-        params.set('name', value);
+        params.set('label', value);
       }
 
       params.set('page', '1');
@@ -57,13 +58,13 @@ function ClientsPage() {
   const handleClearSearch = () => {
     const params = new URLSearchParams(searchParams);
 
-    params.delete('name');
+    params.delete('label');
     params.set('page', '1');
 
     setSearchParams(params);
   };
 
-  const handleSortChange = (field: ClientsSortField) => {
+  const handleSortChange = (field: GlassCategorySortField) => {
     setSearchParams(prev => {
       const params = new URLSearchParams(prev);
       const newOrder = sortBy === field && sortOrder === 'asc' ? 'desc' : 'asc';
@@ -74,42 +75,41 @@ function ClientsPage() {
   };
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['allClients', queryParams],
-    queryFn: () => getAllClientsApi(queryParams),
+    queryKey: ['allGlassCategories', queryParams],
+    queryFn: () => getAllGlassCategoriesApi(queryParams),
     placeholderData: keepPreviousData,
   });
 
-  const allClients = data?.clients ?? [];
-  const totalClients = data?.totalItems ?? 0;
+  const allGlassCategories = data?.glassCategories ?? [];
+  const totalGlassCategories = data?.totalItems ?? 0;
   const totalPages = data?.totalPages ?? 0;
 
   const from = (page - 1) * perPage + 1;
-  const to = Math.min(page * perPage, totalClients);
+  const to = Math.min(page * perPage, totalGlassCategories);
 
   return (
     <div className={css.wrapper}>
       <div className={css.top}>
         <div>
-          <span className={css.title}>Clients's List</span>
-          <p className={css.subtitle}>{totalClients} clients</p>
+          <span className={css.title}>Glass Categories List</span>
+          <p className={css.subtitle}>{totalGlassCategories} categories</p>
         </div>
 
         <div className={css.topWrapper}>
           <SearchBox
-            placeholder="Client's name..."
-            value={name}
+            placeholder="Glass category's name..."
+            value={label}
             onChange={handleInputChange}
             onClear={handleClearSearch}
           />
-
           <button type="button" className={css.btn} onClick={openModal}>
             <Plus />
-            <span>Add New Client</span>
+            <span>Create New Category</span>
           </button>
         </div>
       </div>
-      <ClientsTable
-        clients={allClients}
+      <GlassCategoryTable
+        glassCategories={allGlassCategories}
         isLoading={isLoading}
         isError={isError}
         sortBy={sortBy}
@@ -118,10 +118,11 @@ function ClientsPage() {
         perPage={perPage}
         onSortChange={handleSortChange}
       />
+
       <div className={css.bottom}>
-        {totalClients > 0 && (
+        {totalGlassCategories > 0 && (
           <span className={css.counter}>
-            {from}–{to} of {totalClients}
+            {from}–{to} of {totalGlassCategories}
           </span>
         )}
 
@@ -136,11 +137,11 @@ function ClientsPage() {
 
       {isModalOpen && (
         <ModalOverlay onClose={closeModal}>
-          <ClientForm onClose={closeModal} />
+          <GlassCategoryForm onClose={closeModal} />
         </ModalOverlay>
       )}
     </div>
   );
 }
 
-export default ClientsPage;
+export default GlassCategoriesPage;

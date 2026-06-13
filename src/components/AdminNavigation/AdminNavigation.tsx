@@ -7,6 +7,7 @@ import {
   ActivityIcon,
   Settings,
   Shield,
+  FolderClosed,
 } from 'lucide-react';
 import clsx from 'clsx';
 import css from './AdminNavigation.module.css';
@@ -51,9 +52,15 @@ function AdminNavigation() {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/admin/glass" className={linkClass}>
+              <NavLink to="/admin/glassCategories" className={linkClass}>
+                <FolderClosed size={18} strokeWidth={1.5} />
+                Glass Categories
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/admin/glassTypes" className={linkClass}>
                 <Layers size={18} strokeWidth={1.5} />
-                Glass Units
+                Glass Types
               </NavLink>
             </li>
           </ul>

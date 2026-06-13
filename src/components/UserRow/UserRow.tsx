@@ -95,13 +95,21 @@ function UserRow({ user, index }: UserRowProps) {
         <td className={css.td}>
           {role !== 'admin' && (
             <div className={css.actions}>
-              <button className={css.btn} onClick={openEdit}>
+              <button className={css.btn} onClick={openEdit} title="Edit">
                 <Pencil size={16} strokeWidth={1.5} />
               </button>
-              <button className={css.btnDelete} onClick={openConfirm}>
+              <button
+                className={css.btnDelete}
+                onClick={openConfirm}
+                title="Delete"
+              >
                 <Trash2 size={16} strokeWidth={1.5} />
               </button>
-              <button className={css.btn} onClick={openResetPass}>
+              <button
+                className={css.btn}
+                onClick={openResetPass}
+                title="Reset password"
+              >
                 <RotateCcwKey size={16} strokeWidth={1.5} />
               </button>
             </div>

@@ -4,7 +4,7 @@ import css from './UserForm.module.css';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createUserApi, patchUserApi } from '../../services/usersApi';
 import toast from 'react-hot-toast';
-import { ErrorMessage, Field, Form, Formik, type FormikHelpers } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { PulseLoader } from 'react-spinners';
 
 import { KeyRound, Phone, User as UserIcon } from 'lucide-react';
@@ -15,8 +15,13 @@ interface UserFormProps {
 }
 
 const createValidationSchema = Yup.object().shape({
-  name: Yup.string().required('Required field'),
-  tel: Yup.string().required('Required field'),
+  name: Yup.string()
+    .min(3, 'Minimum 3 characters')
+    .max(30, 'Maximum 30 characters')
+    .required('Required field'),
+  tel: Yup.string()
+    .matches(/^\d{9}$/, 'Must be 9 digits')
+    .required('Required field'),
   role: Yup.string()
     .oneOf([
       'cutting',
@@ -27,22 +32,25 @@ const createValidationSchema = Yup.object().shape({
       'guest',
     ])
     .required('Required field'),
-  password: Yup.string().required('Required field'),
+  password: Yup.string()
+    .min(6, 'Minimum 6 characters')
+    .max(16, 'Maximum 16 characters')
+    .required('Required field'),
 });
 
 const editValidationSchema = Yup.object().shape({
-  name: Yup.string().required('Required field'),
-  tel: Yup.string().required('Required field'),
-  role: Yup.string()
-    .oneOf([
-      'cutting',
-      'hardening',
-      'assembly',
-      'quality',
-      'logistics',
-      'guest',
-    ])
-    .required('Required field'),
+  name: Yup.string()
+    .min(3, 'Minimum 3 characters')
+    .max(16, 'Maximum 30 characters'),
+  tel: Yup.string().matches(/^\d{9}$/, 'Must be 9 digits'),
+  role: Yup.string().oneOf([
+    'cutting',
+    'hardening',
+    'assembly',
+    'quality',
+    'logistics',
+    'guest',
+  ]),
 });
 
 function UserForm({ onClose, user }: UserFormProps) {
@@ -69,7 +77,9 @@ function UserForm({ onClose, user }: UserFormProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allUsers'] });
       toast.success('Successfully added new user!');
+      onClose();
     },
+
     onError: () => {
       toast.error('Something went wrong!');
     },
@@ -80,23 +90,19 @@ function UserForm({ onClose, user }: UserFormProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allUsers'] });
       toast.success('User updated successfully!');
+      onClose();
     },
     onError: () => {
       toast.error('Something went wrong!');
     },
   });
 
-  const handleSubmit = (
-    values: typeof initialValues,
-    actions: FormikHelpers<typeof initialValues>
-  ) => {
+  const handleSubmit = (values: typeof initialValues) => {
     if (user) {
       patchUser({ userId: user._id, updateData: values });
     } else {
       createUser(values as CreateUserReq);
     }
-    actions.resetForm();
-    onClose();
   };
 
   return (
@@ -105,6 +111,8 @@ function UserForm({ onClose, user }: UserFormProps) {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
+        validateOnChange={true}
+        validateOnBlur={true}
       >
         <Form className={css.form}>
           <div className={css.formGroup}>

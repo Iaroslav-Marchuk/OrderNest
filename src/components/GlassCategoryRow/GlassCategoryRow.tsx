@@ -1,27 +1,27 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Client } from '../../types/client';
-import css from './ClientRow.module.css';
-import { deleteClientApi } from '../../services/clientsApi';
+import type { GlassCategory } from '../../types/glassCategory';
+import css from './GlassCategoryRow.module.css';
+import { deleteGlassCategoryApi } from '../../services/glassCategoriesApi';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
-import ModalOverlay from '../ModalOverlay/ModalOverlay';
-import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
-import ClientForm from '../ClientForm/ClientForm';
 import { Pencil, Trash2 } from 'lucide-react';
+import ModalOverlay from '../ModalOverlay/ModalOverlay';
+import GlassCategoryForm from '../GlassCategoryForm/GlassCategoryForm';
+import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
 
-interface ClientRowProps {
-  client: Client;
+interface GlassCategoryRow {
+  glassCategory: GlassCategory;
   index: number;
 }
 
-function ClientRow({ client, index }: ClientRowProps) {
+function GlassCategoryRow({ glassCategory, index }: GlassCategoryRow) {
   const queryClient = useQueryClient();
 
-  const { mutate: deleteClient } = useMutation({
-    mutationFn: deleteClientApi,
+  const { mutate: deleteGlassCategory } = useMutation({
+    mutationFn: deleteGlassCategoryApi,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['allClients'] });
-      toast.success('Client deleted successfully!');
+      queryClient.invalidateQueries({ queryKey: ['allGlassCategories'] });
+      toast.success('Glass category deleted successfully!');
     },
     onError: () => {
       toast.error('Something went wrong!');
@@ -37,11 +37,11 @@ function ClientRow({ client, index }: ClientRowProps) {
   const closeConfirm = () => setIsConfirmOpen(false);
 
   const handleDelete = () => {
-    deleteClient(client._id);
+    deleteGlassCategory(glassCategory._id);
     closeConfirm();
   };
 
-  const createdAt = new Date(client.createdAt).toLocaleString('en-GB', {
+  const createdAt = new Date(glassCategory.createdAt).toLocaleString('en-GB', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -53,7 +53,7 @@ function ClientRow({ client, index }: ClientRowProps) {
     <>
       <tr className={css.row}>
         <td className={css.td}>{index}</td>
-        <td className={css.td}>{client.name}</td>
+        <td className={css.td}>{glassCategory.label}</td>
         <td className={css.td}>{createdAt}</td>
         <td className={css.td}>
           <div className={css.actions}>
@@ -73,14 +73,17 @@ function ClientRow({ client, index }: ClientRowProps) {
 
       {isEditOpen && (
         <ModalOverlay onClose={closeEdit}>
-          <ClientForm client={client} onClose={closeEdit} />
+          <GlassCategoryForm
+            glassCategory={glassCategory}
+            onClose={closeEdit}
+          />
         </ModalOverlay>
       )}
 
       {isConfirmOpen && (
         <ModalOverlay onClose={closeConfirm}>
           <ConfirmContainer
-            text={`Do you really want to delete client ${client.name}?`}
+            text={`Do you really want to delete glass category ${glassCategory.label}?`}
             onConfirm={handleDelete}
             onClose={closeConfirm}
           />
@@ -90,4 +93,4 @@ function ClientRow({ client, index }: ClientRowProps) {
   );
 }
 
-export default ClientRow;
+export default GlassCategoryRow;

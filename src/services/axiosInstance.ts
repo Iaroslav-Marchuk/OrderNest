@@ -43,7 +43,7 @@ axiosInstance.interceptors.response.use(
           { withCredentials: true }
         );
 
-        setAccessToken(data.accessToken);
+        setAccessToken(data.data.accessToken);
         originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
 
         return axiosInstance(originalRequest);

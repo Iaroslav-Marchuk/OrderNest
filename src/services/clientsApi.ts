@@ -1,13 +1,25 @@
-import type { Client, PatchClientReq } from '../types/client';
+import type {
+  Client,
+  ClientResponse,
+  GetClientsParams,
+  PatchClientReq,
+} from '../types/client';
 import { axiosInstance } from './axiosInstance';
 
-export const getAllClientsApi = async (): Promise<Client[]> => {
+export const getAllClientsApi = async (
+  params: GetClientsParams
+): Promise<ClientResponse> => {
+  const cleanParams = Object.fromEntries(
+    Object.entries(params).filter(
+      ([, v]) => v !== '' && v !== undefined && v !== null
+    )
+  );
   const { data } = await axiosInstance.get<{
     message: string;
-    data: { allClients: Client[] };
-  }>('/clients');
+    data: ClientResponse;
+  }>('/clients', { params: cleanParams });
 
-  return data.data.allClients;
+  return data.data;
 };
 
 export const addNewClientApi = async (name: string): Promise<Client> => {

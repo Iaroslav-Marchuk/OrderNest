@@ -1,40 +1,43 @@
 import * as Yup from 'yup';
 
-import type { Client } from '../../types/client';
-import css from './ClientForm.module.css';
+import type { GlassCategory } from '../../types/glassCategory';
+import css from './GlassCategoryForm.module.css';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addNewClientApi, patchClientApi } from '../../services/clientsApi';
+import {
+  addNewGlassCategoryApi,
+  patchGlassCategoryApi,
+} from '../../services/glassCategoriesApi';
 import toast from 'react-hot-toast';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { PulseLoader } from 'react-spinners';
 
-interface ClientFormProps {
+interface GlassCategoryFormProps {
   onClose: () => void;
-  client?: Client;
+  glassCategory?: GlassCategory;
 }
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().min(3, 'Minimum 3 characters').required('Required field'),
+  label: Yup.string().min(3, 'Minimum 3 characters').required('Required field'),
 });
 
-function ClientForm({ onClose, client }: ClientFormProps) {
+function GlassCategoryForm({ onClose, glassCategory }: GlassCategoryFormProps) {
   const queryClient = useQueryClient();
 
   const createInitialValues = {
-    name: '',
+    label: '',
   };
 
   const editInitialValues = {
-    name: client?.name ?? '',
+    label: glassCategory?.label ?? '',
   };
 
-  const initialValues = client ? editInitialValues : createInitialValues;
+  const initialValues = glassCategory ? editInitialValues : createInitialValues;
 
-  const { mutate: addNewClient, isPending } = useMutation({
-    mutationFn: addNewClientApi,
+  const { mutate: addNewGlassCategory, isPending } = useMutation({
+    mutationFn: addNewGlassCategoryApi,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['allClients'] });
-      toast.success('Successfully added new client!');
+      queryClient.invalidateQueries({ queryKey: ['allGlassCategories'] });
+      toast.success('Successfully added new glass category!');
       onClose();
     },
     onError: () => {
@@ -42,11 +45,11 @@ function ClientForm({ onClose, client }: ClientFormProps) {
     },
   });
 
-  const { mutate: patchClient } = useMutation({
-    mutationFn: patchClientApi,
+  const { mutate: patchGlassCategory } = useMutation({
+    mutationFn: patchGlassCategoryApi,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['allClients'] });
-      toast.success('Client updated successfully!');
+      queryClient.invalidateQueries({ queryKey: ['allGlassCategories'] });
+      toast.success('Glass category updated successfully!');
       onClose();
     },
     onError: () => {
@@ -55,13 +58,13 @@ function ClientForm({ onClose, client }: ClientFormProps) {
   });
 
   const handleSubmit = (values: typeof initialValues) => {
-    if (client) {
-      patchClient({
-        clientId: client._id,
-        updateData: { name: values.name },
+    if (glassCategory) {
+      patchGlassCategory({
+        glassCategoryId: glassCategory._id,
+        updateData: { label: values.label },
       });
     } else {
-      addNewClient(values.name);
+      addNewGlassCategory(values.label);
     }
   };
 
@@ -74,21 +77,21 @@ function ClientForm({ onClose, client }: ClientFormProps) {
       >
         <Form className={css.form}>
           <div className={css.formGroup}>
-            <label htmlFor="name" className={css.label}>
-              Client's name
+            <label htmlFor="label" className={css.label}>
+              Glass Category name
             </label>
             <div className={css.inputContainer}>
               <Field
                 type="text"
-                name="name"
-                id="name"
+                name="label"
+                id="label"
                 placeholder=" "
-                autoComplete="name"
+                autoComplete="label"
                 className={css.input}
                 disabled={isPending}
               />
             </div>
-            <ErrorMessage name="name" component="span" className={css.error} />
+            <ErrorMessage name="label" component="span" className={css.error} />
           </div>
 
           <button type="submit" className={css.btn} disabled={isPending}>
@@ -101,10 +104,10 @@ function ClientForm({ onClose, client }: ClientFormProps) {
                 size={5}
                 className={css.spiner}
               />
-            ) : client ? (
-              'Update Client'
+            ) : glassCategory ? (
+              'Update glass category'
             ) : (
-              'Add new Client'
+              'Add new Glass category'
             )}
           </button>
         </Form>
@@ -113,4 +116,4 @@ function ClientForm({ onClose, client }: ClientFormProps) {
   );
 }
 
-export default ClientForm;
+export default GlassCategoryForm;

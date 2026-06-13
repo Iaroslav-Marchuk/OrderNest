@@ -19,7 +19,10 @@ const validationSchema = Yup.object().shape({
   tel: Yup.string()
     .matches(/^\d{9}$/, 'Must be 9 digits')
     .required('Required field'),
-  password: Yup.string().required('Required field'),
+  password: Yup.string()
+    .min(6, 'Minimum 6 characters')
+    .max(16, 'Maximum 16 characters')
+    .required('Required field'),
 });
 
 function LoginForm() {

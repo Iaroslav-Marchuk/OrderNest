@@ -1,28 +1,28 @@
-import type { Client } from '../../types/client';
-import css from './ClientsTable.module.css';
 import {
   ArrowDownUp,
   ArrowDownWideNarrow,
   ArrowUpNarrowWide,
 } from 'lucide-react';
-import ClientRow from '../ClientRow/ClientRow';
+import GlassCategoryRow from '../GlassCategoryRow/GlassCategoryRow';
+import css from './GlassCategoryTable.module.css';
 import type { SortOrder } from '../../types/common';
+import type { GlassCategory } from '../../types/glassCategory';
 
-export type ClientsSortField = 'name' | 'createdAt';
+export type GlassCategorySortField = 'label' | 'createdAt';
 
-interface ClientsTableProps {
-  clients: Client[];
+interface GlassCategoryTableProps {
+  glassCategories: GlassCategory[];
   isLoading: boolean;
   isError: boolean;
   page: number;
   perPage: number;
-  sortBy: ClientsSortField;
+  sortBy: GlassCategorySortField;
   sortOrder: SortOrder;
-  onSortChange: (field: ClientsSortField) => void;
+  onSortChange: (field: GlassCategorySortField) => void;
 }
 
-function ClientsTable({
-  clients,
+function GlassCategoryTable({
+  glassCategories,
   isLoading,
   isError,
   page,
@@ -30,8 +30,8 @@ function ClientsTable({
   sortBy,
   sortOrder,
   onSortChange,
-}: ClientsTableProps) {
-  const getSortIcon = (field: ClientsSortField) => {
+}: GlassCategoryTableProps) {
+  const getSortIcon = (field: GlassCategorySortField) => {
     if (sortBy === field) {
       return sortOrder === 'asc' ? (
         <ArrowUpNarrowWide size={14} strokeWidth={1.5} />
@@ -44,8 +44,8 @@ function ClientsTable({
 
   if (isError) return <p className={css.state}> Something went wrong!</p>;
 
-  if (!isLoading && clients.length === 0)
-    return <p className={css.state}> No clients found!</p>;
+  if (!isLoading && glassCategories.length === 0)
+    return <p className={css.state}> No glass categories found!</p>;
 
   return (
     <table className={css.table}>
@@ -53,8 +53,8 @@ function ClientsTable({
         <tr>
           <th className={css.th}>#</th>
           <th className={css.th}>
-            <button className={css.thBtn} onClick={() => onSortChange('name')}>
-              Clients's name {getSortIcon('name')}
+            <button className={css.thBtn} onClick={() => onSortChange('label')}>
+              Glass Category {getSortIcon('label')}
             </button>
           </th>
 
@@ -91,10 +91,10 @@ function ClientsTable({
 
           {!isLoading &&
             !isError &&
-            clients.map((client, index) => (
-              <ClientRow
-                key={client._id}
-                client={client}
+            glassCategories.map((glassCategory, index) => (
+              <GlassCategoryRow
+                key={glassCategory._id}
+                glassCategory={glassCategory}
                 index={(page - 1) * perPage + index + 1}
               />
             ))}
@@ -104,4 +104,4 @@ function ClientsTable({
   );
 }
 
-export default ClientsTable;
+export default GlassCategoryTable;
