@@ -8,9 +8,43 @@ import {
   patchGlassTypeApi,
 } from '../../services/glassTypesApi';
 import toast from 'react-hot-toast';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { ErrorMessage, Field, Form, Formik, useFormikContext } from 'formik';
 import { PulseLoader } from 'react-spinners';
 import type { GlassCategory } from '../../types/glassCategory';
+import type { AxiosError } from 'axios';
+
+const MONOLITHIC_THICKNESS = ['4', '5', '6', '8', '10'];
+const LAMINATED_THICKNESS = ['3+3', '4+4', '5+5', '6+6'];
+
+function ThicknessFields({
+  categoriesList,
+}: {
+  categoriesList: GlassCategory[];
+}) {
+  const { values } = useFormikContext<{ category: string }>();
+
+  if (!values.category) return null;
+
+  const selectedCategory = categoriesList.find(c => c._id === values.category);
+  const thicknessList = selectedCategory?.isLaminated
+    ? LAMINATED_THICKNESS
+    : MONOLITHIC_THICKNESS;
+
+  return (
+    <div className={css.formGroup}>
+      <span className={css.label}>Thickness</span>
+      <div className={css.checkboxGroup}>
+        {thicknessList.map(t => (
+          <label key={t} className={css.checkboxLabel}>
+            <Field type="checkbox" name="thickness" value={t} />
+            {t} mm
+          </label>
+        ))}
+      </div>
+      <ErrorMessage name="thickness" component="span" className={css.error} />
+    </div>
+  );
+}
 
 interface GlassTypeFormProps {
   onClose: () => void;
@@ -73,8 +107,9 @@ function GlassTypeForm({
       onClose();
     },
 
-    onError: () => {
-      toast.error('Something went wrong!');
+    onError: (error: AxiosError<{ message: string }>) => {
+      const message = error.response?.data?.message;
+      toast.error(message ?? 'Something went wrong!');
     },
   });
 
@@ -151,32 +186,7 @@ function GlassTypeForm({
             />
           </div>
 
-          <div className={css.formGroup}>
-            <span className={css.label}>Thickness</span>
-            <div className={css.checkboxGroup}>
-              <label className={css.checkboxLabel}>
-                <Field type="checkbox" name="thickness" value="4" />4 mm
-              </label>
-              <label className={css.checkboxLabel}>
-                <Field type="checkbox" name="thickness" value="5" />5 mm
-              </label>
-              <label className={css.checkboxLabel}>
-                <Field type="checkbox" name="thickness" value="6" />6 mm
-              </label>
-              <label className={css.checkboxLabel}>
-                <Field type="checkbox" name="thickness" value="8" />8 mm
-              </label>
-              <label className={css.checkboxLabel}>
-                <Field type="checkbox" name="thickness" value="10" />
-                10 mm
-              </label>
-            </div>
-            <ErrorMessage
-              name="thickness"
-              component="span"
-              className={css.error}
-            />
-          </div>
+          <ThicknessFields categoriesList={categoriesList} />
 
           <div className={css.formGroup}>
             <span className={css.label}>Heat Treatment</span>

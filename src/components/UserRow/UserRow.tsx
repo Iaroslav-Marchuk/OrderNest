@@ -10,6 +10,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteUserApi, patchUserApi } from '../../services/usersApi';
 import UserForm from '../UserForm/UserForm';
 import ResetPasswordForm from '../ResetPasswordForm/ResetPasswordForm';
+import type { AxiosError } from 'axios';
 
 interface UserRowProps {
   user: User;
@@ -27,8 +28,9 @@ function UserRow({ user, index }: UserRowProps) {
       queryClient.invalidateQueries({ queryKey: ['allUsers'] });
       toast.success('User deleted successfully!');
     },
-    onError: () => {
-      toast.error('Something went wrong!');
+    onError: (error: AxiosError<{ message: string }>) => {
+      const message = error.response?.data?.message;
+      toast.error(message ?? 'Something went wrong!');
     },
   });
 
@@ -38,8 +40,9 @@ function UserRow({ user, index }: UserRowProps) {
       queryClient.invalidateQueries({ queryKey: ['allUsers'] });
       toast.success('User updated successfully!');
     },
-    onError: () => {
-      toast.error('Something went wrong!');
+    onError: (error: AxiosError<{ message: string }>) => {
+      const message = error.response?.data?.message;
+      toast.error(message ?? 'Something went wrong!');
     },
   });
 

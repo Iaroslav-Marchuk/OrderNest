@@ -8,6 +8,7 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { PulseLoader } from 'react-spinners';
 
 import { KeyRound, Phone, User as UserIcon } from 'lucide-react';
+import type { AxiosError } from 'axios';
 
 interface UserFormProps {
   onClose: () => void;
@@ -80,8 +81,9 @@ function UserForm({ onClose, user }: UserFormProps) {
       onClose();
     },
 
-    onError: () => {
-      toast.error('Something went wrong!');
+    onError: (error: AxiosError<{ message: string }>) => {
+      const message = error.response?.data?.message;
+      toast.error(message ?? 'Something went wrong!');
     },
   });
 
@@ -92,8 +94,9 @@ function UserForm({ onClose, user }: UserFormProps) {
       toast.success('User updated successfully!');
       onClose();
     },
-    onError: () => {
-      toast.error('Something went wrong!');
+    onError: (error: AxiosError<{ message: string }>) => {
+      const message = error.response?.data?.message;
+      toast.error(message ?? 'Something went wrong!');
     },
   });
 

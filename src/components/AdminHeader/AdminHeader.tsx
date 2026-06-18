@@ -17,6 +17,7 @@ function AdminHeader() {
     mutationFn: logoutApi,
     onSuccess: () => {
       queryClient.clear();
+      toast.success('Logged Out!');
       navigate('/login');
     },
     onError: () => {
@@ -84,7 +85,10 @@ function AdminHeader() {
         </div>
 
         <div className={css.avatarWrapper} ref={menuRef}>
-          <button className={css.avatar} onClick={() => setIsMenuOpen(p => !p)}>
+          <button
+            className={css.avatar}
+            onClick={() => setIsMenuOpen(prev => !prev)}
+          >
             <ShieldUser size={20} strokeWidth={1.5} />
           </button>
           {isMenuOpen && (

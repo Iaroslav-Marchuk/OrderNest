@@ -6,7 +6,9 @@ interface SectionProps {
 }
 
 function Section({ children, className = '' }: SectionProps) {
-  return <div className={`${css.section} ${className}`}>{children}</div>;
+  return (
+    <section className={`${css.section} ${className}`}>{children}</section>
+  );
 }
 
 export default Section;

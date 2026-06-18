@@ -1,6 +1,8 @@
 export interface GlassCategory {
   _id: string;
   label: string;
+  isLaminated: boolean;
+  glassTypes: { _id: string; label: string }[];
   createdAt: string;
   updatedAt: string;
 }
@@ -25,5 +27,5 @@ export interface GetGlassCategoriesParams {
 
 export interface PatchGlassCategoryReq {
   glassCategoryId: string;
-  updateData: { label: string };
+  updateData: { label: string; isLaminated?: boolean };
 }

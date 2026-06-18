@@ -5,6 +5,8 @@ import type {
   LoginUserRes,
   ChangePasswordRes,
   ChangePasswordReq,
+  LocationOfUserReq,
+  LocationOfUserRes,
 } from '../types/auth';
 
 import type { User } from '../types/user';
@@ -48,6 +50,17 @@ export const changePasswordApi = async (
     message: string;
     data: ChangePasswordRes;
   }>('/auth/change-password', body);
+  setAccessToken(data.data.accessToken);
+  return data.data;
+};
+
+export const locationOfUserApi = async (
+  body: LocationOfUserReq
+): Promise<LocationOfUserRes> => {
+  const { data } = await axiosInstance.post<{
+    message: string;
+    data: LocationOfUserRes;
+  }>('/auth/setLocation', body);
   setAccessToken(data.data.accessToken);
   return data.data;
 };

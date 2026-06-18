@@ -10,14 +10,21 @@ import {
 import toast from 'react-hot-toast';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { PulseLoader } from 'react-spinners';
+import type { AxiosError } from 'axios';
 
 interface GlassCategoryFormProps {
   onClose: () => void;
   glassCategory?: GlassCategory;
 }
 
-const validationSchema = Yup.object().shape({
+const createValidationSchema = Yup.object().shape({
   label: Yup.string().min(3, 'Minimum 3 characters').required('Required field'),
+  isLaminated: Yup.boolean().required(),
+});
+
+const editValidationSchema = Yup.object().shape({
+  label: Yup.string().min(3, 'Minimum 3 characters'),
+  isLaminated: Yup.boolean(),
 });
 
 function GlassCategoryForm({ onClose, glassCategory }: GlassCategoryFormProps) {
@@ -25,13 +32,18 @@ function GlassCategoryForm({ onClose, glassCategory }: GlassCategoryFormProps) {
 
   const createInitialValues = {
     label: '',
+    isLaminated: false,
   };
 
   const editInitialValues = {
     label: glassCategory?.label ?? '',
+    isLaminated: glassCategory?.isLaminated ?? false,
   };
 
   const initialValues = glassCategory ? editInitialValues : createInitialValues;
+  const validationSchema = glassCategory
+    ? editValidationSchema
+    : createValidationSchema;
 
   const { mutate: addNewGlassCategory, isPending } = useMutation({
     mutationFn: addNewGlassCategoryApi,
@@ -52,8 +64,9 @@ function GlassCategoryForm({ onClose, glassCategory }: GlassCategoryFormProps) {
       toast.success('Glass category updated successfully!');
       onClose();
     },
-    onError: () => {
-      toast.error('Something went wrong!');
+    onError: (error: AxiosError<{ message: string }>) => {
+      const message = error.response?.data?.message;
+      toast.error(message ?? 'Something went wrong!');
     },
   });
 
@@ -61,10 +74,13 @@ function GlassCategoryForm({ onClose, glassCategory }: GlassCategoryFormProps) {
     if (glassCategory) {
       patchGlassCategory({
         glassCategoryId: glassCategory._id,
-        updateData: { label: values.label },
+        updateData: { label: values.label, isLaminated: values.isLaminated },
       });
     } else {
-      addNewGlassCategory(values.label);
+      addNewGlassCategory({
+        label: values.label,
+        isLaminated: values.isLaminated,
+      });
     }
   };
 
@@ -94,6 +110,17 @@ function GlassCategoryForm({ onClose, glassCategory }: GlassCategoryFormProps) {
             <ErrorMessage name="label" component="span" className={css.error} />
           </div>
 
+          <div className={css.formGroup}>
+            <label className={css.checkboxLabel}>
+              <Field type="checkbox" name="isLaminated" />
+              Laminated glass
+            </label>
+            <ErrorMessage
+              name="isLaminated"
+              component="span"
+              className={css.error}
+            />
+          </div>
           <button type="submit" className={css.btn} disabled={isPending}>
             {isPending ? (
               <PulseLoader

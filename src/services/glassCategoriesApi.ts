@@ -22,13 +22,14 @@ export const getAllGlassCategoriesApi = async (
   return data.data;
 };
 
-export const addNewGlassCategoryApi = async (
-  label: string
-): Promise<GlassCategory> => {
+export const addNewGlassCategoryApi = async (payload: {
+  label: string;
+  isLaminated: boolean;
+}): Promise<GlassCategory> => {
   const { data } = await axiosInstance.post<{
     message: string;
     data: { glassCategory: GlassCategory };
-  }>('/glassCategories', { label });
+  }>('/glassCategories', payload);
 
   return data.data.glassCategory;
 };

@@ -10,6 +10,7 @@ import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
 import GlassTypeForm from '../GlassTypeForm/GlassTypeForm';
 import type { GlassCategory } from '../../types/glassCategory';
 import clsx from 'clsx';
+import type { AxiosError } from 'axios';
 
 interface GlassTypeRowProps {
   glassType: GlassType;
@@ -26,8 +27,9 @@ function GlassTypeRow({ glassType, categoriesList, index }: GlassTypeRowProps) {
       queryClient.invalidateQueries({ queryKey: ['allGlassTypes'] });
       toast.success('Glass type deleted successfully!');
     },
-    onError: () => {
-      toast.error('Something went wrong!');
+    onError: (error: AxiosError<{ message: string }>) => {
+      const message = error.response?.data?.message;
+      toast.error(message ?? 'Something went wrong!');
     },
   });
 

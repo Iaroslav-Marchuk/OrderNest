@@ -8,7 +8,9 @@ import css from './LoginForm.module.css';
 import type { LoginUserReq } from '../../types/auth';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { loginApi } from '../../services/authApi';
+import { locationOfUserApi, loginApi } from '../../services/authApi';
+import { useState } from 'react';
+import LocationModal from '../LocationModal/LocationModal';
 
 const initialValues: LoginUserReq = {
   tel: '',
@@ -28,17 +30,35 @@ const validationSchema = Yup.object().shape({
 function LoginForm() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [showLocationModal, setShowLocationModal] = useState(false);
+
+  const [userName, setUserName] = useState('');
+
+  const { mutate: setLocation, isPending: isSettingLocation } = useMutation({
+    mutationFn: locationOfUserApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+      toast.success(`Welcome, ${userName}!`);
+      setShowLocationModal(false);
+      navigate('/');
+    },
+    onError: () => toast.error('Failed to set location'),
+  });
 
   const { mutate: login, isPending } = useMutation({
     mutationFn: loginApi,
     onSuccess: data => {
+      if (data.user.role === 'assembly') {
+        setUserName(data.user.name);
+        setShowLocationModal(true);
+        return;
+      }
+
       queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       toast.success(`Welcome, ${data.user.name}!`);
       navigate(data.user.role === 'admin' ? '/admin' : '/');
     },
-    onError: () => {
-      toast.error('Invalid phone or password');
-    },
+    onError: () => toast.error('Invalid phone or password'),
   });
 
   const handleSubmit = (
@@ -47,6 +67,10 @@ function LoginForm() {
   ) => {
     login(values);
     actions.resetForm();
+  };
+
+  const handleSelectLine = (line: string) => {
+    setLocation({ location: line });
   };
 
   return (
@@ -115,6 +139,14 @@ function LoginForm() {
           </button>
         </Form>
       </Formik>
+
+      {showLocationModal && (
+        <LocationModal
+          onSelect={handleSelectLine}
+          isPending={isSettingLocation}
+          userName={userName}
+        />
+      )}
     </>
   );
 }

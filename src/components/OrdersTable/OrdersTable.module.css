@@ -1,0 +1,207 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--color-bg-surface);
+}
+
+.th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-bg-border);
+  white-space: nowrap;
+}
+
+.thBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+
+.thBtn:hover {
+  color: var(--color-text-primary);
+}
+
+.row {
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid var(--color-bg-border);
+}
+
+.row:hover {
+  background: var(--color-bg-elevated);
+}
+
+.td {
+  padding: 10px 14px;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.expandBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  padding: 2px;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+
+.expandBtn:hover {
+  color: var(--color-text-primary);
+}
+
+.icon {
+  transition: transform 0.2s;
+}
+
+.iconOpen {
+  transform: rotate(180deg);
+  transition: transform 0.2s;
+  color: var(--color-accent);
+}
+
+.expandCell {
+  padding: 0;
+  background: var(--color-bg-base);
+  border-bottom: 1px solid var(--color-bg-border);
+}
+
+.state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 300px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-warning);
+  text-align: center;
+}
+
+.skeletonRow td {
+  padding: 6px 14px;
+}
+
+.skeleton {
+  height: 16px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-elevated) 25%,
+    var(--color-bg-border) 50%,
+    var(--color-bg-elevated) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.ep {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-accent);
+  letter-spacing: 0.04em;
+}
+
+.responsible {
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.itemsCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-bg-border);
+  border-radius: 6px;
+}
+
+.menuBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  padding: 4px;
+  border-radius: 4px;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.menuBtn:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-elevated);
+}
+
+.status {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.statusPending {
+  background: var(--color-bg-elevated);
+  color: var(--color-text-muted);
+}
+.statusCutting {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+.statusHardening {
+  background: var(--color-info-bg);
+  color: var(--color-info);
+}
+.statusAssembly {
+  background: var(--color-accent-deep);
+  color: var(--color-accent-pale);
+}
+.statusQuality {
+  background: var(--color-info-bg);
+  color: var(--color-accent-hover);
+}
+.statusDone {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+.statusCancelled {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
