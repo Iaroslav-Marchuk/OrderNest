@@ -1,16 +1,18 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Container from '../Container/Container';
 import css from './Header.module.css';
 
 import logo from '/logo.png';
 import Navigation from '../Navigation/Navigation';
 import { useEffect, useRef, useState } from 'react';
-import { LogOut, UserRound } from 'lucide-react';
+import { ArrowLeft, LogOut, UserRound } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { logoutApi } from '../../services/authApi';
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
+import type { AxiosError } from 'axios';
 
 function Header() {
   const queryClient = useQueryClient();
@@ -27,10 +29,16 @@ function Header() {
       toast.success('Logged Out!');
       navigate('/login');
     },
+    onError: (error: AxiosError<{ message: string }>) => {
+      const message = error.response?.data?.message;
+      toast.error(message ?? 'Something went wrong!');
+    },
   });
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const { currentUser, isAdmin } = useCurrentUser();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -53,11 +61,18 @@ function Header() {
         </NavLink>
         <Navigation />
         <div className={css.avatarWrapper} ref={dropdownRef}>
+          {isAdmin ? (
+            <Link to="/admin" className={css.backLink}>
+              <ArrowLeft size={18} strokeWidth={1.5} />
+              Back to admin painel
+            </Link>
+          ) : undefined}
+
           <button
             className={css.avatarBtn}
             onClick={() => setIsDropdownOpen(prev => !prev)}
           >
-            A
+            {currentUser?.name}
           </button>
 
           {isDropdownOpen && (

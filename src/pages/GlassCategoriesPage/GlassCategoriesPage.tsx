@@ -9,9 +9,8 @@ import GlassCategoryForm from '../../components/GlassCategoryForm/GlassCategoryF
 import SearchBox from '../../components/SearchBox/SearchBox';
 import { useSearchParams } from 'react-router-dom';
 import type { SortOrder } from '../../types/common';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import Pagination from '../../components/Pagination/Pagination';
-import { getAllGlassCategoriesApi } from '../../services/glassCategoriesApi';
+import { useGlassCategories } from '../../hooks/useGlassCategories';
 
 function GlassCategoriesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -74,25 +73,23 @@ function GlassCategoriesPage() {
     });
   };
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['allGlassCategories', queryParams],
-    queryFn: () => getAllGlassCategoriesApi(queryParams),
-    placeholderData: keepPreviousData,
-  });
-
-  const allGlassCategories = data?.glassCategories ?? [];
-  const totalGlassCategories = data?.totalItems ?? 0;
-  const totalPages = data?.totalPages ?? 0;
+  const {
+    glassCategories,
+    totalItems,
+    totalPages,
+    isGlassCategoriesLoading,
+    isGlassCategoriesError,
+  } = useGlassCategories(queryParams);
 
   const from = (page - 1) * perPage + 1;
-  const to = Math.min(page * perPage, totalGlassCategories);
+  const to = Math.min(page * perPage, totalItems);
 
   return (
     <div className={css.wrapper}>
       <div className={css.top}>
         <div>
           <span className={css.title}>Glass Categories List</span>
-          <p className={css.subtitle}>{totalGlassCategories} categories</p>
+          <p className={css.subtitle}>{totalItems} categories</p>
         </div>
 
         <div className={css.topWrapper}>
@@ -109,9 +106,9 @@ function GlassCategoriesPage() {
         </div>
       </div>
       <GlassCategoryTable
-        glassCategories={allGlassCategories}
-        isLoading={isLoading}
-        isError={isError}
+        glassCategories={glassCategories}
+        isLoading={isGlassCategoriesLoading}
+        isError={isGlassCategoriesError}
         sortBy={sortBy}
         sortOrder={sortOrder}
         page={page}
@@ -120,9 +117,9 @@ function GlassCategoriesPage() {
       />
 
       <div className={css.bottom}>
-        {totalGlassCategories > 0 && (
+        {totalItems > 0 && (
           <span className={css.counter}>
-            {from}–{to} of {totalGlassCategories}
+            {from}–{to} of {totalItems}
           </span>
         )}
 

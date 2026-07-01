@@ -6,7 +6,7 @@ import type {
 } from '../types/client';
 import { axiosInstance } from './axiosInstance';
 
-export const getAllClientsApi = async (
+export const getClientsApi = async (
   params: GetClientsParams
 ): Promise<ClientResponse> => {
   const cleanParams = Object.fromEntries(
@@ -19,6 +19,14 @@ export const getAllClientsApi = async (
     data: ClientResponse;
   }>('/clients', { params: cleanParams });
 
+  return data.data;
+};
+
+export const getAllClientsApi = async (): Promise<Client[]> => {
+  const { data } = await axiosInstance.get<{
+    message: string;
+    data: Client[];
+  }>('/clients/all');
   return data.data;
 };
 

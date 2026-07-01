@@ -1,6 +1,5 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import css from './ClientsPage.module.css';
-import { getAllClientsApi } from '../../services/clientsApi';
+
 import { useState } from 'react';
 import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
 import ClientForm from '../../components/ClientForm/ClientForm';
@@ -12,6 +11,7 @@ import ClientsTable, {
 import SearchBox from '../../components/SearchBox/SearchBox';
 import { useSearchParams } from 'react-router-dom';
 import type { SortOrder } from '../../types/common';
+import { useClients } from '../../hooks/useClients';
 
 function ClientsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -73,25 +73,18 @@ function ClientsPage() {
     });
   };
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['allClients', queryParams],
-    queryFn: () => getAllClientsApi(queryParams),
-    placeholderData: keepPreviousData,
-  });
-
-  const allClients = data?.clients ?? [];
-  const totalClients = data?.totalItems ?? 0;
-  const totalPages = data?.totalPages ?? 0;
+  const { clients, totalItems, totalPages, isClientsLoading, isClientsError } =
+    useClients(queryParams);
 
   const from = (page - 1) * perPage + 1;
-  const to = Math.min(page * perPage, totalClients);
+  const to = Math.min(page * perPage, totalItems);
 
   return (
     <div className={css.wrapper}>
       <div className={css.top}>
         <div>
-          <span className={css.title}>Clients's List</span>
-          <p className={css.subtitle}>{totalClients} clients</p>
+          <span className={css.title}>Client's List</span>
+          <p className={css.subtitle}>{totalItems} clients</p>
         </div>
 
         <div className={css.topWrapper}>
@@ -109,9 +102,9 @@ function ClientsPage() {
         </div>
       </div>
       <ClientsTable
-        clients={allClients}
-        isLoading={isLoading}
-        isError={isError}
+        clients={clients}
+        isLoading={isClientsLoading}
+        isError={isClientsError}
         sortBy={sortBy}
         sortOrder={sortOrder}
         page={page}
@@ -119,9 +112,9 @@ function ClientsPage() {
         onSortChange={handleSortChange}
       />
       <div className={css.bottom}>
-        {totalClients > 0 && (
+        {totalItems > 0 && (
           <span className={css.counter}>
-            {from}–{to} of {totalClients}
+            {from}–{to} of {totalItems}
           </span>
         )}
 

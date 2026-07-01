@@ -6,7 +6,7 @@ import type {
 } from '../types/glassCategory';
 import { axiosInstance } from './axiosInstance';
 
-export const getAllGlassCategoriesApi = async (
+export const getGlassCategoriesApi = async (
   params: GetGlassCategoriesParams
 ): Promise<GlassCategoryResponse> => {
   const cleanParams = Object.fromEntries(
@@ -19,6 +19,14 @@ export const getAllGlassCategoriesApi = async (
     data: GlassCategoryResponse;
   }>('/glassCategories', { params: cleanParams });
 
+  return data.data;
+};
+
+export const getAllGlassCategoriesApi = async (): Promise<GlassCategory[]> => {
+  const { data } = await axiosInstance.get<{
+    message: string;
+    data: GlassCategory[];
+  }>('/glassCategories/all');
   return data.data;
 };
 

@@ -18,9 +18,11 @@
   display: block;
 }
 
-/* Avatar */
 .avatarWrapper {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .avatarBtn {
@@ -68,5 +70,23 @@
 
 .menuItem:hover {
   background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+}
+
+.backLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.backLink:hover {
+  background: var(--color-bg-elevated);
   color: var(--color-text-primary);
 }

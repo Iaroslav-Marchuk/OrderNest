@@ -76,7 +76,7 @@ function UserForm({ onClose, user }: UserFormProps) {
   const { mutate: createUser, isPending } = useMutation({
     mutationFn: createUserApi,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
+      queryClient.invalidateQueries({ queryKey: ['users'] });
       toast.success('Successfully added new user!');
       onClose();
     },
@@ -90,7 +90,7 @@ function UserForm({ onClose, user }: UserFormProps) {
   const { mutate: patchUser } = useMutation({
     mutationFn: patchUserApi,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
+      queryClient.invalidateQueries({ queryKey: ['users'] });
       toast.success('User updated successfully!');
       onClose();
     },

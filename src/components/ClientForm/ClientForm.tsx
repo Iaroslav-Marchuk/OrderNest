@@ -1,12 +1,13 @@
 import * as Yup from 'yup';
 
-import type { Client } from '../../types/client';
+import type { Client, ClientFormValues } from '../../types/client';
 import css from './ClientForm.module.css';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { addNewClientApi, patchClientApi } from '../../services/clientsApi';
 import toast from 'react-hot-toast';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { PulseLoader } from 'react-spinners';
+import type { AxiosError } from 'axios';
 
 interface ClientFormProps {
   onClose: () => void;
@@ -20,25 +21,21 @@ const validationSchema = Yup.object().shape({
 function ClientForm({ onClose, client }: ClientFormProps) {
   const queryClient = useQueryClient();
 
-  const createInitialValues = {
-    name: '',
-  };
-
-  const editInitialValues = {
+  const initialValues: ClientFormValues = {
     name: client?.name ?? '',
   };
-
-  const initialValues = client ? editInitialValues : createInitialValues;
 
   const { mutate: addNewClient, isPending } = useMutation({
     mutationFn: addNewClientApi,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allClients'] });
+      queryClient.invalidateQueries({ queryKey: ['clients'] });
       toast.success('Successfully added new client!');
       onClose();
     },
-    onError: () => {
-      toast.error('Something went wrong!');
+    onError: (error: AxiosError<{ message: string }>) => {
+      const message = error.response?.data?.message;
+      toast.error(message ?? 'Something went wrong!');
     },
   });
 
@@ -46,20 +43,19 @@ function ClientForm({ onClose, client }: ClientFormProps) {
     mutationFn: patchClientApi,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allClients'] });
+      queryClient.invalidateQueries({ queryKey: ['clients'] });
       toast.success('Client updated successfully!');
       onClose();
     },
-    onError: () => {
-      toast.error('Something went wrong!');
+    onError: (error: AxiosError<{ message: string }>) => {
+      const message = error.response?.data?.message;
+      toast.error(message ?? 'Something went wrong!');
     },
   });
 
-  const handleSubmit = (values: typeof initialValues) => {
+  const handleSubmit = (values: ClientFormValues) => {
     if (client) {
-      patchClient({
-        clientId: client._id,
-        updateData: { name: values.name },
-      });
+      patchClient({ clientId: client._id, updateData: { name: values.name } });
     } else {
       addNewClient(values.name);
     }

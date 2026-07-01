@@ -7,10 +7,10 @@ interface PublicRouteProps {
 }
 
 const PublicRoute = ({ element }: PublicRouteProps) => {
-  const { isLoggedIn, isLoading } = useCurrentUser();
-
-  if (isLoading) return null;
-  return isLoggedIn ? <Navigate to="/" replace /> : element;
+  const { isLoggedIn, isAdmin, isUserLoading } = useCurrentUser();
+  if (isUserLoading) return null;
+  if (!isLoggedIn) return element;
+  return <Navigate to={isAdmin ? '/admin' : '/'} replace />;
 };
 
 export default PublicRoute;

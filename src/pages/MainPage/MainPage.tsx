@@ -5,63 +5,19 @@ import Section from '../../components/Section/Section';
 import css from './MainPage.module.css';
 import { useState } from 'react';
 import type { SortOrder } from '../../types/common';
-// import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
 import Pagination from '../../components/Pagination/Pagination';
 import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
-import OrdersTable from '../../components/OrdersTable/OrdersTable';
+import OrdersTable, {
+  type OrdersSortField,
+} from '../../components/OrdersTable/OrdersTable';
+import OrderForm from '../../components/OrderForm/OrderForm';
 
-const MOCK = {
-  totalOrders: 72,
-};
+import { useOrders } from '../../hooks/useOrders';
 
-const allOrders = [
-  {
-    id: '1',
-    ep: 'EP-0041',
-    client: 'Vidraceiros Tejo',
-    createdAt: '2025-06-12',
-    location: 'Cutting',
-    responsible: 'Ana Costa',
-    status: 'cutting',
-    items: [
-      {
-        id: '1-1',
-        glassType: 'Temperado',
-        thickness: 10,
-        size: { width: 1200, height: 800 },
-        quantity: 4,
-      },
-      {
-        id: '1-2',
-        glassType: 'Laminado',
-        thickness: 8,
-        size: { width: 900, height: 600 },
-        quantity: 2,
-      },
-    ],
-  },
-  {
-    id: '2',
-    ep: 'EP-0042',
-    client: 'Janelas Lisboa',
-    createdAt: '2025-06-13',
-    location: 'Assembly',
-    responsible: 'Carlos Melo',
-    status: 'assembly',
-    items: [
-      {
-        id: '2-1',
-        glassType: 'Simples',
-        thickness: 6,
-        size: { width: 600, height: 400 },
-        quantity: 8,
-      },
-    ],
-  },
-];
-
-type OrdersSortField = 'createdAt' | 'ep' | 'cliente';
+import OrderDateFilter from '../../components/OrderDateFilter/OrderDateFilter';
+import OrderLocationFilter from '../../components/OrderLocationFilter/OrderLocationFilter';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 
 function MainPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -75,12 +31,17 @@ function MainPage() {
     perPage: Number(searchParams.get('perPage') || 20),
     sortBy: (searchParams.get('sortBy') || 'createdAt') as OrdersSortField,
     sortOrder: (searchParams.get('sortOrder') || 'asc') as SortOrder,
-    ep: searchParams.get('ep') || '',
-    cliente: searchParams.get('cliente') || '',
+    ep: Number(searchParams.get('ep')) || '',
+    client: searchParams.get('client') || '',
+    date: searchParams.get('date') || '',
+    location: searchParams.get('location') || '',
   };
 
-  const { page, perPage, sortBy, sortOrder, ep, cliente } = queryParams;
-  const inputValue = ep || cliente || '';
+  const { page, perPage, sortBy, sortOrder, ep, client, date, location } =
+    queryParams;
+  const inputValue = String(ep || client || '');
+  const locationValue = location || 'all';
+  const dateValue = date || '';
 
   const handleSetPage = (page: number) => {
     const params = Object.fromEntries(searchParams.entries());
@@ -97,12 +58,12 @@ function MainPage() {
 
       if (!value) {
         params.delete('ep');
-        params.delete('cliente');
+        params.delete('client');
       } else if (/^\d+$/.test(value)) {
         params.set('ep', value);
-        params.delete('cliente');
+        params.delete('client');
       } else {
-        params.set('cliente', value);
+        params.set('client', value);
         params.delete('ep');
       }
 
@@ -115,10 +76,36 @@ function MainPage() {
     const params = new URLSearchParams(searchParams);
 
     params.delete('ep');
-    params.delete('cliente');
+    params.delete('client');
     params.set('page', '1');
 
     setSearchParams(params);
+  };
+
+  const handleLocationChange = (value: string) => {
+    setSearchParams(prev => {
+      const params = new URLSearchParams(prev);
+      if (value === 'all') {
+        params.delete('location');
+      } else {
+        params.set('location', value);
+      }
+      params.set('page', '1');
+      return params;
+    });
+  };
+
+  const handleDateChange = (value: string) => {
+    setSearchParams(prev => {
+      const params = new URLSearchParams(prev);
+      if (value === '') {
+        params.delete('date');
+      } else {
+        params.set('date', value);
+      }
+      params.set('page', '1');
+      return params;
+    });
   };
 
   const handleSortChange = (field: OrdersSortField) => {
@@ -131,18 +118,19 @@ function MainPage() {
     });
   };
 
-  //  const { data, isLoading, isError } = useQuery({
-  //    queryKey: ['allUsers', queryParams],
-  //    queryFn: () => getAllUsersApi(queryParams),
-  //    placeholderData: keepPreviousData,
-  //  });
+  const { orders, totalItems, totalPages, isOrdersLoading, isOrdersError } =
+    useOrders(queryParams);
 
-  const isLoading = false;
-  const isError = false;
-  const totalOrders = MOCK.totalOrders; // вже є — 72
-  const totalPages = Math.ceil(totalOrders / perPage);
   const from = (page - 1) * perPage + 1;
-  const to = Math.min(page * perPage, totalOrders);
+  const to = Math.min(page * perPage, totalItems);
+
+  const { currentUser } = useCurrentUser();
+  const canCreateOrder = [
+    'hardening',
+    'assembly',
+    'quality',
+    'logistics',
+  ].includes(currentUser?.role ?? '');
 
   return (
     <Section>
@@ -150,18 +138,29 @@ function MainPage() {
         <div className={css.top}>
           <div>
             <span className={css.title}>Order's List</span>
-            <p className={css.subtitle}>{MOCK.totalOrders} active orders</p>
+            <p className={css.subtitle}>{totalItems} active orders</p>
           </div>
 
           <div className={css.topWrapper}>
             <SearchBox
-              placeholder="User's name ou telephone..."
+              placeholder="EP or client's name..."
               value={inputValue}
               onChange={handleInputChange}
               onClear={handleClearSearch}
             />
 
-            <button type="button" className={css.btn} onClick={openModal}>
+            <OrderDateFilter value={dateValue} onChange={handleDateChange} />
+            <OrderLocationFilter
+              value={locationValue}
+              onChange={handleLocationChange}
+            />
+
+            <button
+              type="button"
+              className={css.btn}
+              onClick={openModal}
+              disabled={!canCreateOrder}
+            >
               <Plus />
               <span>Create New Order</span>
             </button>
@@ -169,9 +168,9 @@ function MainPage() {
         </div>
 
         <OrdersTable
-          orders={allOrders}
-          isLoading={isLoading}
-          isError={isError}
+          orders={orders}
+          isLoading={isOrdersLoading}
+          isError={isOrdersError}
           sortBy={sortBy}
           sortOrder={sortOrder}
           page={page}
@@ -180,9 +179,9 @@ function MainPage() {
         />
 
         <div className={css.bottom}>
-          {totalOrders > 0 && (
+          {totalItems > 0 && (
             <span className={css.counter}>
-              {from}–{to} of {totalOrders}
+              {from}–{to} of {totalItems}
             </span>
           )}
 
@@ -197,7 +196,7 @@ function MainPage() {
 
         {isModalOpen && (
           <ModalOverlay onClose={closeModal}>
-            {/* <OrderForm onClose={closeModal} /> */}ORDER FORM
+            <OrderForm onClose={closeModal} />
           </ModalOverlay>
         )}
       </Container>

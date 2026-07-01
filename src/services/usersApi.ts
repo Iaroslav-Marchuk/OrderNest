@@ -8,7 +8,7 @@ import type {
 } from '../types/user';
 import { axiosInstance } from './axiosInstance';
 
-export const getAllUsersApi = async (
+export const getUsersApi = async (
   params: GetUsersParams
 ): Promise<UserResponse> => {
   const cleanParams = Object.fromEntries(
@@ -59,7 +59,7 @@ export const resetPasswordApi = async ({
 }: ResetPasswordReq): Promise<void> => {
   await axiosInstance.patch<{
     message: string;
-  }>(`/users/${userId}/reset-password`, { newPass });
+  }>(`/users/${userId}/password`, { newPass });
 };
 
 export const deleteUserApi = async (userId: string): Promise<void> => {

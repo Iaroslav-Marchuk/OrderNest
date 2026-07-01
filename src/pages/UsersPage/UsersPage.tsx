@@ -4,16 +4,15 @@ import UsersTable, {
 } from '../../components/UsersTable/UsersTable';
 import css from './UsersPage.module.css';
 import { useState } from 'react';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import Pagination from '../../components/Pagination/Pagination';
 import UsersRoleFilter from '../../components/UsersRoleFilter/UsersRoleFilter';
 import UsersStatusFilter from '../../components/UsersStatusFilter/UsersStatusFilter';
-import { getAllUsersApi } from '../../services/usersApi';
 import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
 import UserForm from '../../components/UserForm/UserForm';
 import SearchBox from '../../components/SearchBox/SearchBox';
 import { useSearchParams } from 'react-router-dom';
 import type { SortOrder } from '../../types/common';
+import { useUsers } from '../../hooks/useUsers';
 
 function UsersPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -115,25 +114,18 @@ function UsersPage() {
     });
   };
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['allUsers', queryParams],
-    queryFn: () => getAllUsersApi(queryParams),
-    placeholderData: keepPreviousData,
-  });
-
-  const allUsers = data?.users ?? [];
-  const totalUsers = data?.totalItems ?? 0;
-  const totalPages = data?.totalPages ?? 0;
+  const { users, totalItems, totalPages, isUsersLoading, isUsersError } =
+    useUsers(queryParams);
 
   const from = (page - 1) * perPage + 1;
-  const to = Math.min(page * perPage, totalUsers);
+  const to = Math.min(page * perPage, totalItems);
 
   return (
     <div className={css.wrapper}>
       <div className={css.top}>
         <div>
           <span className={css.title}>User's List</span>
-          <p className={css.subtitle}>{totalUsers} users</p>
+          <p className={css.subtitle}>{totalItems} users</p>
         </div>
 
         <div className={css.topWrapper}>
@@ -156,10 +148,11 @@ function UsersPage() {
           </button>
         </div>
       </div>
+
       <UsersTable
-        users={allUsers}
-        isLoading={isLoading}
-        isError={isError}
+        users={users}
+        isLoading={isUsersLoading}
+        isError={isUsersError}
         sortBy={sortBy}
         sortOrder={sortOrder}
         page={page}
@@ -168,9 +161,9 @@ function UsersPage() {
       />
 
       <div className={css.bottom}>
-        {totalUsers > 0 && (
+        {totalItems > 0 && (
           <span className={css.counter}>
-            {from}–{to} of {totalUsers}
+            {from}–{to} of {totalItems}
           </span>
         )}
 

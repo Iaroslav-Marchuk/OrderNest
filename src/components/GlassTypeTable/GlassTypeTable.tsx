@@ -8,6 +8,7 @@ import type { GlassType } from '../../types/glassType';
 import css from './GlassTypeTable.module.css';
 import GlassTypeRow from '../GlassTypeRow/GlassTypeRow';
 import type { GlassCategory } from '../../types/glassCategory';
+import SkeletonGlassTypes from '../SkeletonGlassTypes/SkeletonGlassTypes';
 
 export type GlassTypeSortField = 'label' | 'category' | 'createdAt';
 
@@ -84,45 +85,18 @@ function GlassTypeTable({
         </tr>
       </thead>
       <tbody>
-        <>
-          {isLoading &&
-            Array.from({ length: 5 }).map((_, i) => (
-              <tr key={`skeleton-${i}`}>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '20px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '200px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '120px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '100px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '80px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '100px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '60px' }} />
-                </td>
-              </tr>
-            ))}
-
-          {!isLoading &&
-            !isError &&
-            glassTypes.map((glassType, index) => (
-              <GlassTypeRow
-                key={glassType._id}
-                glassType={glassType}
-                categoriesList={categoriesList}
-                index={(page - 1) * perPage + index + 1}
-              />
-            ))}
-        </>
+        {isLoading ? (
+          <SkeletonGlassTypes />
+        ) : (
+          glassTypes.map((glassType, index) => (
+            <GlassTypeRow
+              key={glassType._id}
+              glassType={glassType}
+              categoriesList={categoriesList}
+              index={(page - 1) * perPage + index + 1}
+            />
+          ))
+        )}
       </tbody>
     </table>
   );

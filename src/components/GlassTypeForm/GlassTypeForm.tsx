@@ -12,6 +12,7 @@ import { ErrorMessage, Field, Form, Formik, useFormikContext } from 'formik';
 import { PulseLoader } from 'react-spinners';
 import type { GlassCategory } from '../../types/glassCategory';
 import type { AxiosError } from 'axios';
+import { useAllGlassCategories } from '../../hooks/useAllGlassCategories';
 
 const MONOLITHIC_THICKNESS = ['4', '5', '6', '8', '10'];
 const LAMINATED_THICKNESS = ['3+3', '4+4', '5+5', '6+6'];
@@ -49,7 +50,6 @@ function ThicknessFields({
 interface GlassTypeFormProps {
   onClose: () => void;
   glassType?: GlassType;
-  categoriesList: GlassCategory[];
 }
 
 const createValidationSchema = Yup.object().shape({
@@ -73,12 +73,9 @@ const editValidationSchema = Yup.object().shape({
   temper: Yup.string().oneOf(['required', 'forbidden', 'optional']),
 });
 
-function GlassTypeForm({
-  onClose,
-  glassType,
-  categoriesList,
-}: GlassTypeFormProps) {
+function GlassTypeForm({ onClose, glassType }: GlassTypeFormProps) {
   const queryClient = useQueryClient();
+  const { allGlassCategories } = useAllGlassCategories();
 
   const createInitialValues: AddNewGlassTypeReq = {
     label: '',
@@ -103,6 +100,7 @@ function GlassTypeForm({
     mutationFn: addNewGlassTypeApi,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allGlassTypes'] });
+      queryClient.invalidateQueries({ queryKey: ['glassTypes'] });
       toast.success('Successfully added new glass type!');
       onClose();
     },
@@ -117,11 +115,13 @@ function GlassTypeForm({
     mutationFn: patchGlassTypeApi,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allGlassTypes'] });
+      queryClient.invalidateQueries({ queryKey: ['glassTypes'] });
       toast.success('Glass type updated successfully!');
       onClose();
     },
-    onError: () => {
-      toast.error('Something went wrong!');
+    onError: (error: AxiosError<{ message: string }>) => {
+      const message = error.response?.data?.message;
+      toast.error(message ?? 'Something went wrong!');
     },
   });
 
@@ -172,7 +172,7 @@ function GlassTypeForm({
                 className={css.input}
               >
                 <option value="">Select category...</option>
-                {categoriesList.map(category => (
+                {allGlassCategories.map(category => (
                   <option key={category._id} value={category._id}>
                     {category.label}
                   </option>
@@ -186,7 +186,7 @@ function GlassTypeForm({
             />
           </div>
 
-          <ThicknessFields categoriesList={categoriesList} />
+          <ThicknessFields categoriesList={allGlassCategories} />
 
           <div className={css.formGroup}>
             <span className={css.label}>Heat Treatment</span>

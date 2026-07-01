@@ -7,6 +7,7 @@ import type { User } from '../../types/user';
 import UserRow from '../UserRow/UserRow';
 import css from './UsersTable.module.css';
 import type { SortOrder } from '../../types/common';
+import SkeletonUsers from '../SkeletonUsers/SkeletonUsers';
 
 export type UsersSortField = 'name' | 'role' | 'createdAt';
 
@@ -76,44 +77,17 @@ function UsersTable({
         </tr>
       </thead>
       <tbody>
-        <>
-          {isLoading &&
-            Array.from({ length: 5 }).map((_, i) => (
-              <tr key={`skeleton-${i}`} className={css.skeletonRow}>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '20px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '140px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '120px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '80px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '60px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '100px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '60px' }} />
-                </td>
-              </tr>
-            ))}
-
-          {!isLoading &&
-            !isError &&
-            users.map((user, index) => (
-              <UserRow
-                key={user._id}
-                user={user}
-                index={(page - 1) * perPage + index + 1}
-              />
-            ))}
-        </>
+        {isLoading ? (
+          <SkeletonUsers />
+        ) : (
+          users.map((user, index) => (
+            <UserRow
+              key={user._id}
+              user={user}
+              index={(page - 1) * perPage + index + 1}
+            />
+          ))
+        )}
       </tbody>
     </table>
   );

@@ -3,9 +3,9 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useCurrentUser } from '../hooks/useCurrentUser';
 
 const PrivateRoute = () => {
-  const { isLoggedIn, isLoading } = useCurrentUser();
+  const { isLoggedIn, isUserLoading } = useCurrentUser();
 
-  if (isLoading) return null;
+  if (isUserLoading) return null;
   return isLoggedIn ? <Outlet /> : <Navigate to="/login" replace />;
 };
 

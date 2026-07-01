@@ -8,6 +8,8 @@ import css from './GlassCategoryTable.module.css';
 import type { SortOrder } from '../../types/common';
 import type { GlassCategory } from '../../types/glassCategory';
 
+import SkeletonGlassCategories from '../SkeletonGlassCategories/SkeletonGlassCategories';
+
 export type GlassCategorySortField = 'label' | 'createdAt';
 
 interface GlassCategoryTableProps {
@@ -70,35 +72,17 @@ function GlassCategoryTable({
         </tr>
       </thead>
       <tbody>
-        <>
-          {isLoading &&
-            Array.from({ length: 5 }).map((_, i) => (
-              <tr key={`skeleton-${i}`}>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '20px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '200px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '100px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '60px' }} />
-                </td>
-              </tr>
-            ))}
-
-          {!isLoading &&
-            !isError &&
-            glassCategories.map((glassCategory, index) => (
-              <GlassCategoryRow
-                key={glassCategory._id}
-                glassCategory={glassCategory}
-                index={(page - 1) * perPage + index + 1}
-              />
-            ))}
-        </>
+        {isLoading ? (
+          <SkeletonGlassCategories />
+        ) : (
+          glassCategories.map((glassCategory, index) => (
+            <GlassCategoryRow
+              key={glassCategory._id}
+              glassCategory={glassCategory}
+              index={(page - 1) * perPage + index + 1}
+            />
+          ))
+        )}
       </tbody>
     </table>
   );

@@ -25,7 +25,7 @@ function UserRow({ user, index }: UserRowProps) {
   const { mutate: deleteUser } = useMutation({
     mutationFn: deleteUserApi,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
+      queryClient.invalidateQueries({ queryKey: ['users'] });
       toast.success('User deleted successfully!');
     },
     onError: (error: AxiosError<{ message: string }>) => {
@@ -37,7 +37,7 @@ function UserRow({ user, index }: UserRowProps) {
   const { mutate: patchUser } = useMutation({
     mutationFn: patchUserApi,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
+      queryClient.invalidateQueries({ queryKey: ['users'] });
       toast.success('User updated successfully!');
     },
     onError: (error: AxiosError<{ message: string }>) => {

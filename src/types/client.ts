@@ -23,6 +23,10 @@ export interface GetClientsParams {
   name?: string;
 }
 
+export interface ClientFormValues {
+  name: string;
+}
+
 export interface PatchClientReq {
   clientId: string;
   updateData: { name: string };

@@ -49,11 +49,13 @@ function GlassCategoryForm({ onClose, glassCategory }: GlassCategoryFormProps) {
     mutationFn: addNewGlassCategoryApi,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allGlassCategories'] });
+      queryClient.invalidateQueries({ queryKey: ['glassCategories'] });
       toast.success('Successfully added new glass category!');
       onClose();
     },
-    onError: () => {
-      toast.error('Something went wrong!');
+    onError: (error: AxiosError<{ message: string }>) => {
+      const message = error.response?.data?.message;
+      toast.error(message ?? 'Something went wrong!');
     },
   });
 
@@ -61,6 +63,7 @@ function GlassCategoryForm({ onClose, glassCategory }: GlassCategoryFormProps) {
     mutationFn: patchGlassCategoryApi,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allGlassCategories'] });
+      queryClient.invalidateQueries({ queryKey: ['glassCategories'] });
       toast.success('Glass category updated successfully!');
       onClose();
     },

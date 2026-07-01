@@ -2,8 +2,7 @@ import { useSearchParams } from 'react-router-dom';
 import css from './GlassTypesPage.module.css';
 import { useState } from 'react';
 import type { SortOrder } from '../../types/common';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { getAllGlassTypesApi } from '../../services/glassTypesApi';
+
 import SearchBox from '../../components/SearchBox/SearchBox';
 import { Plus } from 'lucide-react';
 import Pagination from '../../components/Pagination/Pagination';
@@ -13,8 +12,10 @@ import GlassTypeTable, {
   type GlassTypeSortField,
 } from '../../components/GlassTypeTable/GlassTypeTable';
 import GlassTypeForm from '../../components/GlassTypeForm/GlassTypeForm';
-import { getAllGlassCategoriesApi } from '../../services/glassCategoriesApi';
+
 import GlassCategoriesFilter from '../../components/GlassCategoriesFilter/GlassCategoriesFilter';
+import { useGlassTypes } from '../../hooks/useGlassTypes';
+import { useAllGlassCategories } from '../../hooks/useAllGlassCategories';
 
 function GlassTypesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -91,32 +92,25 @@ function GlassTypesPage() {
     });
   };
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['allGlassTypes', queryParams],
-    queryFn: () => getAllGlassTypesApi(queryParams),
-    placeholderData: keepPreviousData,
-  });
+  const {
+    glassTypes,
+    totalItems,
+    totalPages,
+    isGlassTypesLoading,
+    isGlassTypesError,
+  } = useGlassTypes(queryParams);
 
-  const allGlassTypes = data?.glassTypes ?? [];
-  const totalGlassTypes = data?.totalItems ?? 0;
-  const totalPages = data?.totalPages ?? 0;
+  const { allGlassCategories } = useAllGlassCategories();
 
   const from = (page - 1) * perPage + 1;
-  const to = Math.min(page * perPage, totalGlassTypes);
-
-  const { data: allGlassCategories } = useQuery({
-    queryKey: ['allGlassCategories'],
-    queryFn: () => getAllGlassCategoriesApi({ perPage: 100 }),
-  });
-
-  const categoriesList = allGlassCategories?.glassCategories ?? [];
+  const to = Math.min(page * perPage, totalItems);
 
   return (
     <div className={css.wrapper}>
       <div className={css.top}>
         <div>
           <span className={css.title}>Glass Types List</span>
-          <p className={css.subtitle}>{totalGlassTypes} types</p>
+          <p className={css.subtitle}>{totalItems} types</p>
         </div>
 
         <div className={css.topWrapper}>
@@ -127,7 +121,7 @@ function GlassTypesPage() {
             onClear={handleClearSearch}
           />
           <GlassCategoriesFilter
-            glassCategoriesList={categoriesList}
+            glassCategoriesList={allGlassCategories}
             value={glassCategory}
             onChange={handleGlassCategoryChange}
           />
@@ -138,10 +132,10 @@ function GlassTypesPage() {
         </div>
       </div>
       <GlassTypeTable
-        glassTypes={allGlassTypes}
-        categoriesList={categoriesList}
-        isLoading={isLoading}
-        isError={isError}
+        glassTypes={glassTypes}
+        categoriesList={allGlassCategories}
+        isLoading={isGlassTypesLoading}
+        isError={isGlassTypesError}
         sortBy={sortBy}
         sortOrder={sortOrder}
         page={page}
@@ -150,9 +144,9 @@ function GlassTypesPage() {
       />
 
       <div className={css.bottom}>
-        {totalGlassTypes > 0 && (
+        {totalItems > 0 && (
           <span className={css.counter}>
-            {from}–{to} of {totalGlassTypes}
+            {from}–{to} of {totalItems}
           </span>
         )}
 
@@ -167,7 +161,7 @@ function GlassTypesPage() {
 
       {isModalOpen && (
         <ModalOverlay onClose={closeModal}>
-          <GlassTypeForm onClose={closeModal} categoriesList={categoriesList} />
+          <GlassTypeForm onClose={closeModal} />
         </ModalOverlay>
       )}
     </div>

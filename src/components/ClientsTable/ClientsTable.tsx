@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import ClientRow from '../ClientRow/ClientRow';
 import type { SortOrder } from '../../types/common';
+import SkeletonClients from '../SkeletonClients/SkeletonClients';
 
 export type ClientsSortField = 'name' | 'createdAt';
 
@@ -54,7 +55,7 @@ function ClientsTable({
           <th className={css.th}>#</th>
           <th className={css.th}>
             <button className={css.thBtn} onClick={() => onSortChange('name')}>
-              Clients's name {getSortIcon('name')}
+              Client's name {getSortIcon('name')}
             </button>
           </th>
 
@@ -70,35 +71,17 @@ function ClientsTable({
         </tr>
       </thead>
       <tbody>
-        <>
-          {isLoading &&
-            Array.from({ length: 5 }).map((_, i) => (
-              <tr key={`skeleton-${i}`}>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '20px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '200px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '100px' }} />
-                </td>
-                <td className={css.td}>
-                  <div className={css.skeleton} style={{ width: '60px' }} />
-                </td>
-              </tr>
-            ))}
-
-          {!isLoading &&
-            !isError &&
-            clients.map((client, index) => (
-              <ClientRow
-                key={client._id}
-                client={client}
-                index={(page - 1) * perPage + index + 1}
-              />
-            ))}
-        </>
+        {isLoading ? (
+          <SkeletonClients />
+        ) : (
+          clients.map((client, index) => (
+            <ClientRow
+              key={client._id}
+              client={client}
+              index={(page - 1) * perPage + index + 1}
+            />
+          ))
+        )}
       </tbody>
     </table>
   );
