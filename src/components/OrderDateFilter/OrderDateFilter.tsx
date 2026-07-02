@@ -1,7 +1,41 @@
 import css from './OrderDateFilter.module.css';
 
-function OrderDateFilter() {
-  return <div className={css.wrapper}>27/06/2026</div>;
+import 'react-datepicker/dist/react-datepicker.css';
+
+import DatePicker from 'react-datepicker';
+
+interface OrderDateFilterProps {
+  dateValue: Date | null;
+  onChange: (value: string) => void;
+}
+
+function OrderDateFilter({ dateValue, onChange }: OrderDateFilterProps) {
+  const currentDate = new Date().toLocaleDateString('pt-PT', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  });
+
+  const handleChange = (date: Date | null) => {
+    if (!date) {
+      onChange('');
+      return;
+    }
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    onChange(`${year}-${month}-${day}`);
+  };
+
+  return (
+    <DatePicker
+      selected={dateValue}
+      onChange={handleChange}
+      placeholderText={currentDate}
+      className={css.dateInput}
+      portalId="datepicker-portal"
+    />
+  );
 }
 
 export default OrderDateFilter;

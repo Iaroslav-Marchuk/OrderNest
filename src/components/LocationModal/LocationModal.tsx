@@ -4,9 +4,9 @@ import { PulseLoader } from 'react-spinners';
 import css from './LocationModal.module.css';
 
 const LINES = [
-  { value: 'line_1', label: 'Linha 1' },
-  { value: 'line_2', label: 'Linha 2' },
-  { value: 'line_3', label: 'Linha 3' },
+  { value: 'line_1', label: 'Line 1' },
+  { value: 'line_2', label: 'Line 2' },
+  { value: 'line_3', label: 'Line 3' },
 ];
 
 interface LocationModalProps {

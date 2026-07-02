@@ -1,6 +1,10 @@
 export interface OrderItem {
   _id: string;
-  type: { _id: string; label: string };
+  type: {
+    _id: string;
+    label: string;
+    temper: 'required' | 'forbidden' | 'optional';
+  };
   thickness: string;
   sizeX: number;
   sizeY: number;

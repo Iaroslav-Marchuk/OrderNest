@@ -21,10 +21,8 @@ function OrderItemsTable({ orderId }: OrderItemsTableProps) {
       <table className={css.table}>
         <thead>
           <tr>
-            <th className={css.th}>Glass type</th>
-            <th className={css.th}>Thickness</th>
+            <th className={css.th}>Glass</th>
             <th className={css.th}>Size (mm)</th>
-            <th className={css.th}>Tempered</th>
             <th className={css.th}>Qty</th>
             <th className={css.th}>Reason</th>
             <th className={css.th}>Notes</th>

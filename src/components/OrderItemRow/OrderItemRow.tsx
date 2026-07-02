@@ -10,6 +10,7 @@ import { useRef, useState } from 'react';
 import type { OrderItem } from '../../types/order';
 
 import css from './OrderItemRow.module.css';
+import { formatGlassLabel, formatSize } from '../../utils/formatText';
 
 interface OrderItemRowProps {
   item: OrderItem;
@@ -48,12 +49,8 @@ function OrderItemRow({ item, orderId }: OrderItemRowProps) {
   return (
     <>
       <tr className={css.row}>
-        <td className={css.td}>{item.type.label}</td>
-        <td className={css.td}>{item.thickness} mm</td>
-        <td className={css.td}>
-          {item.sizeX} × {item.sizeY}
-        </td>
-        <td className={css.td}>{item.isTempered ? 'Yes' : 'No'}</td>
+        <td className={css.td}>{formatGlassLabel(item)}</td>
+        <td className={css.td}>{formatSize(item)}</td>
         <td className={css.td}>{item.quantity}</td>
         <td className={css.td}>{item.reason}</td>
         <td className={css.td}>{item.notes || '—'}</td>

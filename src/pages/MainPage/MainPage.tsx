@@ -41,7 +41,7 @@ function MainPage() {
     queryParams;
   const inputValue = String(ep || client || '');
   const locationValue = location || 'all';
-  const dateValue = date || '';
+  const dateValue = date ? new Date(date) : null;
 
   const handleSetPage = (page: number) => {
     const params = Object.fromEntries(searchParams.entries());
@@ -149,7 +149,10 @@ function MainPage() {
               onClear={handleClearSearch}
             />
 
-            <OrderDateFilter value={dateValue} onChange={handleDateChange} />
+            <OrderDateFilter
+              dateValue={dateValue}
+              onChange={handleDateChange}
+            />
             <OrderLocationFilter
               value={locationValue}
               onChange={handleLocationChange}

@@ -28,8 +28,17 @@ function OrderItemForm({
   const thicknessList = selectedType?.thickness || [];
 
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFieldValue(`items[${index}].type`, e.target.value);
+    const newTypeId = e.target.value;
+    const newType = typesList.find(t => t._id === newTypeId);
+
+    setFieldValue(`items[${index}].type`, newTypeId);
     setFieldValue(`items[${index}].thickness`, '');
+
+    if (newType?.temper === 'required') {
+      setFieldValue(`items[${index}].isTempered`, true);
+    } else if (newType?.temper === 'forbidden') {
+      setFieldValue(`items[${index}].isTempered`, false);
+    }
   };
 
   return (
@@ -86,7 +95,11 @@ function OrderItemForm({
         <div className={css.temperedGroup}>
           <label className={css.label}>Tempered</label>
           <div className={css.checkboxWrapper}>
-            <Field type="checkbox" name={`items[${index}].isTempered`} />
+            <Field
+              type="checkbox"
+              name={`items[${index}].isTempered`}
+              disabled={selectedType?.temper !== 'optional'}
+            />
           </div>
         </div>
       </div>
