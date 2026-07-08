@@ -1,5 +1,6 @@
 import type {
   AddItemToOrderFormValues,
+  ClearArchiveRes,
   DeleteOrderItemReq,
   DeleteOrderItemRes,
   EditOrderItemReq,
@@ -26,6 +27,22 @@ export const getOrdersApi = async (
     message: string;
     data: OrderResponse;
   }>('/orders', { params: cleanParams });
+
+  return data.data;
+};
+
+export const getArchivedOrdersApi = async (
+  params: GetOrdersParams
+): Promise<OrderResponse> => {
+  const cleanParams = Object.fromEntries(
+    Object.entries(params).filter(
+      ([, v]) => v !== '' && v !== undefined && v !== null
+    )
+  );
+  const { data } = await axiosInstance.get<{
+    message: string;
+    data: OrderResponse;
+  }>('/orders/archive', { params: cleanParams });
 
   return data.data;
 };
@@ -122,4 +139,22 @@ export const updateOrderItemStatusApi = async ({
     data: { updatedItem: OrderItem };
   }>(`/orders/${orderId}/items/${itemId}/status`, { status });
   return data.data.updatedItem;
+};
+
+export const clearArchiveApi = async (): Promise<ClearArchiveRes> => {
+  const { data } = await axiosInstance.delete<{
+    message: string;
+    data: ClearArchiveRes;
+  }>('/orders/archive');
+  return data.data;
+};
+
+export const deleteArchivedOrderApi = async (
+  orderId: string
+): Promise<Order> => {
+  const { data } = await axiosInstance.delete<{
+    message: string;
+    data: Order;
+  }>(`/orders/archive/${orderId}`);
+  return data.data;
 };

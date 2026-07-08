@@ -123,6 +123,15 @@
   color: var(--color-text-primary);
   background: var(--color-bg-elevated);
 }
+.btn:disabled {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.btn:disabled:hover {
+  color: var(--color-text-muted);
+  background: transparent;
+}
 .btnDelete {
   display: flex;
   align-items: center;
@@ -137,26 +146,11 @@
 .btnDelete:hover {
   background: var(--color-error-bg);
 }
-
-.addItemBtn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 10px 14px 14px;
-  height: 32px;
-  padding: 0 12px;
-  background: transparent;
-  border: 1px dashed var(--color-bg-border);
-  border-radius: 8px;
-  color: var(--color-text-secondary);
-  font-size: 13px;
-  font-weight: 500;
-  transition:
-    border-color 0.2s ease,
-    color 0.2s ease;
+.btnDelete:disabled {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
 }
-
-.addItemBtn:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+.btnDelete:disabled:hover {
+  background: transparent;
 }

@@ -7,14 +7,33 @@ import { useState } from 'react';
 import { Plus } from 'lucide-react';
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import AddOrderItemForm from '../AddOrderItemForm/AddOrderItemForm';
+import type { Order } from '../../types/order';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 
 interface OrderItemsTableProps {
   orderId: string;
+  ownerId: string;
+  orderStatus: Order['status'];
 }
 
-function OrderItemsTable({ orderId }: OrderItemsTableProps) {
+function OrderItemsTable({
+  orderId,
+  ownerId,
+  orderStatus,
+}: OrderItemsTableProps) {
   const { orderItems, isOrderItemsLoading } = useOrderItems(orderId);
   const [isAddItemOpen, setIsAddItemOpen] = useState(false);
+  const { currentUser } = useCurrentUser();
+
+  const isStarted = orderStatus !== 'created';
+  const isOwner = currentUser?._id === ownerId;
+  const isLocked = isStarted || !isOwner;
+
+  const getLockReason = () => {
+    if (isStarted) return 'Order already started production';
+    if (!isOwner) return 'You can only manage your own orders';
+    return undefined;
+  };
 
   return (
     <div className={css.wrapper}>
@@ -35,7 +54,13 @@ function OrderItemsTable({ orderId }: OrderItemsTableProps) {
             <SkeletonOrderItems />
           ) : (
             orderItems.map(item => (
-              <OrderItemRow key={item._id} item={item} orderId={orderId} />
+              <OrderItemRow
+                key={item._id}
+                item={item}
+                orderId={orderId}
+                ownerId={ownerId}
+                orderStatus={orderStatus}
+              />
             ))
           )}
         </tbody>
@@ -46,6 +71,8 @@ function OrderItemsTable({ orderId }: OrderItemsTableProps) {
           e.stopPropagation();
           setIsAddItemOpen(true);
         }}
+        disabled={isLocked}
+        title={getLockReason()}
       >
         <Plus size={14} /> Add item
       </button>

@@ -101,8 +101,9 @@ export interface DeleteOrderItemReq {
 export interface DeleteOrderItemRes {
   message: string;
   data: {
-    orderDeleted: boolean;
+    orderDeleted?: boolean;
     deletedItemId: string;
+    updatedOrder?: Order;
   };
 }
 
@@ -110,4 +111,9 @@ export interface UpdateOrderItemStatusReq {
   orderId: string;
   itemId: string;
   status: 'created' | 'in_progress' | 'completed';
+}
+
+export interface ClearArchiveRes {
+  deletedOrders: number;
+  deletedItems: number;
 }

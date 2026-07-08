@@ -42,3 +42,14 @@
   border-color: var(--color-accent);
   color: var(--color-accent);
 }
+
+.addItemBtn:disabled {
+  color: var(--color-text-muted);
+  border-color: var(--color-bg-border);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.addItemBtn:disabled:hover {
+  border-color: var(--color-bg-border);
+  color: var(--color-text-muted);
+}

@@ -8,7 +8,7 @@ import css from './LoginForm.module.css';
 import type { LoginUserReq } from '../../types/auth';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { locationOfUserApi, loginApi } from '../../services/authApi';
+import { changeLocationApi, loginApi } from '../../services/authApi';
 import { useState } from 'react';
 import LocationModal from '../LocationModal/LocationModal';
 
@@ -35,7 +35,7 @@ function LoginForm() {
   const [userName, setUserName] = useState('');
 
   const { mutate: setLocation, isPending: isSettingLocation } = useMutation({
-    mutationFn: locationOfUserApi,
+    mutationFn: changeLocationApi,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       toast.success(`Welcome, ${userName}!`);

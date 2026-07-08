@@ -2,14 +2,12 @@
   padding: 24px;
   max-width: 480px;
 }
-
 .title {
   font-size: 22px;
   font-weight: 600;
   color: var(--color-text-primary);
   margin-bottom: 24px;
 }
-
 .top {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-bg-border);
@@ -17,14 +15,12 @@
   padding: 20px;
   margin-bottom: 16px;
 }
-
 .line1 {
   display: flex;
   align-items: center;
   gap: 16px;
   margin-bottom: 12px;
 }
-
 .avatar {
   width: 48px;
   height: 48px;
@@ -38,20 +34,17 @@
   justify-content: center;
   flex-shrink: 0;
 }
-
 .name {
   font-size: 18px;
   font-weight: 600;
   color: var(--color-text-primary);
 }
-
 .line2 {
   display: flex;
   align-items: center;
   gap: 8px;
   padding-left: 64px;
 }
-
 .role {
   font-size: 12px;
   font-weight: 500;
@@ -62,7 +55,6 @@
   border: 1px solid var(--color-accent-medium);
   text-transform: capitalize;
 }
-
 .isActive {
   font-size: 12px;
   font-weight: 500;
@@ -72,7 +64,15 @@
   color: var(--color-success);
   border: 1px solid var(--color-success-border);
 }
-
+.locationBadge {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning-border);
+}
 .middle {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-bg-border);
@@ -80,13 +80,11 @@
   padding: 20px;
   margin-bottom: 16px;
 }
-
 .list {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-
 .item {
   display: flex;
   justify-content: space-between;
@@ -95,8 +93,34 @@
   padding-bottom: 12px;
   border-bottom: 1px solid var(--color-bg-border);
 }
-
 .item:last-child {
   border-bottom: none;
   padding-bottom: 0;
+}
+.itemLabel {
+  color: var(--color-text-secondary);
+}
+.itemValue {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+.changeLocationBtn {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid var(--color-accent-medium);
+  color: var(--color-accent);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.changeLocationBtn:hover {
+  background: var(--color-accent-deep);
+  color: var(--color-accent-hover);
 }

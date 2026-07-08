@@ -10,7 +10,7 @@ import type { Order } from '../../types/order';
 import OrderRow from '../OrderRow/OrderRow';
 import SkeletonOrders from '../SkeletonOrders/SkeletonOrders';
 
-export type OrdersSortField = 'createdAt' | 'ep' | 'client';
+export type OrdersSortField = 'createdAt' | 'updatedAt' | 'ep' | 'client';
 
 interface OrdersTableProps {
   orders: Order[];

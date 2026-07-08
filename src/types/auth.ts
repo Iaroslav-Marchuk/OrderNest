@@ -20,10 +20,10 @@ export interface ChangePasswordRes {
   user: User;
 }
 
-export interface LocationOfUserReq {
+export interface ChangeLocationReq {
   location: string;
 }
 
-export interface LocationOfUserRes {
+export interface ChangeLocationRes {
   accessToken: string;
 }

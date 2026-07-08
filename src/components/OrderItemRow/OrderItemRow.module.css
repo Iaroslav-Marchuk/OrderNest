@@ -1,4 +1,4 @@
-css.row {
+.row {
   border-bottom: 1px solid var(--color-bg-border);
 }
 
@@ -50,6 +50,28 @@ css.row {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+.status {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.statusCreated {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+.statusInProgress {
+  background: var(--color-info-bg);
+  color: var(--color-accent-hover);
+}
+.statusCompleted {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
 .btn {
   display: flex;
   align-items: center;
@@ -61,10 +83,18 @@ css.row {
     color 0.15s,
     background 0.15s;
 }
-
 .btn:hover {
   color: var(--color-text-primary);
   background: var(--color-bg-elevated);
+}
+.btn:disabled {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.btn:disabled:hover {
+  color: var(--color-text-muted);
+  background: transparent;
 }
 
 .btnDelete {
@@ -78,7 +108,39 @@ css.row {
     color 0.15s,
     background 0.15s;
 }
-
 .btnDelete:hover {
   background: var(--color-error-bg);
+}
+.btnDelete:disabled {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.btnDelete:disabled:hover {
+  background: transparent;
+}
+
+.btnstatus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  color: var(--color-accent);
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+.btnstatus:hover {
+  color: var(--color-accent-hover);
+  background: var(--color-bg-elevated);
+}
+.btnstatus:disabled {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.btnstatus:disabled:hover {
+  color: var(--color-text-muted);
+  background: transparent;
 }

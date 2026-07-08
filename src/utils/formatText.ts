@@ -4,7 +4,7 @@ export const formatGlassLabel = (
   item: Pick<OrderItem, 'type' | 'isTempered' | 'thickness'>
 ): string => {
   const temperPart = item.isTempered ? 'Temper. ' : '';
-  return `${item.type.label} ${temperPart}${item.thickness}мм`;
+  return `${item.type.label} ${temperPart}${item.thickness}mm`;
 };
 
 export const formatSize = (

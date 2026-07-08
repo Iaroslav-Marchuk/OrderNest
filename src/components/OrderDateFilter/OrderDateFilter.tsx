@@ -1,20 +1,26 @@
 import css from './OrderDateFilter.module.css';
-
 import 'react-datepicker/dist/react-datepicker.css';
-
 import DatePicker from 'react-datepicker';
 
 interface OrderDateFilterProps {
   dateValue: Date | null;
   onChange: (value: string) => void;
+  defaultRangeDays?: number;
 }
 
-function OrderDateFilter({ dateValue, onChange }: OrderDateFilterProps) {
-  const currentDate = new Date().toLocaleDateString('pt-PT', {
-    day: 'numeric',
-    month: 'numeric',
-    year: 'numeric',
-  });
+function OrderDateFilter({
+  dateValue,
+  onChange,
+  defaultRangeDays = 1,
+}: OrderDateFilterProps) {
+  const placeholderText =
+    defaultRangeDays <= 1
+      ? new Date().toLocaleDateString('pt-PT', {
+          day: 'numeric',
+          month: 'numeric',
+          year: 'numeric',
+        })
+      : `Last ${defaultRangeDays} days`;
 
   const handleChange = (date: Date | null) => {
     if (!date) {
@@ -31,7 +37,7 @@ function OrderDateFilter({ dateValue, onChange }: OrderDateFilterProps) {
     <DatePicker
       selected={dateValue}
       onChange={handleChange}
-      placeholderText={currentDate}
+      placeholderText={placeholderText}
       className={css.dateInput}
       portalId="datepicker-portal"
     />

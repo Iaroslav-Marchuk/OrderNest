@@ -1,0 +1,68 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+.topWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.counter {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.btnClear {
+  padding: 10px 20px;
+  border: 1px solid var(--color-error-border);
+  border-radius: 8px;
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.btnClear:hover:not(:disabled) {
+  background-color: var(--color-error);
+  border-color: var(--color-error);
+  color: var(--color-bg-deep);
+}
+
+.btnClear:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

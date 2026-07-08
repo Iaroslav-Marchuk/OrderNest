@@ -1,13 +1,12 @@
 import * as Yup from 'yup';
-
 import css from './ChangePasswordForm.module.css';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { changePasswordApi } from '../../services/authApi';
 import toast from 'react-hot-toast';
 import { ErrorMessage, Field, Form, Formik, type FormikHelpers } from 'formik';
-
 import { PulseLoader } from 'react-spinners';
 import { setAccessToken } from '../../services/axiosInstance';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 
 const validationSchema = Yup.object().shape({
   oldPass: Yup.string().required('Required field'),
@@ -25,6 +24,7 @@ const initialValues = {
 
 function ChangePasswordForm() {
   const queryClient = useQueryClient();
+  const { currentUser } = useCurrentUser();
 
   const { mutate: changePassword, isPending } = useMutation({
     mutationFn: changePasswordApi,
@@ -56,8 +56,17 @@ function ChangePasswordForm() {
       onSubmit={handleSubmit}
     >
       <Form className={css.form}>
+        <input
+          type="text"
+          name="username"
+          autoComplete="username"
+          value={currentUser?.tel ?? ''}
+          readOnly
+          hidden
+        />
+
         <div className={css.formGroup}>
-          <label htmlFor="password" className={css.label}>
+          <label htmlFor="oldPass" className={css.label}>
             Old password
           </label>
           <div className={css.inputContainer}>
@@ -75,7 +84,7 @@ function ChangePasswordForm() {
         </div>
 
         <div className={css.formGroup}>
-          <label htmlFor="password" className={css.label}>
+          <label htmlFor="newPass" className={css.label}>
             New password
           </label>
           <div className={css.inputContainer}>
@@ -84,7 +93,7 @@ function ChangePasswordForm() {
               name="newPass"
               id="newPass"
               placeholder=" "
-              autoComplete="current-password"
+              autoComplete="new-password"
               className={css.input}
               disabled={isPending}
             />
@@ -93,7 +102,7 @@ function ChangePasswordForm() {
         </div>
 
         <div className={css.formGroup}>
-          <label htmlFor="password" className={css.label}>
+          <label htmlFor="confirmPass" className={css.label}>
             Confirm password
           </label>
           <div className={css.inputContainer}>
@@ -102,7 +111,7 @@ function ChangePasswordForm() {
               name="confirmPass"
               id="confirmPass"
               placeholder=" "
-              autoComplete="current-password"
+              autoComplete="new-password"
               className={css.input}
               disabled={isPending}
             />

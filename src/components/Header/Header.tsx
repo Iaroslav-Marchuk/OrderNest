@@ -72,7 +72,7 @@ function Header() {
             className={css.avatarBtn}
             onClick={() => setIsDropdownOpen(prev => !prev)}
           >
-            {currentUser?.name}
+            {currentUser?.name.charAt(0).toUpperCase()}
           </button>
 
           {isDropdownOpen && (

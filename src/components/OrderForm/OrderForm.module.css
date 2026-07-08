@@ -3,8 +3,6 @@
   flex-direction: column;
   gap: 20px;
   width: 640px;
-  max-height: 80vh;
-  overflow-y: auto;
   align-items: center;
 }
 
@@ -138,12 +136,10 @@
 
 .submitBtn:hover {
   background: var(--color-accent-hover);
-  transform: scale(1.02);
 }
 
 .submitBtn:active {
   background: var(--color-accent-medium);
-  transform: scale(0.98);
 }
 
 .submitBtn:disabled {

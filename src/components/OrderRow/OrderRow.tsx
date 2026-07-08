@@ -10,6 +10,7 @@ import OrderItemsTable from '../OrderItemsTable/OrderItemsTable';
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import EditOrderForm from '../EditOrderForm/EditOrderForm';
 import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 
 interface OrderRowProps {
   order: Order;
@@ -36,12 +37,23 @@ const LOCATION_LABEL: Record<Order['location'], string> = {
 
 function OrderRow({ order, index }: OrderRowProps) {
   const queryClient = useQueryClient();
+  const { currentUser } = useCurrentUser();
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const isStarted = order.status !== 'created';
+  const isOwner = currentUser?._id === order.owner?._id;
+  const isLocked = isStarted || !isOwner;
+
+  const getLockReason = () => {
+    if (isStarted) return 'Order already started production';
+    if (!isOwner) return 'You can only manage your own orders';
+    return undefined;
+  };
 
   const { mutate: deleteOrder } = useMutation({
     mutationFn: deleteOrderApi,
@@ -119,7 +131,8 @@ function OrderRow({ order, index }: OrderRowProps) {
                     setIsEditOpen(true);
                     setIsDropdownOpen(false);
                   }}
-                  title="Edit"
+                  disabled={isLocked}
+                  title={getLockReason() ?? 'Edit'}
                 >
                   <Pencil size={16} strokeWidth={1.5} />
                 </button>
@@ -129,7 +142,8 @@ function OrderRow({ order, index }: OrderRowProps) {
                     setIsConfirmOpen(true);
                     setIsDropdownOpen(false);
                   }}
-                  title="Delete"
+                  disabled={isLocked}
+                  title={getLockReason() ?? 'Delete'}
                 >
                   <Trash2 size={16} strokeWidth={1.5} />
                 </button>
@@ -142,7 +156,11 @@ function OrderRow({ order, index }: OrderRowProps) {
       {isExpanded && (
         <tr>
           <td colSpan={9} className={css.expandCell}>
-            <OrderItemsTable orderId={order._id} />
+            <OrderItemsTable
+              orderId={order._id}
+              ownerId={order.owner?._id ?? ''}
+              orderStatus={order.status}
+            />
           </td>
         </tr>
       )}
