@@ -20,9 +20,20 @@ function MainPage() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  const { currentUser } = useCurrentUser();
+  const PRODUCTION_ROLES = ['hardening', 'quality', 'logistics'];
+
+  const defaultLocation =
+    currentUser?.role === 'assembly'
+      ? (currentUser.location ?? '')
+      : currentUser?.role && PRODUCTION_ROLES.includes(currentUser.role)
+        ? currentUser.role
+        : '';
+
   const { queryParams, handleSetPage, handleSortChange } = useOrderQueryParams({
     defaultSortBy: 'createdAt',
     defaultSortOrder: 'asc',
+    defaultLocation,
   });
 
   const { page, perPage, sortBy, sortOrder } = queryParams;
@@ -33,7 +44,6 @@ function MainPage() {
   const from = (page - 1) * perPage + 1;
   const to = Math.min(page * perPage, totalItems);
 
-  const { currentUser } = useCurrentUser();
   const canCreateOrder = [
     'hardening',
     'assembly',
@@ -51,7 +61,10 @@ function MainPage() {
           </div>
 
           <div className={css.topWrapper}>
-            <OrderFilters />
+            <OrderFilters
+              defaultRangeDays={7}
+              defaultLocation={defaultLocation}
+            />
             <button
               type="button"
               className={css.btn}

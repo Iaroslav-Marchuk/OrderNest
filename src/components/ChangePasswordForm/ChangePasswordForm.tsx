@@ -8,6 +8,10 @@ import { PulseLoader } from 'react-spinners';
 import { setAccessToken } from '../../services/axiosInstance';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 
+interface ChangePasswordFormProps {
+  onSuccess?: () => void;
+}
+
 const validationSchema = Yup.object().shape({
   oldPass: Yup.string().required('Required field'),
   newPass: Yup.string().required('Required field'),
@@ -22,7 +26,7 @@ const initialValues = {
   confirmPass: '',
 };
 
-function ChangePasswordForm() {
+function ChangePasswordForm({ onSuccess }: ChangePasswordFormProps) {
   const queryClient = useQueryClient();
   const { currentUser } = useCurrentUser();
 
@@ -32,6 +36,7 @@ function ChangePasswordForm() {
       setAccessToken(data.accessToken);
       queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       toast.success('Password changed successfully!');
+      onSuccess?.();
     },
     onError: () => {
       toast.error('Something went wrong!');

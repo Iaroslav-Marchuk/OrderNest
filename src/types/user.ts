@@ -7,13 +7,14 @@ export type UserRole =
   | 'logistics'
   | 'guest';
 
-export type HardeningLine = 'line_1' | 'line_2' | 'line_3';
+export type AssemblyLine = 'line_1' | 'line_2' | 'line_3';
 
 export interface User {
   _id: string;
   name: string;
   tel: string;
   role: UserRole;
+  location: AssemblyLine | null;
   telegramChatId: string | null;
   isActive: boolean;
   createdAt: string;

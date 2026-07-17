@@ -1,10 +1,10 @@
 import css from './ProfilePage.module.css';
-import ChangePasswordForm from '../../components/ChangePasswordForm/ChangePasswordForm';
+
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import SkeletonProfile from '../../components/SkeletonProfile/SkeletonProfile';
 import { useState } from 'react';
-import { useChangeLocation } from '../../hooks/useChangeLocation';
-import LocationModal from '../../components/LocationModal/LocationModal';
+import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
+import ChangePasswordForm from '../../components/ChangePasswordForm/ChangePasswordForm';
 
 const LOCATION_LABEL: Record<string, string> = {
   line_1: 'Line 1',
@@ -14,9 +14,9 @@ const LOCATION_LABEL: Record<string, string> = {
 
 function ProfilePage() {
   const { currentUser, isUserLoading, location } = useCurrentUser();
-  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const { mutate: changeLocation, isPending: isLocationPending } =
-    useChangeLocation(() => setIsLocationModalOpen(false));
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const openModal = () => setShowChangePassword(true);
+  const closeModal = () => setShowChangePassword(false);
 
   if (isUserLoading) {
     return <SkeletonProfile />;
@@ -63,33 +63,26 @@ function ProfilePage() {
             <span className={css.itemLabel}>Role</span>
             <span className={css.itemValue}>{currentUser?.role}</span>
           </li>
-          {location && currentUser?.role === 'assembly' && (
-            <li className={css.item}>
-              <span className={css.itemLabel}>Location</span>
-              <button
-                type="button"
-                className={css.changeLocationBtn}
-                onClick={() => setIsLocationModalOpen(true)}
-              >
-                Change
-              </button>
-            </li>
-          )}
         </ul>
       </div>
 
-      {currentUser && <ChangePasswordForm />}
+      <div className={css.middle}>
+        <div className={css.item}>
+          <span className={css.itemLabel}>Password</span>
+          <button
+            type="button"
+            className={css.changePasswordBtn}
+            onClick={openModal}
+          >
+            Change
+          </button>
+        </div>
+      </div>
 
-      {isLocationModalOpen && (
-        <LocationModal
-          userName={currentUser?.name ?? ''}
-          isPending={isLocationPending}
-          currentLocation={location ?? undefined}
-          onClose={() => setIsLocationModalOpen(false)}
-          onSelect={line => changeLocation({ location: line })}
-          title="Change your location"
-          subtitle="Where do you work now?"
-        />
+      {showChangePassword && (
+        <ModalOverlay onClose={closeModal}>
+          <ChangePasswordForm onSuccess={closeModal} />
+        </ModalOverlay>
       )}
     </div>
   );

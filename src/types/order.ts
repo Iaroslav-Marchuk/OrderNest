@@ -12,7 +12,12 @@ export interface OrderItem {
   quantity: number;
   reason: string;
   notes: string;
-  status: 'created' | 'in_progress' | 'completed';
+  status: 'created' | 'in_progress' | 'rejected' | 'completed';
+  completed: {
+    by: { _id: string; name: string; role: string };
+    at: string;
+    location: 'line_1' | 'line_2' | 'line_3';
+  } | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -107,13 +112,12 @@ export interface DeleteOrderItemRes {
   };
 }
 
-export interface UpdateOrderItemStatusReq {
-  orderId: string;
-  itemId: string;
-  status: 'created' | 'in_progress' | 'completed';
-}
-
 export interface ClearArchiveRes {
   deletedOrders: number;
   deletedItems: number;
+}
+
+export interface OrderItemStatusReq {
+  orderId: string;
+  itemId: string;
 }

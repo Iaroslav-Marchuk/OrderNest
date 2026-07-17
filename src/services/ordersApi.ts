@@ -10,8 +10,8 @@ import type {
   OrderExistsResponse,
   OrderFormValues,
   OrderItem,
+  OrderItemStatusReq,
   OrderResponse,
-  UpdateOrderItemStatusReq,
 } from '../types/order';
 import { axiosInstance } from './axiosInstance';
 
@@ -129,15 +129,36 @@ export const deleteOrderItemApi = async ({
   return data;
 };
 
-export const updateOrderItemStatusApi = async ({
+export const startOrderItemApi = async ({
   orderId,
   itemId,
-  status,
-}: UpdateOrderItemStatusReq): Promise<OrderItem> => {
+}: OrderItemStatusReq): Promise<OrderItem> => {
   const { data } = await axiosInstance.patch<{
     message: string;
     data: { updatedItem: OrderItem };
-  }>(`/orders/${orderId}/items/${itemId}/status`, { status });
+  }>(`/orders/${orderId}/items/${itemId}/start`);
+  return data.data.updatedItem;
+};
+
+export const completeOrderItemApi = async ({
+  orderId,
+  itemId,
+}: OrderItemStatusReq): Promise<OrderItem> => {
+  const { data } = await axiosInstance.patch<{
+    message: string;
+    data: { updatedItem: OrderItem };
+  }>(`/orders/${orderId}/items/${itemId}/complete`);
+  return data.data.updatedItem;
+};
+
+export const rejectOrderItemApi = async ({
+  orderId,
+  itemId,
+}: OrderItemStatusReq): Promise<OrderItem> => {
+  const { data } = await axiosInstance.patch<{
+    message: string;
+    data: { updatedItem: OrderItem };
+  }>(`/orders/${orderId}/items/${itemId}/reject`);
   return data.data.updatedItem;
 };
 

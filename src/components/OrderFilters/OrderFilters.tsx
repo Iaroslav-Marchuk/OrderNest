@@ -2,16 +2,22 @@ import { useSearchParams } from 'react-router-dom';
 import SearchBox from '../SearchBox/SearchBox';
 import OrderDateFilter from '../OrderDateFilter/OrderDateFilter';
 import OrderLocationFilter from '../OrderLocationFilter/OrderLocationFilter';
+
 interface OrderFiltersProps {
   defaultRangeDays?: number;
+  defaultLocation?: string;
 }
-function OrderFilters({ defaultRangeDays = 1 }: OrderFiltersProps) {
+
+function OrderFilters({
+  defaultRangeDays = 1,
+  defaultLocation = '',
+}: OrderFiltersProps) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const ep = Number(searchParams.get('ep')) || '';
   const client = searchParams.get('client') || '';
   const date = searchParams.get('date') || '';
-  const location = searchParams.get('location') || '';
+  const location = searchParams.get('location') || defaultLocation;
 
   const inputValue = String(ep || client || '');
   const locationValue = location || 'all';
@@ -46,11 +52,7 @@ function OrderFilters({ defaultRangeDays = 1 }: OrderFiltersProps) {
   const handleLocationChange = (value: string) => {
     setSearchParams(prev => {
       const params = new URLSearchParams(prev);
-      if (value === 'all') {
-        params.delete('location');
-      } else {
-        params.set('location', value);
-      }
+      params.set('location', value);
       params.set('page', '1');
       return params;
     });

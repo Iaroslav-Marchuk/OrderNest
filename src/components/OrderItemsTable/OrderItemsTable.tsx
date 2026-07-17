@@ -46,6 +46,9 @@ function OrderItemsTable({
             <th className={css.th}>Reason</th>
             <th className={css.th}>Notes</th>
             <th className={css.th}>Status</th>
+            <th className={css.th}>Finished At</th>
+            <th className={css.th}>Finished On</th>
+            <th className={css.th}>Finished By</th>
             <th className={css.th}>Actions</th>
           </tr>
         </thead>

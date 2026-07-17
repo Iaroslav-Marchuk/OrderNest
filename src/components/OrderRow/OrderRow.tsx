@@ -29,10 +29,13 @@ const STATUS_CLASS: Record<Order['status'], string> = {
   completed: css.statusCompleted,
 };
 
-const LOCATION_LABEL: Record<Order['location'], string> = {
+const LOCATION_LABEL: Record<string, string> = {
   line_1: 'Line 1',
   line_2: 'Line 2',
   line_3: 'Line 3',
+  hardening: 'Hardening',
+  quality: 'Quality',
+  logistics: 'Logistics',
 };
 
 function OrderRow({ order, index }: OrderRowProps) {
@@ -101,7 +104,9 @@ function OrderRow({ order, index }: OrderRowProps) {
         <td className={css.td}>
           {new Date(order.createdAt).toLocaleDateString('pt-PT')}
         </td>
-        <td className={css.td}>{LOCATION_LABEL[order.location]}</td>
+        <td className={css.td}>
+          {LOCATION_LABEL[order.location] ?? order.location}
+        </td>
         <td className={css.td}>
           <span className={css.responsible}>{order.owner?.name ?? '—'}</span>
         </td>
@@ -110,7 +115,7 @@ function OrderRow({ order, index }: OrderRowProps) {
             {STATUS_LABEL[order.status]}
           </span>
         </td>
-        <td className={css.td}>{order.itemsCount}</td>
+        <td className={css.td}>{order.itemsPendingCount}</td>
         <td className={css.td}>
           <div
             className={css.actionsCell}

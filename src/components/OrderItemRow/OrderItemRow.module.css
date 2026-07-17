@@ -72,6 +72,11 @@
   color: var(--color-success);
 }
 
+.statusRejected {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
 .btn {
   display: flex;
   align-items: center;

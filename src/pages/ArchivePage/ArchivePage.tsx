@@ -68,7 +68,7 @@ function ArchivePage() {
               className={css.btnClear}
               onClick={openConfirm}
               title="Clear Archive"
-              disabled={isPending}
+              disabled={isPending || totalItems === 0}
             >
               {isPending ? 'Clearing...' : 'Clear Archive'}
             </button>

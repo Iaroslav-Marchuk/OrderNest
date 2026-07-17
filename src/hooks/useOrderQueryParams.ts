@@ -5,11 +5,13 @@ import type { SortOrder } from '../types/common';
 interface UseOrderQueryParamsOptions {
   defaultSortBy?: OrdersSortField;
   defaultSortOrder?: SortOrder;
+  defaultLocation?: string;
 }
 
 export const useOrderQueryParams = ({
   defaultSortBy = 'createdAt',
   defaultSortOrder = 'asc',
+  defaultLocation = '',
 }: UseOrderQueryParamsOptions = {}) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -21,7 +23,7 @@ export const useOrderQueryParams = ({
     ep: Number(searchParams.get('ep')) || '',
     client: searchParams.get('client') || '',
     date: searchParams.get('date') || '',
-    location: searchParams.get('location') || '',
+    location: searchParams.get('location') || defaultLocation || '',
   };
 
   const handleSetPage = (page: number) => {

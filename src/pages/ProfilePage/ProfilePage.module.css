@@ -2,12 +2,14 @@
   padding: 24px;
   max-width: 480px;
 }
+
 .title {
   font-size: 22px;
   font-weight: 600;
   color: var(--color-text-primary);
   margin-bottom: 24px;
 }
+
 .top {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-bg-border);
@@ -15,12 +17,14 @@
   padding: 20px;
   margin-bottom: 16px;
 }
+
 .line1 {
   display: flex;
   align-items: center;
   gap: 16px;
   margin-bottom: 12px;
 }
+
 .avatar {
   width: 48px;
   height: 48px;
@@ -34,17 +38,20 @@
   justify-content: center;
   flex-shrink: 0;
 }
+
 .name {
   font-size: 18px;
   font-weight: 600;
   color: var(--color-text-primary);
 }
+
 .line2 {
   display: flex;
   align-items: center;
   gap: 8px;
   padding-left: 64px;
 }
+
 .role {
   font-size: 12px;
   font-weight: 500;
@@ -55,6 +62,7 @@
   border: 1px solid var(--color-accent-medium);
   text-transform: capitalize;
 }
+
 .isActive {
   font-size: 12px;
   font-weight: 500;
@@ -64,6 +72,7 @@
   color: var(--color-success);
   border: 1px solid var(--color-success-border);
 }
+
 .locationBadge {
   font-size: 12px;
   font-weight: 500;
@@ -73,6 +82,7 @@
   color: var(--color-warning);
   border: 1px solid var(--color-warning-border);
 }
+
 .middle {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-bg-border);
@@ -80,26 +90,32 @@
   padding: 20px;
   margin-bottom: 16px;
 }
+
 .list {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
+
 .item {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: 14px;
   color: var(--color-text-secondary);
   padding-bottom: 12px;
   border-bottom: 1px solid var(--color-bg-border);
 }
+
 .item:last-child {
   border-bottom: none;
   padding-bottom: 0;
 }
+
 .itemLabel {
   color: var(--color-text-secondary);
 }
+
 .itemValue {
   display: flex;
   align-items: center;
@@ -107,20 +123,33 @@
   color: var(--color-text-primary);
   font-weight: 500;
 }
-.changeLocationBtn {
-  font-size: 11px;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 6px;
+
+.changePasswordBtn {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--color-accent-deep, #1e3a5f);
   background: transparent;
-  border: 1px solid var(--color-accent-medium);
-  color: var(--color-accent);
+  color: var(--color-accent-hover, #9fb9e2);
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
   transition:
-    background 0.15s ease,
-    color 0.15s ease;
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
-.changeLocationBtn:hover {
-  background: var(--color-accent-deep);
-  color: var(--color-accent-hover);
+
+.changePasswordBtn:hover {
+  background: var(--color-accent-deep, #1e3a5f);
+  color: #fff;
+  border-color: var(--color-accent-hover, #9fb9e2);
+}
+
+.changePasswordBtn:active {
+  transform: scale(0.98);
+}
+
+.changePasswordBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

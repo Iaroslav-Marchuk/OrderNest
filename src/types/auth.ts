@@ -19,11 +19,3 @@ export interface ChangePasswordRes {
   accessToken: string;
   user: User;
 }
-
-export interface ChangeLocationReq {
-  location: string;
-}
-
-export interface ChangeLocationRes {
-  accessToken: string;
-}

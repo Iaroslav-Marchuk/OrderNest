@@ -5,11 +5,10 @@ import type {
   LoginUserRes,
   ChangePasswordRes,
   ChangePasswordReq,
-  ChangeLocationReq,
-  ChangeLocationRes,
 } from '../types/auth';
 
 import type { User } from '../types/user';
+import { refreshSession } from './refreshManager';
 
 export const loginApi = async (
   credentials: LoginUserReq
@@ -28,11 +27,7 @@ export const logoutApi = async (): Promise<void> => {
 };
 
 export const refreshSessionApi = async (): Promise<void> => {
-  const { data } = await axiosInstance.post<{
-    message: string;
-    data: LoginUserRes;
-  }>('/auth/refresh');
-  setAccessToken(data.data.accessToken);
+  return refreshSession();
 };
 
 export const getCurrentUserApi = async (): Promise<User> => {
@@ -55,12 +50,12 @@ export const changePasswordApi = async (
 };
 
 export const changeLocationApi = async (
-  body: ChangeLocationReq
-): Promise<ChangeLocationRes> => {
+  location: string
+): Promise<{ location: string }> => {
   const { data } = await axiosInstance.patch<{
     message: string;
-    data: ChangeLocationRes;
-  }>('/auth/setLocation', body);
-  setAccessToken(data.data.accessToken);
+    data: { location: string };
+  }>('/auth/setLocation', { location });
+
   return data.data;
 };

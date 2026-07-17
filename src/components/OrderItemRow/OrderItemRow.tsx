@@ -1,12 +1,14 @@
-import { ArrowBigRight, Ellipsis, Pencil, Trash2 } from 'lucide-react';
+import { Check, Ellipsis, Pencil, Play, Trash2, X } from 'lucide-react';
 import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
 import EditOrderItemForm from '../EditOrderItemForm/EditOrderItemForm';
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import toast from 'react-hot-toast';
 import type { AxiosError } from 'axios';
 import {
+  completeOrderItemApi,
   deleteOrderItemApi,
-  updateOrderItemStatusApi,
+  rejectOrderItemApi,
+  startOrderItemApi,
 } from '../../services/ordersApi';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
@@ -23,42 +25,24 @@ interface OrderItemRowProps {
   orderStatus: Order['status'];
 }
 
-const STATUS_FLOW: OrderItem['status'][] = [
-  'created',
-  'in_progress',
-  'completed',
-];
-
 const STATUS_LABEL: Record<OrderItem['status'], string> = {
   created: 'Created',
   in_progress: 'In Progress',
   completed: 'Completed',
+  rejected: 'Rejected',
 };
 
 const STATUS_CLASS: Record<OrderItem['status'], string> = {
   created: css.statusCreated,
   in_progress: css.statusInProgress,
   completed: css.statusCompleted,
+  rejected: css.statusRejected,
 };
 
-const getNextStatus = (
-  current: OrderItem['status']
-): OrderItem['status'] | null => {
-  const currentIndex = STATUS_FLOW.indexOf(current);
-  if (currentIndex === -1 || currentIndex === STATUS_FLOW.length - 1) {
-    return null;
-  }
-  return STATUS_FLOW[currentIndex + 1];
-};
-
-const canAdvanceStatus = (
-  nextStatus: OrderItem['status'] | null,
-  role: string
-): boolean => {
-  if (!nextStatus) return false;
-  if (nextStatus === 'in_progress') return role === 'cutting';
-  if (nextStatus === 'completed') return role === 'assembly';
-  return false;
+const LOCATION_LABEL: Record<'line_1' | 'line_2' | 'line_3', string> = {
+  line_1: 'Line 1',
+  line_2: 'Line 2',
+  line_3: 'Line 3',
 };
 
 function OrderItemRow({
@@ -73,16 +57,31 @@ function OrderItemRow({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isRejectConfirmOpen, setIsRejectConfirmOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const isStarted = orderStatus !== 'created';
+  const isOrderStarted = orderStatus !== 'created';
   const isOwner = currentUser?._id === ownerId;
-  const isEditLocked = isStarted || !isOwner;
+  const isEditLocked = isOrderStarted || !isOwner;
 
   const getEditLockReason = () => {
-    if (isStarted) return 'Order already started production';
+    if (isOrderStarted) return 'Order already started production';
     if (!isOwner) return 'You can only manage your own orders';
     return undefined;
+  };
+
+  const canStart = item.status === 'created' && currentUser?.role === 'cutting';
+  const canCompleteOrReject =
+    item.status === 'in_progress' && currentUser?.role === 'assembly';
+
+  const invalidateAfterStatusChange = () => {
+    queryClient.invalidateQueries({ queryKey: ['orders'] });
+    queryClient.invalidateQueries({ queryKey: ['orderItems', orderId] });
+  };
+
+  const handleMutationError = (error: AxiosError<{ message: string }>) => {
+    const message = error.response?.data?.message;
+    toast.error(message ?? 'Something went wrong!');
   };
 
   const { mutate: deleteOrderItem } = useMutation({
@@ -100,33 +99,38 @@ function OrderItemRow({
         toast.success('Order item deleted successfully!');
       }
     },
-    onError: (error: AxiosError<{ message: string }>) => {
-      const message = error.response?.data?.message;
-      toast.error(message ?? 'Something went wrong!');
-    },
+    onError: handleMutationError,
   });
 
-  const { mutate: changeStatus, isPending: isStatusPending } = useMutation({
-    mutationFn: updateOrderItemStatusApi,
+  const { mutate: startItem, isPending: isStartPending } = useMutation({
+    mutationFn: startOrderItemApi,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
-      queryClient.invalidateQueries({ queryKey: ['orderItems', orderId] });
-      toast.success('Status updated!');
+      invalidateAfterStatusChange();
+      toast.success('Item started!');
     },
-    onError: (error: AxiosError<{ message: string }>) => {
-      const message = error.response?.data?.message;
-      toast.error(message ?? 'Something went wrong!');
-    },
+    onError: handleMutationError,
   });
 
-  const nextStatus = getNextStatus(item.status);
-  const canAdvance = canAdvanceStatus(nextStatus, currentUser?.role ?? '');
+  const { mutate: completeItem, isPending: isCompletePending } = useMutation({
+    mutationFn: completeOrderItemApi,
+    onSuccess: () => {
+      invalidateAfterStatusChange();
+      toast.success('Item completed!');
+    },
+    onError: handleMutationError,
+  });
 
-  const handleStatusChange = () => {
-    if (!nextStatus || !canAdvance) return;
-    changeStatus({ orderId, itemId: item._id, status: nextStatus });
-    setIsDropdownOpen(false);
-  };
+  const { mutate: rejectItem, isPending: isRejectPending } = useMutation({
+    mutationFn: rejectOrderItemApi,
+    onSuccess: () => {
+      invalidateAfterStatusChange();
+      toast.success('Item rejected — a rework item was created');
+    },
+    onError: handleMutationError,
+  });
+
+  const isStatusActionPending =
+    isStartPending || isCompletePending || isRejectPending;
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -155,6 +159,19 @@ function OrderItemRow({
           </span>
         </td>
         <td className={css.td}>
+          {item.completed?.at
+            ? new Date(item.completed.at).toLocaleDateString('pt-PT')
+            : '—'}
+        </td>
+        <td className={css.td}>
+          {item.completed?.location
+            ? LOCATION_LABEL[item.completed.location]
+            : '—'}
+        </td>
+        <td className={css.td}>
+          {item.completed?.by ? item.completed.by.name : '—'}
+        </td>
+        <td className={css.td}>
           <div
             className={css.actionsCell}
             ref={dropdownRef}
@@ -168,20 +185,46 @@ function OrderItemRow({
             </button>
             {isDropdownOpen && (
               <div className={css.menu}>
-                <button
-                  className={css.btnstatus}
-                  onClick={handleStatusChange}
-                  disabled={!canAdvance || isStatusPending}
-                  title={
-                    nextStatus
-                      ? canAdvance
-                        ? `Move to ${STATUS_LABEL[nextStatus]}`
-                        : 'You do not have permission for this action'
-                      : 'Already completed'
-                  }
-                >
-                  <ArrowBigRight size={16} strokeWidth={1.5} />
-                </button>
+                {canStart && (
+                  <button
+                    className={css.btnStart}
+                    onClick={() => {
+                      startItem({ orderId, itemId: item._id });
+                      setIsDropdownOpen(false);
+                    }}
+                    disabled={isStatusActionPending}
+                    title="Start production"
+                  >
+                    <Play size={16} strokeWidth={1.5} />
+                  </button>
+                )}
+
+                {canCompleteOrReject && (
+                  <>
+                    <button
+                      className={css.btnComplete}
+                      onClick={() => {
+                        completeItem({ orderId, itemId: item._id });
+                        setIsDropdownOpen(false);
+                      }}
+                      disabled={isStatusActionPending}
+                      title="Mark as completed"
+                    >
+                      <Check size={16} strokeWidth={1.5} />
+                    </button>
+                    <button
+                      className={css.btnReject}
+                      onClick={() => {
+                        setIsRejectConfirmOpen(true);
+                        setIsDropdownOpen(false);
+                      }}
+                      disabled={isStatusActionPending}
+                      title="Reject — creates a rework item"
+                    >
+                      <X size={16} strokeWidth={1.5} />
+                    </button>
+                  </>
+                )}
 
                 <button
                   className={css.btn}
@@ -230,6 +273,19 @@ function OrderItemRow({
               setIsConfirmOpen(false);
             }}
             onClose={() => setIsConfirmOpen(false)}
+          />
+        </ModalOverlay>
+      )}
+
+      {isRejectConfirmOpen && (
+        <ModalOverlay onClose={() => setIsRejectConfirmOpen(false)}>
+          <ConfirmContainer
+            text="Reject this item? A new item will be automatically created for rework."
+            onConfirm={() => {
+              rejectItem({ orderId, itemId: item._id });
+              setIsRejectConfirmOpen(false);
+            }}
+            onClose={() => setIsRejectConfirmOpen(false)}
           />
         </ModalOverlay>
       )}

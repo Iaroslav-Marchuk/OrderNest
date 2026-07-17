@@ -4,9 +4,14 @@ import type { GetOrdersParams, OrderResponse } from '../types/order';
 import { getOrdersApi } from '../services/ordersApi';
 
 export const useOrders = (params: GetOrdersParams) => {
+  const apiParams: GetOrdersParams = {
+    ...params,
+    location: params.location === 'all' ? '' : params.location,
+  };
+
   const { data, isLoading, isError } = useQuery<OrderResponse>({
-    queryKey: ['orders', params],
-    queryFn: () => getOrdersApi(params),
+    queryKey: ['orders', apiParams],
+    queryFn: () => getOrdersApi(apiParams),
     placeholderData: keepPreviousData,
   });
 

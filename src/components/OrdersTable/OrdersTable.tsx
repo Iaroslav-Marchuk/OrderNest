@@ -73,13 +73,13 @@ function OrdersTable({
               className={css.thBtn}
               onClick={() => onSortChange('createdAt')}
             >
-              Created At {getSortIcon('createdAt')}
+              Created at {getSortIcon('createdAt')}
             </button>
           </th>
-          <th className={css.th}>Location</th>
-          <th className={css.th}>Responsible</th>
+          <th className={css.th}>Created on</th>
+          <th className={css.th}>Created by</th>
           <th className={css.th}>Status</th>
-          <th className={css.th}>Items</th>
+          <th className={css.th}>Pending Items</th>
           <th className={css.th}>Actions</th>
         </tr>
       </thead>

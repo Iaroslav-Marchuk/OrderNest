@@ -11,6 +11,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { changeLocationApi, loginApi } from '../../services/authApi';
 import { useState } from 'react';
 import LocationModal from '../LocationModal/LocationModal';
+import type { AxiosError } from 'axios';
 
 const initialValues: LoginUserReq = {
   tel: '',
@@ -42,7 +43,10 @@ function LoginForm() {
       setShowLocationModal(false);
       navigate('/');
     },
-    onError: () => toast.error('Failed to set location'),
+    onError: (error: AxiosError<{ message: string }>) => {
+      const message = error.response?.data?.message ?? 'Failed to set location';
+      toast.error(message);
+    },
   });
 
   const { mutate: login, isPending } = useMutation({
@@ -58,7 +62,10 @@ function LoginForm() {
       toast.success(`Welcome, ${data.user.name}!`);
       navigate(data.user.role === 'admin' ? '/admin' : '/');
     },
-    onError: () => toast.error('Invalid phone or password'),
+    onError: (error: AxiosError<{ message: string }>) => {
+      const message = error.response?.data?.message;
+      toast.error(message ?? 'Invalid phone or password');
+    },
   });
 
   const handleSubmit = (
@@ -70,7 +77,7 @@ function LoginForm() {
   };
 
   const handleSelectLine = (line: string) => {
-    setLocation({ location: line });
+    setLocation(line);
   };
 
   return (
