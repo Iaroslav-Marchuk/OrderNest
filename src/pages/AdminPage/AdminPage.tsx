@@ -1,8 +1,7 @@
-import { useQueryClient } from '@tanstack/react-query';
 import DashBoardCard from '../../components/DashBoardCard/DashBoardCard';
 import DashBoardUserList from '../../components/DashBoardUserList/DashBoardUserList';
 import css from './AdminPage.module.css';
-import { Users, Building2, Layers, SquareCheck, Users2 } from 'lucide-react';
+import { Users, Building2, Layers, SquareCheck } from 'lucide-react';
 import { useUsers } from '../../hooks/useUsers';
 import { useAllClients } from '../../hooks/useAllClients';
 import { useAllGlassTypes } from '../../hooks/useAllGlassTypes';

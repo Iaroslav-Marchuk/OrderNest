@@ -21,6 +21,7 @@ function OrderFilters({
 
   const inputValue = String(ep || client || '');
   const locationValue = location || 'all';
+  const isAllTime = date === 'all';
   const dateValue = date ? new Date(date) : null;
 
   const handleInputChange = (value: string) => {
@@ -84,6 +85,7 @@ function OrderFilters({
         dateValue={dateValue}
         onChange={handleDateChange}
         defaultRangeDays={defaultRangeDays}
+        isAllTime={isAllTime}
       />
       <OrderLocationFilter
         value={locationValue}

@@ -6,15 +6,18 @@ interface OrderDateFilterProps {
   dateValue: Date | null;
   onChange: (value: string) => void;
   defaultRangeDays?: number;
+  isAllTime?: boolean;
 }
 
 function OrderDateFilter({
   dateValue,
   onChange,
   defaultRangeDays = 1,
+  isAllTime = false,
 }: OrderDateFilterProps) {
-  const placeholderText =
-    defaultRangeDays <= 1
+  const placeholderText = isAllTime
+    ? 'All time'
+    : defaultRangeDays <= 1
       ? new Date().toLocaleDateString('pt-PT', {
           day: 'numeric',
           month: 'numeric',
@@ -33,14 +36,26 @@ function OrderDateFilter({
     onChange(`${year}-${month}-${day}`);
   };
 
+  const handleAllTimeToggle = () => {
+    onChange(isAllTime ? '' : 'all');
+  };
+
   return (
     <DatePicker
-      selected={dateValue}
+      selected={isAllTime ? null : dateValue}
       onChange={handleChange}
       placeholderText={placeholderText}
       className={css.dateInput}
       portalId="datepicker-portal"
-    />
+    >
+      <button
+        type="button"
+        className={isAllTime ? css.allTimeActive : css.allTimeBtn}
+        onClick={handleAllTimeToggle}
+      >
+        {isAllTime ? 'Last 7 days' : 'All time'}
+      </button>
+    </DatePicker>
   );
 }
 

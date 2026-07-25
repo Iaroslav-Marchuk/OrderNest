@@ -11,6 +11,7 @@ import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import EditOrderForm from '../EditOrderForm/EditOrderForm';
 import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
+import { formatLocation } from '../../utils/formatLocationLabel';
 
 interface OrderRowProps {
   order: Order;
@@ -27,15 +28,6 @@ const STATUS_CLASS: Record<Order['status'], string> = {
   created: css.statusCreated,
   in_progress: css.statusInProgress,
   completed: css.statusCompleted,
-};
-
-const LOCATION_LABEL: Record<string, string> = {
-  line_1: 'Line 1',
-  line_2: 'Line 2',
-  line_3: 'Line 3',
-  hardening: 'Hardening',
-  quality: 'Quality',
-  logistics: 'Logistics',
 };
 
 function OrderRow({ order, index }: OrderRowProps) {
@@ -105,7 +97,7 @@ function OrderRow({ order, index }: OrderRowProps) {
           {new Date(order.createdAt).toLocaleDateString('pt-PT')}
         </td>
         <td className={css.td}>
-          {LOCATION_LABEL[order.location] ?? order.location}
+          {formatLocation(order.location) ?? order.location}
         </td>
         <td className={css.td}>
           <span className={css.responsible}>{order.owner?.name ?? '—'}</span>

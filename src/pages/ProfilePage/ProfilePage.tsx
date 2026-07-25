@@ -5,12 +5,7 @@ import SkeletonProfile from '../../components/SkeletonProfile/SkeletonProfile';
 import { useState } from 'react';
 import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
 import ChangePasswordForm from '../../components/ChangePasswordForm/ChangePasswordForm';
-
-const LOCATION_LABEL: Record<string, string> = {
-  line_1: 'Line 1',
-  line_2: 'Line 2',
-  line_3: 'Line 3',
-};
+import { formatLocation } from '../../utils/formatLocationLabel';
 
 function ProfilePage() {
   const { currentUser, isUserLoading, location } = useCurrentUser();
@@ -39,7 +34,8 @@ function ProfilePage() {
           </span>
           {location && (
             <span className={css.locationBadge}>
-              {LOCATION_LABEL[location] ?? location}
+              {/* {LOCATION_LABEL[location] ?? location} */}
+              {formatLocation(location)}
             </span>
           )}
         </div>

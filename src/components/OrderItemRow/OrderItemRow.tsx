@@ -17,6 +17,7 @@ import type { Order, OrderItem } from '../../types/order';
 import css from './OrderItemRow.module.css';
 import { formatGlassLabel, formatSize } from '../../utils/formatText';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
+import { formatLocation } from '../../utils/formatLocationLabel';
 
 interface OrderItemRowProps {
   item: OrderItem;
@@ -37,12 +38,6 @@ const STATUS_CLASS: Record<OrderItem['status'], string> = {
   in_progress: css.statusInProgress,
   completed: css.statusCompleted,
   rejected: css.statusRejected,
-};
-
-const LOCATION_LABEL: Record<'line_1' | 'line_2' | 'line_3', string> = {
-  line_1: 'Line 1',
-  line_2: 'Line 2',
-  line_3: 'Line 3',
 };
 
 function OrderItemRow({
@@ -165,7 +160,7 @@ function OrderItemRow({
         </td>
         <td className={css.td}>
           {item.completed?.location
-            ? LOCATION_LABEL[item.completed.location]
+            ? formatLocation(item.completed.location)
             : '—'}
         </td>
         <td className={css.td}>

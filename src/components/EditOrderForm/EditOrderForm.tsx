@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import type { AxiosError } from 'axios';
 import { PulseLoader } from 'react-spinners';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
+import { formatLocation } from '../../utils/formatLocationLabel';
 
 interface EditOrderFormProps {
   order: Order;
@@ -49,12 +50,6 @@ function EditOrderForm({ onClose, order }: EditOrderFormProps) {
     patchOrder({ orderId: order._id, updateData: values });
   };
 
-  const LOCATION_LABEL: Record<Order['location'], string> = {
-    line_1: 'Line 1',
-    line_2: 'Line 2',
-    line_3: 'Line 3',
-  };
-
   return (
     <Formik
       initialValues={initialValues}
@@ -69,7 +64,7 @@ function EditOrderForm({ onClose, order }: EditOrderFormProps) {
               <label className={css.label}>Location</label>
               <span className={css.value}>
                 {' '}
-                {location ? LOCATION_LABEL[location as Order['location']] : '—'}
+                {location ? formatLocation(location) : '—'}
               </span>
             </div>
             <div className={css.formGroup}>
