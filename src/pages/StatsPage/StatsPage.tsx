@@ -31,7 +31,7 @@ function StatsPage() {
     return (
       <Section>
         <Container>
-          <p>Loading stats...</p>
+          <p className={css.state}>Loading stats...</p>
         </Container>
       </Section>
     );
@@ -41,7 +41,7 @@ function StatsPage() {
     return (
       <Section>
         <Container>
-          <p>Failed to load stats.</p>
+          <p className={css.state}>Failed to load stats.</p>
         </Container>
       </Section>
     );
@@ -64,7 +64,6 @@ function StatsPage() {
     <Section>
       <Container>
         <h2 className={css.title}>General statistics</h2>
-
         <div className={css.kpiWrapper}>
           <KpiCard
             color={'var(--color-accent)'}
@@ -108,7 +107,6 @@ function StatsPage() {
             icon={CircleAlert}
           />
         </div>
-
         <div className={css.chartWrapper}>
           <ChartCard title={'Created vs. Completed'} subtitle={'Last 14 days'}>
             <ChartOrdersTrend data={data.ordersTrend} />
@@ -125,7 +123,6 @@ function StatsPage() {
             />
           </ChartCard>
         </div>
-
         <div className={css.tableWrapper}>
           <div className={css.tableHeader}>
             <h3 className={css.tableTitle}>Oldest Active Orders</h3>

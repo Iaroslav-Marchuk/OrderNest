@@ -3,12 +3,12 @@ import {
   ArrowDownWideNarrow,
   ArrowUpNarrowWide,
 } from 'lucide-react';
-import css from './OrdersTable.module.css';
-
 import type { Order } from '../../types/order';
 
-import OrderRow from '../OrderRow/OrderRow';
 import SkeletonOrders from '../SkeletonOrders/SkeletonOrders';
+
+import css from './ArchiveOrdersTable.module.css';
+import ArchiveOrderRow from '../ArchiveOrderRow/ArchiveOrderRow';
 
 export type OrdersSortField =
   | 'createdAt'
@@ -28,7 +28,7 @@ interface OrdersTableProps {
   onSortChange: (field: OrdersSortField) => void;
 }
 
-function OrdersTable({
+function ArchiveOrdersTable({
   orders,
   isLoading,
   isError,
@@ -73,6 +73,7 @@ function OrdersTable({
               Client {getSortIcon('client')}
             </button>
           </th>
+          <th className={css.th}>Status</th>
           <th className={css.th}>
             <button
               className={css.thBtn}
@@ -83,9 +84,17 @@ function OrdersTable({
           </th>
           <th className={css.th}>Created on</th>
           <th className={css.th}>Created by</th>
-          <th className={css.th}>Status</th>
-          <th className={css.th}>Pending Items</th>
-          <th className={css.th}>Actions</th>
+
+          <th className={css.th}>
+            <button
+              className={css.thBtn}
+              onClick={() => onSortChange('completed.at')}
+            >
+              Completed at {getSortIcon('completed.at')}
+            </button>
+          </th>
+          <th className={css.th}>Completed on</th>
+          <th className={css.th}>Completed by</th>
         </tr>
       </thead>
       <tbody>
@@ -93,7 +102,7 @@ function OrdersTable({
           <SkeletonOrders />
         ) : (
           orders.map((order, index) => (
-            <OrderRow
+            <ArchiveOrderRow
               key={order._id}
               order={order}
               index={(page - 1) * perPage + index + 1}
@@ -105,4 +114,4 @@ function OrdersTable({
   );
 }
 
-export default OrdersTable;
+export default ArchiveOrdersTable;

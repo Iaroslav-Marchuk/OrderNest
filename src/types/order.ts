@@ -29,6 +29,11 @@ export interface Order {
   owner: { _id: string; name: string; role: string };
   location: string;
   status: 'created' | 'in_progress' | 'completed';
+  completed: {
+    by: { _id: string; name: string; role: string };
+    at: string;
+    location: 'line_1' | 'line_2' | 'line_3';
+  } | null;
   itemsCount: number;
   itemsPendingCount: number;
   createdAt: string;

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Container from '../../components/Container/Container';
 import OrderFilters from '../../components/OrderFilters/OrderFilters';
-import OrdersTable from '../../components/OrdersTable/OrdersTable';
 import Pagination from '../../components/Pagination/Pagination';
 import Section from '../../components/Section/Section';
 import { useArchivedOrders } from '../../hooks/useArchivedOrders';
@@ -14,11 +13,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { clearArchiveApi } from '../../services/ordersApi';
 import toast from 'react-hot-toast';
 import type { AxiosError } from 'axios';
+import ArchiveOrdersTable from '../../components/ArchiveOrdersTable/ArchiveOrdersTable';
 
 function ArchivePage() {
   const queryClient = useQueryClient();
   const { queryParams, handleSetPage, handleSortChange } = useOrderQueryParams({
-    defaultSortBy: 'updatedAt',
+    defaultSortBy: 'completed.at',
     defaultSortOrder: 'desc',
   });
 
@@ -75,7 +75,7 @@ function ArchivePage() {
           ) : undefined}
         </div>
 
-        <OrdersTable
+        <ArchiveOrdersTable
           orders={orders}
           isLoading={isOrdersLoading}
           isError={isOrdersError}
