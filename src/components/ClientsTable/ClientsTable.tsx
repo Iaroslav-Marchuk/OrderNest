@@ -1,4 +1,4 @@
-import type { Client } from '../../types/client';
+import type { Client, ClientsSortField } from '../../types/client';
 import css from './ClientsTable.module.css';
 import {
   ArrowDownUp,
@@ -8,8 +8,6 @@ import {
 import ClientRow from '../ClientRow/ClientRow';
 import type { SortOrder } from '../../types/common';
 import SkeletonClients from '../SkeletonClients/SkeletonClients';
-
-export type ClientsSortField = 'name' | 'createdAt';
 
 interface ClientsTableProps {
   clients: Client[];

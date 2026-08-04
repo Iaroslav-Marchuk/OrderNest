@@ -4,13 +4,11 @@ import {
   ArrowUpNarrowWide,
 } from 'lucide-react';
 import type { SortOrder } from '../../types/common';
-import type { GlassType } from '../../types/glassType';
+import type { GlassType, GlassTypeSortField } from '../../types/glassType';
 import css from './GlassTypeTable.module.css';
 import GlassTypeRow from '../GlassTypeRow/GlassTypeRow';
 import type { GlassCategory } from '../../types/glassCategory';
 import SkeletonGlassTypes from '../SkeletonGlassTypes/SkeletonGlassTypes';
-
-export type GlassTypeSortField = 'label' | 'category' | 'createdAt';
 
 interface GlassTypeTableProps {
   glassTypes: GlassType[];

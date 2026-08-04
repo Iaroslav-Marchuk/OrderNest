@@ -1,0 +1,15 @@
+.row {
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid var(--color-bg-border);
+}
+.row:hover {
+  background: var(--color-bg-elevated);
+}
+.td {
+  text-align: left;
+  padding: 12px 14px;
+  color: var(--color-text-secondary);
+  vertical-align: middle;
+  white-space: nowrap;
+}

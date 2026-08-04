@@ -1,3 +1,5 @@
+export type ClientsSortField = 'name' | 'createdAt';
+
 export interface Client {
   _id: string;
   name: string;

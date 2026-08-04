@@ -5,6 +5,7 @@ import type {
   ResetPasswordReq,
   User,
   UserResponse,
+  UsersInfoResponse,
 } from '../types/user';
 import { axiosInstance } from './axiosInstance';
 
@@ -30,6 +31,15 @@ export const getUserByIdApi = async (userId: string): Promise<User> => {
   }>(`/users/${userId}`);
 
   return data.data.user;
+};
+
+export const getUsersSessionInfoApi = async (): Promise<UsersInfoResponse> => {
+  const { data } = await axiosInstance.get<{
+    message: string;
+    data: UsersInfoResponse;
+  }>('/users/dashboard');
+
+  return data.data;
 };
 
 export const createUserApi = async (userData: CreateUserReq): Promise<User> => {

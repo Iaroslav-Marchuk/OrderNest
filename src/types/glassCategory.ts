@@ -1,3 +1,5 @@
+export type GlassCategorySortField = 'label' | 'createdAt';
+
 export interface GlassCategory {
   _id: string;
   label: string;

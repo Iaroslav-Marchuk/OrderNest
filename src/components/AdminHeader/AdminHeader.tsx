@@ -1,13 +1,17 @@
 import { Bell, LogOut, ShieldUser, UserRound } from 'lucide-react';
-import logo from '../../assets/logo-sticky-2x.png';
-import css from './AdminHeader.module.css';
+import toast from 'react-hot-toast';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { logoutApi } from '../../services/authApi';
-import toast from 'react-hot-toast';
+
+import logo from '../../assets/logo-sticky-2x.png';
+
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
+
+import { logoutApi } from '../../services/authApi';
+
+import css from './AdminHeader.module.css';
 
 function AdminHeader() {
   const queryClient = useQueryClient();

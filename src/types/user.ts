@@ -1,3 +1,5 @@
+export type UsersSortField = 'name' | 'role' | 'createdAt';
+
 export type UserRole =
   | 'admin'
   | 'cutting'
@@ -40,6 +42,13 @@ export interface GetUsersParams {
   tel?: string;
   role?: string;
   isActive?: boolean;
+}
+
+export interface UsersInfoResponse {
+  users: User[];
+  sessionInfo: Record<string, string | null>;
+  page?: number;
+  perPage?: number;
 }
 
 export interface CreateUserReq {

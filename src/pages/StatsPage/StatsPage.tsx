@@ -15,17 +15,11 @@ import OldestOrdersTable from '../../components/OldestOrdersTable/OldestOrdersTa
 import ChartOrdersTrend from '../../components/ChartOrdersTrend/ChartOrdersTrend';
 import ChartOrdersPerLine from '../../components/ChartOrdersPerLine/ChartOrdersPerLine';
 
-import type { StatsResponse } from '../../types/stats';
-import { getStatsApi } from '../../services/statsApi';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import ChartAvgCompletionTimePerLine from '../../components/ChartAvgCompletionTimePerLine/ChartAvgCompletionTimePerLine';
+import { useStats } from '../../hooks/useStats';
 
 function StatsPage() {
-  const { data, isLoading, isError } = useQuery<StatsResponse>({
-    queryKey: ['stats'],
-    queryFn: () => getStatsApi(),
-    placeholderData: keepPreviousData,
-  });
+  const { data, isStatsLoading: isLoading, isStatsError: isError } = useStats();
 
   if (isLoading) {
     return (

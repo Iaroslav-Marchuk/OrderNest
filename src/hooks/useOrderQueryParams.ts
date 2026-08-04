@@ -1,8 +1,8 @@
 import { useSearchParams } from 'react-router-dom';
-import type { OrdersSortField } from '../components/OrdersTable/OrdersTable';
 import type { SortOrder } from '../types/common';
+import type { OrdersSortField } from '../types/order';
 
-interface UseOrderQueryParamsOptions {
+interface UseOrderQueryParamsProps {
   defaultSortBy?: OrdersSortField;
   defaultSortOrder?: SortOrder;
   defaultLocation?: string;
@@ -12,7 +12,7 @@ export const useOrderQueryParams = ({
   defaultSortBy = 'createdAt',
   defaultSortOrder = 'asc',
   defaultLocation = '',
-}: UseOrderQueryParamsOptions = {}) => {
+}: UseOrderQueryParamsProps = {}) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const queryParams = {

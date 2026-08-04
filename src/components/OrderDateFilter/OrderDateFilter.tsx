@@ -15,6 +15,9 @@ function OrderDateFilter({
   defaultRangeDays = 1,
   isAllTime = false,
 }: OrderDateFilterProps) {
+  const defaultRangeLabel =
+    defaultRangeDays <= 1 ? 'Today' : `Last ${defaultRangeDays} days`;
+
   const placeholderText = isAllTime
     ? 'All time'
     : defaultRangeDays <= 1
@@ -53,7 +56,7 @@ function OrderDateFilter({
         className={isAllTime ? css.allTimeActive : css.allTimeBtn}
         onClick={handleAllTimeToggle}
       >
-        {isAllTime ? 'Last 7 days' : 'All time'}
+        {isAllTime ? defaultRangeLabel : 'All time'}
       </button>
     </DatePicker>
   );

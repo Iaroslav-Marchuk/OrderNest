@@ -44,4 +44,5 @@ export interface StatsResponse {
   ordersPerLine: OrdersPerLine[];
   avgCompletionTimePerLine: AvgCompletionTimePerLine[];
   oldestOrders: OldestOrders[];
+  activeUsersToday: number;
 }

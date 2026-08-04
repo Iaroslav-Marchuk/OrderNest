@@ -6,11 +6,12 @@ import {
 import GlassCategoryRow from '../GlassCategoryRow/GlassCategoryRow';
 import css from './GlassCategoryTable.module.css';
 import type { SortOrder } from '../../types/common';
-import type { GlassCategory } from '../../types/glassCategory';
+import type {
+  GlassCategory,
+  GlassCategorySortField,
+} from '../../types/glassCategory';
 
 import SkeletonGlassCategories from '../SkeletonGlassCategories/SkeletonGlassCategories';
-
-export type GlassCategorySortField = 'label' | 'createdAt';
 
 interface GlassCategoryTableProps {
   glassCategories: GlassCategory[];

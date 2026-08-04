@@ -2,32 +2,25 @@ import DashBoardCard from '../../components/DashBoardCard/DashBoardCard';
 import DashBoardUserList from '../../components/DashBoardUserList/DashBoardUserList';
 import css from './AdminPage.module.css';
 import { Users, Building2, Layers, SquareCheck } from 'lucide-react';
-import { useUsers } from '../../hooks/useUsers';
 import { useAllClients } from '../../hooks/useAllClients';
 import { useAllGlassTypes } from '../../hooks/useAllGlassTypes';
-import { useOrders } from '../../hooks/useOrders';
+import { useStats } from '../../hooks/useStats';
+import type { UsersInfoResponse } from '../../types/user';
+import { getUsersSessionInfoApi } from '../../services/usersApi';
+import { useQuery } from '@tanstack/react-query';
+import { useUsers } from '../../hooks/useUsers';
 
 function AdminPage() {
-  const { users, totalItems: totalUsers } = useUsers({
-    page: 1,
-    perPage: 5,
-    sortBy: 'createdAt',
-    sortOrder: 'desc',
-  });
-
   const { allClients } = useAllClients();
-
   const { allGlassTypes } = useAllGlassTypes();
+  const { totalItems: totalUsers } = useUsers({ perPage: 1 });
 
-  // TODO: 'active' — placeholder, потрібен реальний enum статусу Order
-  const { totalItems: activeOrdersCount } = useOrders({
-    page: 1,
-    perPage: 1,
-    status: 'active',
+  const { data } = useStats();
+
+  const { data: dashboardUsers } = useQuery<UsersInfoResponse>({
+    queryKey: ['users', 'dashboard'],
+    queryFn: () => getUsersSessionInfoApi(),
   });
-
-  // TODO: немає джерела даних для orders per user — див. питання нижче
-  const ordersCountByUser: Record<string, number> = {};
 
   return (
     <div className={css.wrapper}>
@@ -73,13 +66,16 @@ function AdminPage() {
             icon={SquareCheck}
             iconColor="var(--color-accent-hover)"
             iconBg="var(--color-accent-deep)"
-            value={activeOrdersCount}
+            value={data?.activeOrders ?? 0}
             trend="—"
             trendType="neutral"
           />
         </li>
       </ul>
-      <DashBoardUserList users={users} ordersCount={ordersCountByUser} />
+      <DashBoardUserList
+        users={dashboardUsers?.users ?? []}
+        sessionInfo={dashboardUsers?.sessionInfo ?? {}}
+      />
     </div>
   );
 }

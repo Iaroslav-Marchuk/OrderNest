@@ -5,17 +5,10 @@ import {
 } from 'lucide-react';
 import css from './OrdersTable.module.css';
 
-import type { Order } from '../../types/order';
+import type { Order, OrdersSortField } from '../../types/order';
 
 import OrderRow from '../OrderRow/OrderRow';
 import SkeletonOrders from '../SkeletonOrders/SkeletonOrders';
-
-export type OrdersSortField =
-  | 'createdAt'
-  | 'updatedAt'
-  | 'completed.at'
-  | 'ep'
-  | 'client';
 
 interface OrdersTableProps {
   orders: Order[];

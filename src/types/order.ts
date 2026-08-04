@@ -1,3 +1,10 @@
+export type OrdersSortField =
+  | 'createdAt'
+  | 'updatedAt'
+  | 'completed.at'
+  | 'ep'
+  | 'client';
+
 export interface OrderItem {
   _id: string;
   type: {

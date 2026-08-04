@@ -1,0 +1,25 @@
+.skeletonRow td {
+  padding: 6px 6px;
+}
+
+.skeleton {
+  height: 16px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-elevated) 25%,
+    var(--color-bg-border) 50%,
+    var(--color-bg-elevated) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

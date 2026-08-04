@@ -3,13 +3,14 @@ import {
   ArrowDownWideNarrow,
   ArrowUpNarrowWide,
 } from 'lucide-react';
-import type { User } from '../../types/user';
+
 import UserRow from '../UserRow/UserRow';
-import css from './UsersTable.module.css';
-import type { SortOrder } from '../../types/common';
 import SkeletonUsers from '../SkeletonUsers/SkeletonUsers';
 
-export type UsersSortField = 'name' | 'role' | 'createdAt';
+import type { SortOrder } from '../../types/common';
+import type { User, UsersSortField } from '../../types/user';
+
+import css from './UsersTable.module.css';
 
 interface UsersTableProps {
   users: User[];
