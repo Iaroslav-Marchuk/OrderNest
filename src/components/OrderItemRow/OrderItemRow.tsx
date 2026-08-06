@@ -24,6 +24,7 @@ interface OrderItemRowProps {
   orderId: string;
   ownerId: string;
   orderStatus: Order['status'];
+  isArchive: boolean;
 }
 
 const STATUS_LABEL: Record<OrderItem['status'], string> = {
@@ -45,6 +46,7 @@ function OrderItemRow({
   orderId,
   ownerId,
   orderStatus,
+  isArchive,
 }: OrderItemRowProps) {
   const queryClient = useQueryClient();
   const { currentUser } = useCurrentUser();
@@ -166,87 +168,90 @@ function OrderItemRow({
         <td className={css.td}>
           {item.completed?.by ? item.completed.by.name : '—'}
         </td>
-        <td className={css.td}>
-          <div
-            className={css.actionsCell}
-            ref={dropdownRef}
-            onClick={e => e.stopPropagation()}
-          >
-            <button
-              className={css.menuBtn}
-              onClick={() => setIsDropdownOpen(prev => !prev)}
+
+        {!isArchive && (
+          <td className={css.td}>
+            <div
+              className={css.actionsCell}
+              ref={dropdownRef}
+              onClick={e => e.stopPropagation()}
             >
-              <Ellipsis size={16} />
-            </button>
-            {isDropdownOpen && (
-              <div className={css.menu}>
-                {canStart && (
+              <button
+                className={css.menuBtn}
+                onClick={() => setIsDropdownOpen(prev => !prev)}
+              >
+                <Ellipsis size={16} />
+              </button>
+              {isDropdownOpen && (
+                <div className={css.menu}>
+                  {canStart && (
+                    <button
+                      className={css.btnStart}
+                      onClick={() => {
+                        startItem({ orderId, itemId: item._id });
+                        setIsDropdownOpen(false);
+                      }}
+                      disabled={isStatusActionPending}
+                      title="Start production"
+                    >
+                      <Play size={16} strokeWidth={1.5} />
+                    </button>
+                  )}
+
+                  {canCompleteOrReject && (
+                    <>
+                      <button
+                        className={css.btnComplete}
+                        onClick={() => {
+                          completeItem({ orderId, itemId: item._id });
+                          setIsDropdownOpen(false);
+                        }}
+                        disabled={isStatusActionPending}
+                        title="Mark as completed"
+                      >
+                        <Check size={16} strokeWidth={1.5} />
+                      </button>
+                      <button
+                        className={css.btnReject}
+                        onClick={() => {
+                          setIsRejectConfirmOpen(true);
+                          setIsDropdownOpen(false);
+                        }}
+                        disabled={isStatusActionPending}
+                        title="Reject — creates a rework item"
+                      >
+                        <X size={16} strokeWidth={1.5} />
+                      </button>
+                    </>
+                  )}
+
                   <button
-                    className={css.btnStart}
+                    className={css.btn}
                     onClick={() => {
-                      startItem({ orderId, itemId: item._id });
+                      setIsEditOpen(true);
                       setIsDropdownOpen(false);
                     }}
-                    disabled={isStatusActionPending}
-                    title="Start production"
+                    disabled={isEditLocked}
+                    title={getEditLockReason() ?? 'Edit'}
                   >
-                    <Play size={16} strokeWidth={1.5} />
+                    <Pencil size={16} strokeWidth={1.5} />
                   </button>
-                )}
-
-                {canCompleteOrReject && (
-                  <>
-                    <button
-                      className={css.btnComplete}
-                      onClick={() => {
-                        completeItem({ orderId, itemId: item._id });
-                        setIsDropdownOpen(false);
-                      }}
-                      disabled={isStatusActionPending}
-                      title="Mark as completed"
-                    >
-                      <Check size={16} strokeWidth={1.5} />
-                    </button>
-                    <button
-                      className={css.btnReject}
-                      onClick={() => {
-                        setIsRejectConfirmOpen(true);
-                        setIsDropdownOpen(false);
-                      }}
-                      disabled={isStatusActionPending}
-                      title="Reject — creates a rework item"
-                    >
-                      <X size={16} strokeWidth={1.5} />
-                    </button>
-                  </>
-                )}
-
-                <button
-                  className={css.btn}
-                  onClick={() => {
-                    setIsEditOpen(true);
-                    setIsDropdownOpen(false);
-                  }}
-                  disabled={isEditLocked}
-                  title={getEditLockReason() ?? 'Edit'}
-                >
-                  <Pencil size={16} strokeWidth={1.5} />
-                </button>
-                <button
-                  className={css.btnDelete}
-                  onClick={() => {
-                    setIsConfirmOpen(true);
-                    setIsDropdownOpen(false);
-                  }}
-                  disabled={isEditLocked}
-                  title={getEditLockReason() ?? 'Delete'}
-                >
-                  <Trash2 size={16} strokeWidth={1.5} />
-                </button>
-              </div>
-            )}
-          </div>
-        </td>
+                  <button
+                    className={css.btnDelete}
+                    onClick={() => {
+                      setIsConfirmOpen(true);
+                      setIsDropdownOpen(false);
+                    }}
+                    disabled={isEditLocked}
+                    title={getEditLockReason() ?? 'Delete'}
+                  >
+                    <Trash2 size={16} strokeWidth={1.5} />
+                  </button>
+                </div>
+              )}
+            </div>
+          </td>
+        )}
       </tr>
 
       {isEditOpen && (

@@ -1,29 +1,14 @@
 import { type LucideIcon } from 'lucide-react';
 import css from './DashBoardCard.module.css';
 
-type TrendType = 'positive' | 'negative' | 'neutral';
-
 interface DashBoardCardProps {
   title: string;
   icon: LucideIcon;
   iconColor: string;
   iconBg: string;
   value: number;
-  trend?: string;
-  trendType?: TrendType;
+  upd: string;
 }
-
-const trendColor: Record<TrendType, string> = {
-  positive: 'var(--color-success)',
-  negative: 'var(--color-error)',
-  neutral: 'var(--color-text-muted)',
-};
-
-const trendArrow: Record<TrendType, string> = {
-  positive: '↑',
-  negative: '↓',
-  neutral: '→',
-};
 
 function DashBoardCard({
   title,
@@ -31,8 +16,7 @@ function DashBoardCard({
   iconColor,
   iconBg,
   value,
-  trend,
-  trendType = 'neutral',
+  upd,
 }: DashBoardCardProps) {
   return (
     <div className={css.card}>
@@ -43,11 +27,7 @@ function DashBoardCard({
         </div>
       </div>
       <span className={css.value}>{value}</span>
-      {trend && (
-        <span className={css.trend} style={{ color: trendColor[trendType] }}>
-          {trendArrow[trendType]} {trend}
-        </span>
-      )}
+      <span className={css.trend}>{upd}</span>
     </div>
   );
 }

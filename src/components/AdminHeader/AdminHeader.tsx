@@ -98,7 +98,7 @@ function AdminHeader() {
           {isMenuOpen && (
             <div className={css.menu}>
               <Link
-                to="/admin/profile"
+                to="/profile"
                 className={css.menuItem}
                 onClick={() => setIsMenuOpen(false)}
               >

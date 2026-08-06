@@ -77,7 +77,6 @@ function App() {
             />
             <Route path="/admin/glassTypes" element={<GlassTypesPage />} />
             <Route path="/admin/settings" element={<SettingsPage />} />
-            <Route path="/admin/profile" element={<ProfilePage />} />
           </Route>
         </Route>
 

@@ -14,12 +14,14 @@ interface OrderItemsTableProps {
   orderId: string;
   ownerId: string;
   orderStatus: Order['status'];
+  isArchive: boolean;
 }
 
 function OrderItemsTable({
   orderId,
   ownerId,
   orderStatus,
+  isArchive,
 }: OrderItemsTableProps) {
   const { orderItems, isOrderItemsLoading } = useOrderItems(orderId);
   const [isAddItemOpen, setIsAddItemOpen] = useState(false);
@@ -49,7 +51,7 @@ function OrderItemsTable({
             <th className={css.th}>Finished At</th>
             <th className={css.th}>Finished On</th>
             <th className={css.th}>Finished By</th>
-            <th className={css.th}>Actions</th>
+            {!isArchive && <th className={css.th}>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -63,22 +65,26 @@ function OrderItemsTable({
                 orderId={orderId}
                 ownerId={ownerId}
                 orderStatus={orderStatus}
+                isArchive={isArchive}
               />
             ))
           )}
         </tbody>
       </table>
-      <button
-        className={css.addItemBtn}
-        onClick={e => {
-          e.stopPropagation();
-          setIsAddItemOpen(true);
-        }}
-        disabled={isLocked}
-        title={getLockReason()}
-      >
-        <Plus size={14} /> Add item
-      </button>
+
+      {!isArchive && (
+        <button
+          className={css.addItemBtn}
+          onClick={e => {
+            e.stopPropagation();
+            setIsAddItemOpen(true);
+          }}
+          disabled={isLocked}
+          title={getLockReason()}
+        >
+          <Plus size={14} /> Add item
+        </button>
+      )}
 
       {isAddItemOpen && (
         <ModalOverlay onClose={() => setIsAddItemOpen(false)}>

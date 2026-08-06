@@ -9,13 +9,27 @@ import type { UsersInfoResponse } from '../../types/user';
 import { getUsersSessionInfoApi } from '../../services/usersApi';
 import { useQuery } from '@tanstack/react-query';
 import { useUsers } from '../../hooks/useUsers';
+import { formatRelativeTime } from '../../utils/formatRelativeTime';
+import { useOrders } from '../../hooks/useOrders';
 
 function AdminPage() {
-  const { allClients } = useAllClients();
-  const { allGlassTypes } = useAllGlassTypes();
-  const { totalItems: totalUsers } = useUsers({ perPage: 1 });
+  const { allClients, lastClient } = useAllClients();
+  const { allGlassTypes, lastGlassType } = useAllGlassTypes();
+  const { totalItems: totalUsers, users } = useUsers({
+    perPage: 1,
+    sortBy: 'createdAt',
+    sortOrder: 'desc',
+  });
+  const lastUser = users[0] ?? null;
 
   const { data } = useStats();
+
+  const { orders } = useOrders({
+    perPage: 1,
+    sortBy: 'createdAt',
+    sortOrder: 'desc',
+  });
+  const lastOrder = orders[0] ?? null;
 
   const { data: dashboardUsers } = useQuery<UsersInfoResponse>({
     queryKey: ['users', 'dashboard'],
@@ -34,8 +48,11 @@ function AdminPage() {
             iconColor="var(--color-accent-hover)"
             iconBg="var(--color-accent-deep)"
             value={totalUsers}
-            trend="—"
-            trendType="neutral"
+            upd={
+              lastUser
+                ? `Last added: ${lastUser.name} · ${formatRelativeTime(lastUser.createdAt)}`
+                : 'No users yet'
+            }
           />
         </li>
         <li className={css.cardItem}>
@@ -45,8 +62,11 @@ function AdminPage() {
             iconColor="#4cca88"
             iconBg="#0f3d2a"
             value={allClients.length}
-            trend="—"
-            trendType="neutral"
+            upd={
+              lastClient
+                ? `Last added: ${lastClient.name} · ${formatRelativeTime(lastClient.createdAt)}`
+                : 'No clients yet'
+            }
           />
         </li>
         <li className={css.cardItem}>
@@ -56,8 +76,11 @@ function AdminPage() {
             iconColor="var(--color-accent-hover)"
             iconBg="var(--color-accent-deep)"
             value={allGlassTypes.length}
-            trend="—"
-            trendType="neutral"
+            upd={
+              lastGlassType
+                ? `Last added: ${lastGlassType.label} · ${formatRelativeTime(lastGlassType.createdAt)}`
+                : 'No glass units yet'
+            }
           />
         </li>
         <li className={css.cardItem}>
@@ -67,8 +90,11 @@ function AdminPage() {
             iconColor="var(--color-accent-hover)"
             iconBg="var(--color-accent-deep)"
             value={data?.activeOrders ?? 0}
-            trend="—"
-            trendType="neutral"
+            upd={
+              lastOrder
+                ? `Last added: EP-${lastOrder.ep} · ${formatRelativeTime(lastOrder.createdAt)}`
+                : 'No orders yet'
+            }
           />
         </li>
       </ul>

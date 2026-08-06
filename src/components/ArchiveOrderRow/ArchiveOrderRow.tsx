@@ -83,6 +83,7 @@ function ArchiveOrderRow({ order, index }: OrderRowProps) {
               orderId={order._id}
               ownerId={order.owner?._id ?? ''}
               orderStatus={order.status}
+              isArchive={true}
             />
           </td>
         </tr>
