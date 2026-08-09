@@ -8,10 +8,15 @@ import ChangePasswordForm from '../../components/ChangePasswordForm/ChangePasswo
 import { formatLocation } from '../../utils/formatLocationLabel';
 import Section from '../../components/Section/Section';
 import Container from '../../components/Container/Container';
+import { Send } from 'lucide-react';
+import { useTelegramLink } from '../../hooks/useTelegrammLink';
 
 function ProfilePage() {
   const { currentUser, isUserLoading, location } = useCurrentUser();
+  const { connectTelegram, isConnecting } = useTelegramLink();
+
   const [showChangePassword, setShowChangePassword] = useState(false);
+
   const openModal = () => setShowChangePassword(true);
   const closeModal = () => setShowChangePassword(false);
 
@@ -23,6 +28,7 @@ function ProfilePage() {
     <Section>
       <Container className={css.container}>
         <h2 className={css.title}>User's profile</h2>
+
         <div className={css.wrapper}>
           <div className={css.top}>
             <div className={css.line1}>
@@ -38,7 +44,6 @@ function ProfilePage() {
               </span>
               {location && (
                 <span className={css.locationBadge}>
-                  {/* {LOCATION_LABEL[location] ?? location} */}
                   {formatLocation(location)}
                 </span>
               )}
@@ -71,12 +76,23 @@ function ProfilePage() {
           <div className={css.middle}>
             <div className={css.item}>
               <span className={css.itemLabel}>Password</span>
+              <button type="button" className={css.btn} onClick={openModal}>
+                Change
+              </button>
+            </div>
+          </div>
+
+          <div className={css.middle}>
+            <div className={css.item}>
+              <span className={css.itemLabel}>Telegramm Bot</span>
               <button
                 type="button"
-                className={css.changePasswordBtn}
-                onClick={openModal}
+                className={css.btn}
+                onClick={() => connectTelegram()}
+                disabled={isConnecting}
               >
-                Change
+                <Send size={16} />
+                {isConnecting ? 'Generating link...' : 'Connect Telegram'}
               </button>
             </div>
           </div>

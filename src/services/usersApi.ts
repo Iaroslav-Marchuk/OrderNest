@@ -75,3 +75,8 @@ export const resetPasswordApi = async ({
 export const deleteUserApi = async (userId: string): Promise<void> => {
   await axiosInstance.delete(`/users/${userId}`);
 };
+
+export const getTelegramLinkApi = async (): Promise<{ link: string }> => {
+  const { data } = await axiosInstance.post('/users/telegram-link');
+  return data.data;
+};

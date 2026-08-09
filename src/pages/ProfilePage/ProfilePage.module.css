@@ -130,7 +130,10 @@
   font-weight: 500;
 }
 
-.changePasswordBtn {
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 8px 20px;
   border-radius: 8px;
   border: 1px solid var(--color-accent-deep, #1e3a5f);
@@ -145,17 +148,17 @@
     border-color 0.2s ease;
 }
 
-.changePasswordBtn:hover {
+.btn:hover {
   background: var(--color-accent-deep, #1e3a5f);
   color: #fff;
   border-color: var(--color-accent-hover, #9fb9e2);
 }
 
-.changePasswordBtn:active {
+.btn:active {
   transform: scale(0.98);
 }
 
-.changePasswordBtn:disabled {
+.btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
