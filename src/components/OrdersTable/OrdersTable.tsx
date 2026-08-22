@@ -19,6 +19,7 @@ interface OrdersTableProps {
   sortBy: string;
   sortOrder: string;
   onSortChange: (field: OrdersSortField) => void;
+  canManageOrders: boolean;
 }
 
 function OrdersTable({
@@ -30,6 +31,7 @@ function OrdersTable({
   sortBy,
   sortOrder,
   onSortChange,
+  canManageOrders,
 }: OrdersTableProps) {
   const getSortIcon = (field: OrdersSortField) => {
     if (sortBy === field) {
@@ -54,7 +56,7 @@ function OrdersTable({
           <th className={css.th}>#</th>
           <th className={css.th}>
             <button className={css.thBtn} onClick={() => onSortChange('ep')}>
-              EP {getSortIcon('ep')}
+              Order {getSortIcon('ep')}
             </button>
           </th>
 
@@ -66,19 +68,18 @@ function OrdersTable({
               Client {getSortIcon('client')}
             </button>
           </th>
+          <th className={css.th}>Status</th>
           <th className={css.th}>
             <button
               className={css.thBtn}
               onClick={() => onSortChange('createdAt')}
             >
-              Created at {getSortIcon('createdAt')}
+              Created{getSortIcon('createdAt')}
             </button>
           </th>
-          <th className={css.th}>Created on</th>
-          <th className={css.th}>Created by</th>
-          <th className={css.th}>Status</th>
+
           <th className={css.th}>Pending Items</th>
-          <th className={css.th}>Actions</th>
+          <th className={css.th}>{canManageOrders ? 'Actions' : ''}</th>
         </tr>
       </thead>
       <tbody>
@@ -90,6 +91,7 @@ function OrdersTable({
               key={order._id}
               order={order}
               index={(page - 1) * perPage + index + 1}
+              canManageOrders={canManageOrders}
             />
           ))
         )}

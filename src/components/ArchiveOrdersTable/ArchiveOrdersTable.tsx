@@ -5,10 +5,9 @@ import {
 } from 'lucide-react';
 import type { Order, OrdersSortField } from '../../types/order';
 
-import SkeletonOrders from '../SkeletonOrders/SkeletonOrders';
-
 import css from './ArchiveOrdersTable.module.css';
 import ArchiveOrderRow from '../ArchiveOrderRow/ArchiveOrderRow';
+import SkeletonArchiveOrders from '../SkeletonArchiveOrders/SkeletonArchiveOrders';
 
 interface OrdersTableProps {
   orders: Order[];
@@ -54,7 +53,7 @@ function ArchiveOrdersTable({
           <th className={css.th}>#</th>
           <th className={css.th}>
             <button className={css.thBtn} onClick={() => onSortChange('ep')}>
-              EP {getSortIcon('ep')}
+              Order{getSortIcon('ep')}
             </button>
           </th>
 
@@ -63,7 +62,7 @@ function ArchiveOrdersTable({
               className={css.thBtn}
               onClick={() => onSortChange('client')}
             >
-              Client {getSortIcon('client')}
+              Client{getSortIcon('client')}
             </button>
           </th>
           <th className={css.th}>Status</th>
@@ -72,27 +71,22 @@ function ArchiveOrdersTable({
               className={css.thBtn}
               onClick={() => onSortChange('createdAt')}
             >
-              Created at {getSortIcon('createdAt')}
+              Created{getSortIcon('createdAt')}
             </button>
           </th>
-          <th className={css.th}>Created on</th>
-          <th className={css.th}>Created by</th>
-
           <th className={css.th}>
             <button
               className={css.thBtn}
               onClick={() => onSortChange('completed.at')}
             >
-              Completed at {getSortIcon('completed.at')}
+              Completed{getSortIcon('completed.at')}
             </button>
           </th>
-          <th className={css.th}>Completed on</th>
-          <th className={css.th}>Completed by</th>
         </tr>
       </thead>
       <tbody>
         {isLoading ? (
-          <SkeletonOrders />
+          <SkeletonArchiveOrders />
         ) : (
           orders.map((order, index) => (
             <ArchiveOrderRow

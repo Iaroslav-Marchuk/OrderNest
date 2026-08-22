@@ -16,6 +16,7 @@ import { formatLocation } from '../../utils/formatLocationLabel';
 interface OrderRowProps {
   order: Order;
   index: number;
+  canManageOrders: boolean;
 }
 
 const STATUS_LABEL: Record<Order['status'], string> = {
@@ -30,7 +31,7 @@ const STATUS_CLASS: Record<Order['status'], string> = {
   completed: css.statusCompleted,
 };
 
-function OrderRow({ order, index }: OrderRowProps) {
+function OrderRow({ order, index, canManageOrders }: OrderRowProps) {
   const queryClient = useQueryClient();
   const { currentUser } = useCurrentUser();
 
@@ -90,73 +91,80 @@ function OrderRow({ order, index }: OrderRowProps) {
           </div>
         </td>
         <td className={css.td}>
-          <span className={css.ep}>{order.ep}</span>
+          <span className={css.ep}>EP-{order.ep}</span>
         </td>
         <td className={css.td}>{order.client?.name ?? '—'}</td>
-        <td className={css.td}>
-          {new Date(order.createdAt).toLocaleDateString('pt-PT')}
-        </td>
-        <td className={css.td}>
-          {formatLocation(order.location) ?? order.location}
-        </td>
-        <td className={css.td}>
-          <span className={css.responsible}>{order.owner?.name ?? '—'}</span>
-        </td>
         <td className={css.td}>
           <span className={`${css.status} ${STATUS_CLASS[order.status]}`}>
             {STATUS_LABEL[order.status]}
           </span>
         </td>
-        <td className={css.td}>{order.itemsPendingCount}</td>
         <td className={css.td}>
-          <div
-            className={css.actionsCell}
-            ref={dropdownRef}
-            onClick={e => e.stopPropagation()}
-          >
-            <button
-              className={css.menuBtn}
-              onClick={() => setIsDropdownOpen(prev => !prev)}
-            >
-              <Ellipsis size={16} />
-            </button>
-            {isDropdownOpen && (
-              <div className={css.menu}>
-                <button
-                  className={css.btn}
-                  onClick={() => {
-                    setIsEditOpen(true);
-                    setIsDropdownOpen(false);
-                  }}
-                  disabled={isLocked}
-                  title={getLockReason() ?? 'Edit'}
-                >
-                  <Pencil size={16} strokeWidth={1.5} />
-                </button>
-                <button
-                  className={css.btnDelete}
-                  onClick={() => {
-                    setIsConfirmOpen(true);
-                    setIsDropdownOpen(false);
-                  }}
-                  disabled={isLocked}
-                  title={getLockReason() ?? 'Delete'}
-                >
-                  <Trash2 size={16} strokeWidth={1.5} />
-                </button>
-              </div>
-            )}
+          <div className={css.info}>
+            {new Date(order.createdAt).toLocaleDateString('pt-PT')}
+            <div className={css.subInfo}>
+              {formatLocation(order.location) ?? order.location}
+              {' · '}
+              <span className={css.responsible}>
+                {order.owner?.name ?? '—'}
+              </span>
+            </div>
           </div>
         </td>
+
+        <td className={css.td}>{order.itemsPendingCount}</td>
+        {canManageOrders && (
+          <td className={css.td}>
+            <div
+              className={css.actionsCell}
+              ref={dropdownRef}
+              onClick={e => e.stopPropagation()}
+            >
+              <button
+                className={css.menuBtn}
+                onClick={() => setIsDropdownOpen(prev => !prev)}
+              >
+                <Ellipsis size={16} />
+              </button>
+              {isDropdownOpen && (
+                <div className={css.menu}>
+                  <button
+                    className={css.btn}
+                    onClick={() => {
+                      setIsEditOpen(true);
+                      setIsDropdownOpen(false);
+                    }}
+                    disabled={isLocked}
+                    title={getLockReason() ?? 'Edit'}
+                  >
+                    <Pencil size={16} strokeWidth={1.5} />
+                  </button>
+                  <button
+                    className={css.btnDelete}
+                    onClick={() => {
+                      setIsConfirmOpen(true);
+                      setIsDropdownOpen(false);
+                    }}
+                    disabled={isLocked}
+                    title={getLockReason() ?? 'Delete'}
+                  >
+                    <Trash2 size={16} strokeWidth={1.5} />
+                  </button>
+                </div>
+              )}
+            </div>
+          </td>
+        )}
       </tr>
 
       {isExpanded && (
         <tr>
-          <td colSpan={9} className={css.expandCell}>
+          <td colSpan={7} className={css.expandCell}>
             <OrderItemsTable
               orderId={order._id}
               ownerId={order.owner?._id ?? ''}
               orderStatus={order.status}
+              canManageOrders={canManageOrders}
             />
           </td>
         </tr>

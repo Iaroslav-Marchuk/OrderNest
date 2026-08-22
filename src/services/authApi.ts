@@ -30,6 +30,10 @@ export const refreshSessionApi = async (): Promise<void> => {
   return refreshSession();
 };
 
+export const sendHeartbeatApi = async (): Promise<void> => {
+  await axiosInstance.patch('/auth/heartbeat');
+};
+
 export const getCurrentUserApi = async (): Promise<User> => {
   const { data } = await axiosInstance.get<{
     message: string;

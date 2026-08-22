@@ -1,6 +1,6 @@
-import css from './SkeletonOrderItems.module.css';
+import css from './SkeletonArchiveOrderItems.module.css';
 
-function SkeletonOrderItems() {
+function SkeletonArchiveOrderItems() {
   return (
     <>
       {Array.from({ length: 3 }).map((_, i) => (
@@ -15,19 +15,13 @@ function SkeletonOrderItems() {
             <div className={css.skeleton} style={{ width: '40px' }} />
           </td>
           <td className={css.td}>
+            <div className={css.skeleton} style={{ width: '280px' }} />
+          </td>
+          <td className={css.td}>
             <div className={css.skeleton} style={{ width: '180px' }} />
           </td>
           <td className={css.td}>
-            <div className={css.skeleton} style={{ width: '80px' }} />
-          </td>
-          <td className={css.td}>
-            <div className={css.skeleton} style={{ width: '120px' }} />
-          </td>
-          <td className={css.td}>
-            <div className={css.skeleton} style={{ width: '120px' }} />
-          </td>
-          <td className={css.td}>
-            <div className={css.skeleton} style={{ width: '97px' }} />
+            <div className={css.skeleton} style={{ width: '160px' }} />
           </td>
         </tr>
       ))}
@@ -35,4 +29,4 @@ function SkeletonOrderItems() {
   );
 }
 
-export default SkeletonOrderItems;
+export default SkeletonArchiveOrderItems;

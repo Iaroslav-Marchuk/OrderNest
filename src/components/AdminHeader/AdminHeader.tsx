@@ -1,4 +1,4 @@
-import { Bell, LogOut, ShieldUser, UserRound } from 'lucide-react';
+import { LogOut, ShieldUser, UserRound } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
@@ -12,6 +12,7 @@ import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
 import { logoutApi } from '../../services/authApi';
 
 import css from './AdminHeader.module.css';
+import NotificationBell from '../NotificationBell/NotificationBell';
 
 function AdminHeader() {
   const queryClient = useQueryClient();
@@ -84,9 +85,8 @@ function AdminHeader() {
           <span>{date}</span>
           <span className={css.time}>{time}</span>
         </div>
-        <div className={css.bell}>
-          <Bell size={20} strokeWidth={1.5} />
-        </div>
+
+        <NotificationBell />
 
         <div className={css.avatarWrapper} ref={menuRef}>
           <button

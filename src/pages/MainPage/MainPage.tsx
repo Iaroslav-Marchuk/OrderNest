@@ -44,7 +44,7 @@ function MainPage() {
   const from = (page - 1) * perPage + 1;
   const to = Math.min(page * perPage, totalItems);
 
-  const canCreateOrder = [
+  const canManageOrders = [
     'hardening',
     'assembly',
     'quality',
@@ -69,7 +69,7 @@ function MainPage() {
               type="button"
               className={css.btn}
               onClick={openModal}
-              disabled={!canCreateOrder}
+              disabled={!canManageOrders}
             >
               <Plus />
               <span>Create New Order</span>
@@ -86,6 +86,7 @@ function MainPage() {
           page={page}
           perPage={perPage}
           onSortChange={handleSortChange}
+          canManageOrders={canManageOrders}
         />
 
         <div className={css.bottom}>

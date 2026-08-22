@@ -24,7 +24,8 @@ interface OrderItemRowProps {
   orderId: string;
   ownerId: string;
   orderStatus: Order['status'];
-  isArchive: boolean;
+
+  canManageOrders: boolean;
 }
 
 const STATUS_LABEL: Record<OrderItem['status'], string> = {
@@ -46,7 +47,7 @@ function OrderItemRow({
   orderId,
   ownerId,
   orderStatus,
-  isArchive,
+  canManageOrders,
 }: OrderItemRowProps) {
   const queryClient = useQueryClient();
   const { currentUser } = useCurrentUser();
@@ -70,6 +71,7 @@ function OrderItemRow({
   const canStart = item.status === 'created' && currentUser?.role === 'cutting';
   const canCompleteOrReject =
     item.status === 'in_progress' && currentUser?.role === 'assembly';
+  const isCutter = currentUser?.role === 'cutting';
 
   const invalidateAfterStatusChange = () => {
     queryClient.invalidateQueries({ queryKey: ['orders'] });
@@ -156,20 +158,40 @@ function OrderItemRow({
           </span>
         </td>
         <td className={css.td}>
-          {item.completed?.at
-            ? new Date(item.completed.at).toLocaleDateString('pt-PT')
-            : '—'}
-        </td>
-        <td className={css.td}>
-          {item.completed?.location
-            ? formatLocation(item.completed.location)
-            : '—'}
-        </td>
-        <td className={css.td}>
-          {item.completed?.by ? item.completed.by.name : '—'}
+          {item.status === 'completed' ? (
+            <div className={css.info}>
+              {item.completed?.at
+                ? new Date(item.completed.at).toLocaleDateString('pt-PT')
+                : '—'}
+              <div className={css.subInfo}>
+                {item.completed?.location
+                  ? formatLocation(item.completed.location)
+                  : '—'}
+                {' · '}
+                {item.completed?.by ? item.completed.by.name : '—'}
+              </div>
+            </div>
+          ) : (
+            '—'
+          )}
         </td>
 
-        {!isArchive && (
+        {/* {isCutter && (
+          <td className={css.td}>
+            {canStart && (
+              <button
+                className={css.btnStart}
+                onClick={() => startItem({ orderId, itemId: item._id })}
+                disabled={isStatusActionPending}
+                title="Start production"
+              >
+                <Play size={16} strokeWidth={1.5} />
+              </button>
+            )}
+          </td>
+        )} */}
+
+        {/* {canManageOrders && (
           <td className={css.td}>
             <div
               className={css.actionsCell}
@@ -248,6 +270,91 @@ function OrderItemRow({
                     <Trash2 size={16} strokeWidth={1.5} />
                   </button>
                 </div>
+              )}
+            </div>
+          </td>
+        )} */}
+
+        {(isCutter || canManageOrders) && (
+          <td className={css.td}>
+            <div
+              className={css.actionsCell}
+              ref={dropdownRef}
+              onClick={e => e.stopPropagation()}
+            >
+              {canStart && (
+                <button
+                  className={css.btnStart}
+                  onClick={() => startItem({ orderId, itemId: item._id })}
+                  disabled={isStatusActionPending}
+                  title="Start production"
+                >
+                  <Play size={16} strokeWidth={1.5} />
+                </button>
+              )}
+
+              {canManageOrders && (
+                <>
+                  <button
+                    className={css.menuBtn}
+                    onClick={() => setIsDropdownOpen(prev => !prev)}
+                  >
+                    <Ellipsis size={16} />
+                  </button>
+                  {isDropdownOpen && (
+                    <div className={css.menu}>
+                      {canCompleteOrReject && (
+                        <>
+                          <button
+                            className={css.btnComplete}
+                            onClick={() => {
+                              completeItem({ orderId, itemId: item._id });
+                              setIsDropdownOpen(false);
+                            }}
+                            disabled={isStatusActionPending}
+                            title="Mark as completed"
+                          >
+                            <Check size={16} strokeWidth={1.5} />
+                          </button>
+                          <button
+                            className={css.btnReject}
+                            onClick={() => {
+                              setIsRejectConfirmOpen(true);
+                              setIsDropdownOpen(false);
+                            }}
+                            disabled={isStatusActionPending}
+                            title="Reject — creates a rework item"
+                          >
+                            <X size={16} strokeWidth={1.5} />
+                          </button>
+                        </>
+                      )}
+
+                      <button
+                        className={css.btn}
+                        onClick={() => {
+                          setIsEditOpen(true);
+                          setIsDropdownOpen(false);
+                        }}
+                        disabled={isEditLocked}
+                        title={getEditLockReason() ?? 'Edit'}
+                      >
+                        <Pencil size={16} strokeWidth={1.5} />
+                      </button>
+                      <button
+                        className={css.btnDelete}
+                        onClick={() => {
+                          setIsConfirmOpen(true);
+                          setIsDropdownOpen(false);
+                        }}
+                        disabled={isEditLocked}
+                        title={getEditLockReason() ?? 'Delete'}
+                      >
+                        <Trash2 size={16} strokeWidth={1.5} />
+                      </button>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </td>

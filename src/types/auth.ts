@@ -3,6 +3,7 @@ import type { User } from './user';
 export interface LoginUserReq {
   tel: string;
   password: string;
+  force?: boolean;
 }
 
 export interface LoginUserRes {

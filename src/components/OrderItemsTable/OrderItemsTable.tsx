@@ -14,16 +14,17 @@ interface OrderItemsTableProps {
   orderId: string;
   ownerId: string;
   orderStatus: Order['status'];
-  isArchive: boolean;
+  canManageOrders: boolean;
 }
 
 function OrderItemsTable({
   orderId,
   ownerId,
   orderStatus,
-  isArchive,
+  canManageOrders,
 }: OrderItemsTableProps) {
   const { orderItems, isOrderItemsLoading } = useOrderItems(orderId);
+
   const [isAddItemOpen, setIsAddItemOpen] = useState(false);
   const { currentUser } = useCurrentUser();
 
@@ -31,11 +32,15 @@ function OrderItemsTable({
   const isOwner = currentUser?._id === ownerId;
   const isLocked = isStarted || !isOwner;
 
+  const isCutter = currentUser?.role === 'cutting';
+
   const getLockReason = () => {
     if (isStarted) return 'Order already started production';
     if (!isOwner) return 'You can only manage your own orders';
     return undefined;
   };
+
+  const hasActionsColumn = isCutter || canManageOrders;
 
   return (
     <div className={css.wrapper}>
@@ -48,10 +53,8 @@ function OrderItemsTable({
             <th className={css.th}>Reason</th>
             <th className={css.th}>Notes</th>
             <th className={css.th}>Status</th>
-            <th className={css.th}>Finished At</th>
-            <th className={css.th}>Finished On</th>
-            <th className={css.th}>Finished By</th>
-            {!isArchive && <th className={css.th}>Actions</th>}
+            <th className={css.th}>Completed</th>
+            <th className={css.th}>{hasActionsColumn ? 'Actions' : ''}</th>
           </tr>
         </thead>
         <tbody>
@@ -65,14 +68,14 @@ function OrderItemsTable({
                 orderId={orderId}
                 ownerId={ownerId}
                 orderStatus={orderStatus}
-                isArchive={isArchive}
+                canManageOrders={canManageOrders}
               />
             ))
           )}
         </tbody>
       </table>
 
-      {!isArchive && (
+      {canManageOrders && (
         <button
           className={css.addItemBtn}
           onClick={e => {

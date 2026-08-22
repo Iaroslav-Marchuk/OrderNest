@@ -1,3 +1,93 @@
+/* .row {
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid var(--color-bg-border);
+}
+
+.row:hover {
+  background: var(--color-bg-elevated);
+}
+
+.td {
+  text-align: center;
+  padding: 10px 14px;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.rowIndex {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+}
+
+.expandBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  padding: 2px;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+
+.expandBtn:hover {
+  color: var(--color-text-primary);
+}
+
+.icon {
+  transition: transform 0.2s;
+}
+
+.iconOpen {
+  transform: rotate(180deg);
+  transition: transform 0.2s;
+  color: var(--color-accent);
+}
+
+.expandCell {
+  padding: 0;
+  background: var(--color-bg-base);
+  border-bottom: 1px solid var(--color-bg-border);
+}
+
+.ep {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-accent);
+  letter-spacing: 0.04em;
+}
+
+.responsible {
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.status {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.statusCreated {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.statusInProgress {
+  background: var(--color-info-bg);
+  color: var(--color-accent-hover);
+}
+
+.statusCompleted {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+} */
+
 .row {
   cursor: pointer;
   transition: background 0.15s;
@@ -49,6 +139,16 @@
   color: var(--color-accent);
   letter-spacing: 0.04em;
 }
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+}
+.subInfo {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
 .responsible {
   color: var(--color-text-secondary);
   font-size: 13px;
@@ -72,85 +172,4 @@
 .statusCompleted {
   background: var(--color-success-bg);
   color: var(--color-success);
-}
-.actionsCell {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.menuBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-text-muted);
-  padding: 4px;
-  border-radius: 4px;
-  transition:
-    color 0.15s,
-    background 0.15s;
-}
-.menuBtn:hover {
-  color: var(--color-text-primary);
-  background: var(--color-bg-elevated);
-}
-.menu {
-  position: absolute;
-  top: calc(100% + 4px);
-  right: 0;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 4px;
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-bg-border);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-.btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px;
-  border-radius: 6px;
-  color: var(--color-text-secondary);
-  transition:
-    color 0.15s,
-    background 0.15s;
-}
-.btn:hover {
-  color: var(--color-text-primary);
-  background: var(--color-bg-elevated);
-}
-.btn:disabled {
-  color: var(--color-text-muted);
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-.btn:disabled:hover {
-  color: var(--color-text-muted);
-  background: transparent;
-}
-.btnDelete {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px;
-  border-radius: 6px;
-  color: var(--color-error);
-  transition:
-    color 0.15s,
-    background 0.15s;
-}
-.btnDelete:hover {
-  background: var(--color-error-bg);
-}
-.btnDelete:disabled {
-  color: var(--color-text-muted);
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-.btnDelete:disabled:hover {
-  background: transparent;
 }

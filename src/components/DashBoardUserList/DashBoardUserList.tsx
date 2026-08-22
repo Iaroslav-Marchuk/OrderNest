@@ -1,11 +1,11 @@
 import clsx from 'clsx';
-import type { User } from '../../types/user';
+import type { SessionInfo, User } from '../../types/user';
 import css from './DashBoardUserList.module.css';
 import { formatLocation } from '../../utils/formatLocationLabel';
 
 interface DashBoardUserListProps {
   users: User[];
-  sessionInfo: Record<string, string | null>;
+  sessionInfo: Record<string, SessionInfo>;
 }
 
 function DashBoardUserList({ users, sessionInfo }: DashBoardUserListProps) {
@@ -14,9 +14,12 @@ function DashBoardUserList({ users, sessionInfo }: DashBoardUserListProps) {
       <h2 className={css.title}>System Users</h2>
       <ul className={css.list}>
         {users.map(user => {
-          const isOnline = user._id in sessionInfo;
-          const location = sessionInfo[user._id];
-          const locationLabel = isOnline
+          const info = sessionInfo[user._id];
+          const hasSession = Boolean(info);
+          const isOnline = info?.isOnline ?? false;
+          const location = info?.location ?? null;
+
+          const locationLabel = hasSession
             ? user.role === 'assembly' && location
               ? formatLocation(location)
               : user.role
@@ -35,7 +38,7 @@ function DashBoardUserList({ users, sessionInfo }: DashBoardUserListProps) {
                 {user.isActive ? 'Active' : 'Inactive'}
               </div>
               <span className={clsx(css.loggedIn, !isOnline && css.loggedOut)}>
-                {isOnline ? 'Logged In' : 'Not Logged'}
+                {isOnline ? 'Online' : hasSession ? 'Away' : 'Offline'}
               </span>
               <span className={clsx(css.location, !location && css.notLocated)}>
                 {locationLabel ? `${locationLabel}` : '-'}

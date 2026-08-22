@@ -9,7 +9,7 @@ let refreshPromise: Promise<void> | null = null;
 
 export const refreshSession = async (): Promise<void> => {
   if (refreshPromise) {
-    return refreshPromise; // вже йде запит — приєднуємось до нього
+    return refreshPromise;
   }
 
   refreshPromise = axios

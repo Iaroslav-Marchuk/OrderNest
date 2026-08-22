@@ -1,12 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
 import { Routes, Route } from 'react-router-dom';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 import GlobalLoader from '../GlobalLoader/GlobalLoader';
 
-import { getCurrentUserApi, refreshSessionApi } from '../../services/authApi';
-import { getAccessToken } from '../../services/axiosInstance';
+import { refreshSessionApi } from '../../services/authApi';
+
 import Layout from '../Layout/Layout';
 import PublicRoute from '../PublicRoute';
 import PrivateRoute from '../PrivateRoute';
@@ -14,6 +13,7 @@ import AdminRoute from '../AdminRoute';
 import AdminLayout from '../AdminLayout/AdminLayout';
 import SettingsPage from '../../pages/SettingsPage/SettingsPage';
 import ActivityPage from '../../pages/ActivityPage/ActivityPage';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 
 const AdminPage = lazy(() => import('../../pages/AdminPage/AdminPage'));
 const ArchivePage = lazy(() => import('../../pages/ArchivePage/ArchivePage'));
@@ -41,14 +41,9 @@ function App() {
     refreshSessionApi().finally(() => setIsRefreshing(false));
   }, []);
 
-  const { isLoading } = useQuery({
-    queryKey: ['currentUser'],
-    queryFn: getCurrentUserApi,
-    enabled: !isRefreshing && !!getAccessToken(),
-    retry: false,
-  });
+  const { isUserLoading } = useCurrentUser();
 
-  if (isRefreshing || isLoading) return <GlobalLoader />;
+  if (isRefreshing || isUserLoading) return <GlobalLoader />;
 
   return (
     <Suspense fallback={<GlobalLoader />}>

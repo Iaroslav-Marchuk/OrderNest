@@ -3,8 +3,9 @@ import type { Order } from '../../types/order';
 import css from './ArchiveOrderRow.module.css';
 
 import { ChevronDown } from 'lucide-react';
-import OrderItemsTable from '../OrderItemsTable/OrderItemsTable';
+
 import { formatLocation } from '../../utils/formatLocationLabel';
+import ArchiveOrderItemsTable from '../ArchiveOrderItemsTable/ArchiveOrderItemsTable';
 
 interface OrderRowProps {
   order: Order;
@@ -41,7 +42,7 @@ function ArchiveOrderRow({ order, index }: OrderRowProps) {
           </div>
         </td>
         <td className={css.td}>
-          <span className={css.ep}>{order.ep}</span>
+          <span className={css.ep}>EP-{order.ep}</span>
         </td>
         <td className={css.td}>{order.client?.name ?? '—'}</td>
         <td className={css.td}>
@@ -50,40 +51,43 @@ function ArchiveOrderRow({ order, index }: OrderRowProps) {
           </span>
         </td>
         <td className={css.td}>
-          {new Date(order.createdAt).toLocaleDateString('pt-PT')}
-        </td>
-        <td className={css.td}>
-          {order.location ? formatLocation(order.location) : '—'}
-        </td>
-        <td className={css.td}>
-          <span className={css.responsible}>{order.owner?.name ?? '—'}</span>
+          <div className={css.info}>
+            {new Date(order.createdAt).toLocaleDateString('pt-PT')}
+            <div className={css.subInfo}>
+              {order.location ? formatLocation(order.location) : '—'}
+              {' · '}
+              <span className={css.responsible}>
+                {order.owner?.name ?? '—'}
+              </span>
+            </div>
+          </div>
         </td>
 
         <td className={css.td}>
-          {order.completed?.at
-            ? new Date(order.completed.at).toLocaleDateString('pt-PT')
-            : '—'}
-        </td>
-        <td className={css.td}>
-          {order.completed?.location
-            ? formatLocation(order.completed.location)
-            : '—'}
-        </td>
-        <td className={css.td}>
-          <span className={css.responsible}>
-            {order.completed?.by?.name ?? '—'}
-          </span>
+          <div className={css.info}>
+            {order.completed?.at
+              ? new Date(order.completed.at).toLocaleDateString('pt-PT')
+              : '—'}
+            <div className={css.subInfo}>
+              {order.completed?.location
+                ? formatLocation(order.completed.location)
+                : '—'}
+              {' · '}
+              <span className={css.responsible}>
+                {order.completed?.by?.name ?? '—'}
+              </span>
+            </div>
+          </div>
         </td>
       </tr>
 
       {isExpanded && (
         <tr>
-          <td colSpan={10} className={css.expandCell}>
-            <OrderItemsTable
+          <td colSpan={6} className={css.expandCell}>
+            <ArchiveOrderItemsTable
               orderId={order._id}
               ownerId={order.owner?._id ?? ''}
               orderStatus={order.status}
-              isArchive={true}
             />
           </td>
         </tr>

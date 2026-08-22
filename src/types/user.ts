@@ -44,9 +44,14 @@ export interface GetUsersParams {
   isActive?: boolean;
 }
 
+export interface SessionInfo {
+  location: string | null;
+  isOnline: boolean;
+}
+
 export interface UsersInfoResponse {
   users: User[];
-  sessionInfo: Record<string, string | null>;
+  sessionInfo: Record<string, SessionInfo>;
   page?: number;
   perPage?: number;
 }
