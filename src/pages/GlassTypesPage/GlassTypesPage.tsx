@@ -1,21 +1,21 @@
 import { useSearchParams } from 'react-router-dom';
-import css from './GlassTypesPage.module.css';
 import { useState } from 'react';
-import type { SortOrder } from '../../types/common';
-
-import SearchBox from '../../components/SearchBox/SearchBox';
 import { Plus } from 'lucide-react';
-import Pagination from '../../components/Pagination/Pagination';
-import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
 
-import GlassTypeTable, {
-  type GlassTypeSortField,
-} from '../../components/GlassTypeTable/GlassTypeTable';
-import GlassTypeForm from '../../components/GlassTypeForm/GlassTypeForm';
+import type { SortOrder } from '../../types/common';
+import type { GlassTypeSortField } from '../../types/glassType';
 
-import GlassCategoriesFilter from '../../components/GlassCategoriesFilter/GlassCategoriesFilter';
 import { useGlassTypes } from '../../hooks/useGlassTypes';
 import { useAllGlassCategories } from '../../hooks/useAllGlassCategories';
+
+import SearchBox from '../../components/SearchBox/SearchBox';
+import Pagination from '../../components/Pagination/Pagination';
+import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
+import GlassTypeTable from '../../components/GlassTypeTable/GlassTypeTable';
+import GlassTypeForm from '../../components/GlassTypeForm/GlassTypeForm';
+import GlassCategoriesFilter from '../../components/GlassCategoriesFilter/GlassCategoriesFilter';
+
+import css from './GlassTypesPage.module.css';
 
 function GlassTypesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -133,7 +133,6 @@ function GlassTypesPage() {
       </div>
       <GlassTypeTable
         glassTypes={glassTypes}
-        categoriesList={allGlassCategories}
         isLoading={isGlassTypesLoading}
         isError={isGlassTypesError}
         sortBy={sortBy}

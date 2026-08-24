@@ -1,14 +1,18 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { GlassCategory } from '../../types/glassCategory';
-import css from './GlassCategoryRow.module.css';
-import { deleteGlassCategoryApi } from '../../services/glassCategoriesApi';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { Pencil, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import type { AxiosError } from 'axios';
+
+import type { GlassCategory } from '../../types/glassCategory';
+
+import { deleteGlassCategoryApi } from '../../services/glassCategoriesApi';
+
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import GlassCategoryForm from '../GlassCategoryForm/GlassCategoryForm';
 import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
-import type { AxiosError } from 'axios';
+
+import css from './GlassCategoryRow.module.css';
 
 interface GlassCategoryRowProps {
   glassCategory: GlassCategory;

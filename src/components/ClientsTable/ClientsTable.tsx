@@ -1,13 +1,16 @@
-import type { Client, ClientsSortField } from '../../types/client';
-import css from './ClientsTable.module.css';
 import {
   ArrowDownUp,
   ArrowDownWideNarrow,
   ArrowUpNarrowWide,
 } from 'lucide-react';
-import ClientRow from '../ClientRow/ClientRow';
+
+import type { Client, ClientsSortField } from '../../types/client';
 import type { SortOrder } from '../../types/common';
+
+import ClientRow from '../ClientRow/ClientRow';
 import SkeletonClients from '../SkeletonClients/SkeletonClients';
+
+import css from './ClientsTable.module.css';
 
 interface ClientsTableProps {
   clients: Client[];

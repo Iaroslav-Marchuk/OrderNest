@@ -1,4 +1,5 @@
 import { formatLocation } from '../../utils/formatLocationLabel';
+
 import css from './OldestOrdersTable.module.css';
 
 interface OldestOrder {

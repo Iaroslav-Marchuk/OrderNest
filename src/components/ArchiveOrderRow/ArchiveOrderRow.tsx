@@ -1,11 +1,13 @@
 import { Fragment, useState } from 'react';
-import type { Order } from '../../types/order';
-import css from './ArchiveOrderRow.module.css';
-
 import { ChevronDown } from 'lucide-react';
 
+import type { Order } from '../../types/order';
+
 import { formatLocation } from '../../utils/formatLocationLabel';
+
 import ArchiveOrderItemsTable from '../ArchiveOrderItemsTable/ArchiveOrderItemsTable';
+
+import css from './ArchiveOrderRow.module.css';
 
 interface OrderRowProps {
   order: Order;

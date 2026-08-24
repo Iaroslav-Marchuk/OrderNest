@@ -1,6 +1,7 @@
 import { createPortal } from 'react-dom';
 import { useEffect } from 'react';
 import { PulseLoader } from 'react-spinners';
+
 import css from './LocationModal.module.css';
 
 const LINES = [

@@ -1,18 +1,21 @@
 import { Plus } from 'lucide-react';
-import UsersTable, {
-  type UsersSortField,
-} from '../../components/UsersTable/UsersTable';
-import css from './UsersPage.module.css';
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
+import type { SortOrder } from '../../types/common';
+import type { UsersSortField } from '../../types/user';
+
+import { useUsers } from '../../hooks/useUsers';
+
+import UsersTable from '../../components/UsersTable/UsersTable';
 import Pagination from '../../components/Pagination/Pagination';
 import UsersRoleFilter from '../../components/UsersRoleFilter/UsersRoleFilter';
 import UsersStatusFilter from '../../components/UsersStatusFilter/UsersStatusFilter';
 import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
 import UserForm from '../../components/UserForm/UserForm';
 import SearchBox from '../../components/SearchBox/SearchBox';
-import { useSearchParams } from 'react-router-dom';
-import type { SortOrder } from '../../types/common';
-import { useUsers } from '../../hooks/useUsers';
+
+import css from './UsersPage.module.css';
 
 function UsersPage() {
   const [searchParams, setSearchParams] = useSearchParams();

@@ -1,16 +1,22 @@
-import DashBoardCard from '../../components/DashBoardCard/DashBoardCard';
-import DashBoardUserList from '../../components/DashBoardUserList/DashBoardUserList';
-import css from './AdminPage.module.css';
+import { useQuery } from '@tanstack/react-query';
 import { Users, Building2, Layers, SquareCheck } from 'lucide-react';
+
+import type { UsersInfoResponse } from '../../types/user';
+
+import { useOrders } from '../../hooks/useOrders';
+import { useUsers } from '../../hooks/useUsers';
 import { useAllClients } from '../../hooks/useAllClients';
 import { useAllGlassTypes } from '../../hooks/useAllGlassTypes';
 import { useStats } from '../../hooks/useStats';
-import type { UsersInfoResponse } from '../../types/user';
+
 import { getUsersSessionInfoApi } from '../../services/usersApi';
-import { useQuery } from '@tanstack/react-query';
-import { useUsers } from '../../hooks/useUsers';
+
 import { formatRelativeTime } from '../../utils/formatRelativeTime';
-import { useOrders } from '../../hooks/useOrders';
+
+import DashBoardCard from '../../components/DashBoardCard/DashBoardCard';
+import DashBoardUserList from '../../components/DashBoardUserList/DashBoardUserList';
+
+import css from './AdminPage.module.css';
 
 function AdminPage() {
   const { allClients, lastClient } = useAllClients();

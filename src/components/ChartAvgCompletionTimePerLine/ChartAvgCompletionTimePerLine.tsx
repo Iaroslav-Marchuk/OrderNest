@@ -8,8 +8,9 @@ import {
   YAxis,
 } from 'recharts';
 
-import css from './ChartAvgCompletionTimePerLine.module.css';
 import { formatLocation } from '../../utils/formatLocationLabel';
+
+import css from './ChartAvgCompletionTimePerLine.module.css';
 
 export interface AvgDailyOrdersPerLinePoint {
   location: string;

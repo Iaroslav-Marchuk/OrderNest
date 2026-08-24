@@ -1,9 +1,11 @@
-import css from './ArchiveOrderItemsTable.module.css';
+import type { Order } from '../../types/order';
 
 import { useOrderItems } from '../../hooks/useOrderItems';
-import type { Order } from '../../types/order';
+
 import ArchiveOrderItemRow from '../ArchiveOrderItemRow/ArchiveOrderItemRow';
 import SkeletonArchiveOrderItems from '../SkeletonArchiveOrderItems/SkeletonArchiveOrderItems';
+
+import css from './ArchiveOrderItemsTable.module.css';
 
 interface ArchiveOrderItemsTableProps {
   orderId: string;

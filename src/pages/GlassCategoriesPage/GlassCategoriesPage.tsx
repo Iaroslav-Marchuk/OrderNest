@@ -1,16 +1,19 @@
 import { Plus } from 'lucide-react';
-import css from './GlassCategoriesPage.module.css';
-import GlassCategoryTable, {
-  type GlassCategorySortField,
-} from '../../components/GlassCategoryTable/GlassCategoryTable';
-import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
 import { useState } from 'react';
-import GlassCategoryForm from '../../components/GlassCategoryForm/GlassCategoryForm';
-import SearchBox from '../../components/SearchBox/SearchBox';
 import { useSearchParams } from 'react-router-dom';
+
 import type { SortOrder } from '../../types/common';
-import Pagination from '../../components/Pagination/Pagination';
+import type { GlassCategorySortField } from '../../types/glassCategory';
+
 import { useGlassCategories } from '../../hooks/useGlassCategories';
+
+import GlassCategoryTable from '../../components/GlassCategoryTable/GlassCategoryTable';
+import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
+import GlassCategoryForm from '../../components/GlassCategoryForm/GlassCategoryForm';
+import Pagination from '../../components/Pagination/Pagination';
+import SearchBox from '../../components/SearchBox/SearchBox';
+
+import css from './GlassCategoriesPage.module.css';
 
 function GlassCategoriesPage() {
   const [searchParams, setSearchParams] = useSearchParams();

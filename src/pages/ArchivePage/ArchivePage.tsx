@@ -1,19 +1,23 @@
 import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+import type { AxiosError } from 'axios';
+
+import { useArchivedOrders } from '../../hooks/useArchivedOrders';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
+import { useOrderQueryParams } from '../../hooks/useOrderQueryParams';
+
+import { clearArchiveApi } from '../../services/ordersApi';
+
 import Container from '../../components/Container/Container';
 import OrderFilters from '../../components/OrderFilters/OrderFilters';
 import Pagination from '../../components/Pagination/Pagination';
 import Section from '../../components/Section/Section';
-import { useArchivedOrders } from '../../hooks/useArchivedOrders';
-import { useCurrentUser } from '../../hooks/useCurrentUser';
-import { useOrderQueryParams } from '../../hooks/useOrderQueryParams';
-import css from './ArchivePage.module.css';
 import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
 import ConfirmContainer from '../../components/ConfirmContainer/ConfirmContainer';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { clearArchiveApi } from '../../services/ordersApi';
-import toast from 'react-hot-toast';
-import type { AxiosError } from 'axios';
 import ArchiveOrdersTable from '../../components/ArchiveOrdersTable/ArchiveOrdersTable';
+
+import css from './ArchivePage.module.css';
 
 function ArchivePage() {
   const queryClient = useQueryClient();

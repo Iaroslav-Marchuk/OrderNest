@@ -1,12 +1,13 @@
 import * as Yup from 'yup';
-
-import css from './ResetPasswordForm.module.css';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { resetPasswordApi } from '../../services/usersApi';
 import toast from 'react-hot-toast';
 import { PulseLoader } from 'react-spinners';
-import { ErrorMessage, Field, Form, Formik, type FormikHelpers } from 'formik';
 import { KeyRound } from 'lucide-react';
+import { ErrorMessage, Field, Form, Formik, type FormikHelpers } from 'formik';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { resetPasswordApi } from '../../services/usersApi';
+
+import css from './ResetPasswordForm.module.css';
 
 interface ResetPasswordFormProps {
   userId: string;

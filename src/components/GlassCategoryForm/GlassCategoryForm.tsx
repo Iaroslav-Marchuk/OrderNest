@@ -1,16 +1,18 @@
 import * as Yup from 'yup';
+import type { AxiosError } from 'axios';
+import toast from 'react-hot-toast';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { PulseLoader } from 'react-spinners';
 
 import type { GlassCategory } from '../../types/glassCategory';
-import css from './GlassCategoryForm.module.css';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   addNewGlassCategoryApi,
   patchGlassCategoryApi,
 } from '../../services/glassCategoriesApi';
-import toast from 'react-hot-toast';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { PulseLoader } from 'react-spinners';
-import type { AxiosError } from 'axios';
+
+import css from './GlassCategoryForm.module.css';
 
 interface GlassCategoryFormProps {
   onClose: () => void;

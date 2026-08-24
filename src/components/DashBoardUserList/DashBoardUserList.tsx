@@ -1,7 +1,10 @@
 import clsx from 'clsx';
+
 import type { SessionInfo, User } from '../../types/user';
-import css from './DashBoardUserList.module.css';
+
 import { formatLocation } from '../../utils/formatLocationLabel';
+
+import css from './DashBoardUserList.module.css';
 
 interface DashBoardUserListProps {
   users: User[];

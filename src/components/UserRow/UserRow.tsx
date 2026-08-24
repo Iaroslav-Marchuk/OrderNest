@@ -1,16 +1,20 @@
 import { Pencil, RotateCcwKey, Trash2 } from 'lucide-react';
-import type { User } from '../../types/user';
-import css from './UserRow.module.css';
+import type { AxiosError } from 'axios';
 import clsx from 'clsx';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
-import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import type { User } from '../../types/user';
+
 import { deleteUserApi, patchUserApi } from '../../services/usersApi';
+
 import UserForm from '../UserForm/UserForm';
 import ResetPasswordForm from '../ResetPasswordForm/ResetPasswordForm';
-import type { AxiosError } from 'axios';
+import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
+import ModalOverlay from '../ModalOverlay/ModalOverlay';
+
+import css from './UserRow.module.css';
 
 interface UserRowProps {
   user: User;

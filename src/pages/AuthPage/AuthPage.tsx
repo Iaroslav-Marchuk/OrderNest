@@ -1,10 +1,11 @@
 import { ChartLine, ShieldCheck, UsersRound } from 'lucide-react';
 import logo from '/logo.png';
 
-import css from './AuthPage.module.css';
 import LoginForm from '../../components/LoginForm/LoginForm';
 import Section from '../../components/Section/Section';
 import Container from '../../components/Container/Container';
+
+import css from './AuthPage.module.css';
 
 function AuthPage() {
   return (

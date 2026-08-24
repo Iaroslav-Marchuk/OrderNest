@@ -1,24 +1,26 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { GlassType } from '../../types/glassType';
-import css from './GlassTypeRow.module.css';
-import { deleteGlassTypeApi } from '../../services/glassTypesApi';
+import clsx from 'clsx';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
+import type { AxiosError } from 'axios';
+
+import type { GlassType } from '../../types/glassType';
+
+import { deleteGlassTypeApi } from '../../services/glassTypesApi';
+
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
 import GlassTypeForm from '../GlassTypeForm/GlassTypeForm';
-import type { GlassCategory } from '../../types/glassCategory';
-import clsx from 'clsx';
-import type { AxiosError } from 'axios';
+
+import css from './GlassTypeRow.module.css';
 
 interface GlassTypeRowProps {
   glassType: GlassType;
-  categoriesList: GlassCategory[];
   index: number;
 }
 
-function GlassTypeRow({ glassType, categoriesList, index }: GlassTypeRowProps) {
+function GlassTypeRow({ glassType, index }: GlassTypeRowProps) {
   const queryClient = useQueryClient();
 
   const { mutate: deleteGlassType } = useMutation({
@@ -92,11 +94,7 @@ function GlassTypeRow({ glassType, categoriesList, index }: GlassTypeRowProps) {
 
       {isEditOpen && (
         <ModalOverlay onClose={closeEdit}>
-          <GlassTypeForm
-            glassType={glassType}
-            categoriesList={categoriesList}
-            onClose={closeEdit}
-          />
+          <GlassTypeForm glassType={glassType} onClose={closeEdit} />
         </ModalOverlay>
       )}
 

@@ -1,13 +1,17 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Client } from '../../types/client';
-import css from './ClientRow.module.css';
-import { deleteClientApi } from '../../services/clientsApi';
+import { Pencil, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
+
+import type { Client } from '../../types/client';
+
+import { deleteClientApi } from '../../services/clientsApi';
+
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
 import ClientForm from '../ClientForm/ClientForm';
-import { Pencil, Trash2 } from 'lucide-react';
+
+import css from './ClientRow.module.css';
 
 interface ClientRowProps {
   client: Client;

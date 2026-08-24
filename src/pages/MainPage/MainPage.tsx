@@ -1,19 +1,19 @@
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
+
+import { useOrders } from '../../hooks/useOrders';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
+import { useOrderQueryParams } from '../../hooks/useOrderQueryParams';
+
 import Container from '../../components/Container/Container';
 import Section from '../../components/Section/Section';
-import css from './MainPage.module.css';
-import { useState } from 'react';
-
-import { Plus } from 'lucide-react';
 import Pagination from '../../components/Pagination/Pagination';
 import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
 import OrdersTable from '../../components/OrdersTable/OrdersTable';
 import OrderForm from '../../components/OrderForm/OrderForm';
-
-import { useOrders } from '../../hooks/useOrders';
-
-import { useCurrentUser } from '../../hooks/useCurrentUser';
-import { useOrderQueryParams } from '../../hooks/useOrderQueryParams';
 import OrderFilters from '../../components/OrderFilters/OrderFilters';
+
+import css from './MainPage.module.css';
 
 function MainPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);

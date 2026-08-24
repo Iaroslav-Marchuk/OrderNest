@@ -1,15 +1,18 @@
-import css from './ProfilePage.module.css';
+import { Send } from 'lucide-react';
+import { useState } from 'react';
 
 import { useCurrentUser } from '../../hooks/useCurrentUser';
+import { useTelegramLink } from '../../hooks/useTelegrammLink';
+
+import { formatLocation } from '../../utils/formatLocationLabel';
+
 import SkeletonProfile from '../../components/SkeletonProfile/SkeletonProfile';
-import { useState } from 'react';
 import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
 import ChangePasswordForm from '../../components/ChangePasswordForm/ChangePasswordForm';
-import { formatLocation } from '../../utils/formatLocationLabel';
-import Section from '../../components/Section/Section';
 import Container from '../../components/Container/Container';
-import { Send } from 'lucide-react';
-import { useTelegramLink } from '../../hooks/useTelegrammLink';
+import Section from '../../components/Section/Section';
+
+import css from './ProfilePage.module.css';
 
 function ProfilePage() {
   const { currentUser, isUserLoading, location } = useCurrentUser();

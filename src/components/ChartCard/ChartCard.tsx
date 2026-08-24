@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+
 import css from './ChartCard.module.css';
 
 interface ChartCardProps {

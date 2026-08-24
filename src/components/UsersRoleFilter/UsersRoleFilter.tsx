@@ -1,4 +1,5 @@
 import type { UserRole } from '../../types/user';
+
 import css from './UsersRoleFilter.module.css';
 
 type RoleFilter = UserRole | 'all';

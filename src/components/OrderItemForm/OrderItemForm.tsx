@@ -1,9 +1,11 @@
 import { ErrorMessage, Field, useFormikContext } from 'formik';
-import css from './OrderItemForm.module.css';
 import { X } from 'lucide-react';
+
 import type { GlassCategory } from '../../types/glassCategory';
 import type { GlassType } from '../../types/glassType';
 import type { OrderFormValues } from '../../types/order';
+
+import css from './OrderItemForm.module.css';
 
 interface OrderItemFormProps {
   index: number;

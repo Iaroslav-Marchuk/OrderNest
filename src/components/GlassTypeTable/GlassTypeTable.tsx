@@ -3,16 +3,17 @@ import {
   ArrowDownWideNarrow,
   ArrowUpNarrowWide,
 } from 'lucide-react';
+
 import type { SortOrder } from '../../types/common';
 import type { GlassType, GlassTypeSortField } from '../../types/glassType';
-import css from './GlassTypeTable.module.css';
+
 import GlassTypeRow from '../GlassTypeRow/GlassTypeRow';
-import type { GlassCategory } from '../../types/glassCategory';
 import SkeletonGlassTypes from '../SkeletonGlassTypes/SkeletonGlassTypes';
+
+import css from './GlassTypeTable.module.css';
 
 interface GlassTypeTableProps {
   glassTypes: GlassType[];
-  categoriesList: GlassCategory[];
   isLoading: boolean;
   isError: boolean;
   page: number;
@@ -24,7 +25,6 @@ interface GlassTypeTableProps {
 
 function GlassTypeTable({
   glassTypes,
-  categoriesList,
   isLoading,
   isError,
   page,
@@ -90,7 +90,6 @@ function GlassTypeTable({
             <GlassTypeRow
               key={glassType._id}
               glassType={glassType}
-              categoriesList={categoriesList}
               index={(page - 1) * perPage + index + 1}
             />
           ))

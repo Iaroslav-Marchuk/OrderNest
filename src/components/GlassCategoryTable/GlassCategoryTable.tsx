@@ -3,15 +3,17 @@ import {
   ArrowDownWideNarrow,
   ArrowUpNarrowWide,
 } from 'lucide-react';
-import GlassCategoryRow from '../GlassCategoryRow/GlassCategoryRow';
-import css from './GlassCategoryTable.module.css';
+
 import type { SortOrder } from '../../types/common';
 import type {
   GlassCategory,
   GlassCategorySortField,
 } from '../../types/glassCategory';
 
+import GlassCategoryRow from '../GlassCategoryRow/GlassCategoryRow';
 import SkeletonGlassCategories from '../SkeletonGlassCategories/SkeletonGlassCategories';
+
+import css from './GlassCategoryTable.module.css';
 
 interface GlassCategoryTableProps {
   glassCategories: GlassCategory[];

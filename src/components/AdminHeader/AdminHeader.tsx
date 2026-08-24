@@ -8,11 +8,11 @@ import logo from '../../assets/logo-sticky-2x.png';
 
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
+import NotificationBell from '../NotificationBell/NotificationBell';
 
 import { logoutApi } from '../../services/authApi';
 
 import css from './AdminHeader.module.css';
-import NotificationBell from '../NotificationBell/NotificationBell';
 
 function AdminHeader() {
   const queryClient = useQueryClient();

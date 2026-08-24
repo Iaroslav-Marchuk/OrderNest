@@ -1,14 +1,17 @@
-import css from './OrderItemsTable.module.css';
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
+
+import type { Order } from '../../types/order';
+
+import { useCurrentUser } from '../../hooks/useCurrentUser';
+import { useOrderItems } from '../../hooks/useOrderItems';
 
 import SkeletonOrderItems from '../SkeletonOrderItems/SkeletonOrderItems';
 import OrderItemRow from '../OrderItemRow/OrderItemRow';
-import { useOrderItems } from '../../hooks/useOrderItems';
-import { useState } from 'react';
-import { Plus } from 'lucide-react';
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import AddOrderItemForm from '../AddOrderItemForm/AddOrderItemForm';
-import type { Order } from '../../types/order';
-import { useCurrentUser } from '../../hooks/useCurrentUser';
+
+import css from './OrderItemsTable.module.css';
 
 interface OrderItemsTableProps {
   orderId: string;

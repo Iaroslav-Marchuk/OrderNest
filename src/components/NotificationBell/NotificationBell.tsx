@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import css from './NotificationBell.module.css';
-import { useNotifications } from '../../hooks/useNotifications';
-import { useEffect, useRef, useState } from 'react';
 import { Bell } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+
+import { useNotifications } from '../../hooks/useNotifications';
+
+import css from './NotificationBell.module.css';
 
 const NOTIFICATION_LABELS: Record<string, string> = {
   order_created: '🆕 New order',
@@ -54,18 +56,6 @@ function NotificationBell() {
 
       {isOpen && (
         <div className={css.dropdown}>
-          {/* <div className={css.dropdownHeader}>
-            <span>Notifications</span>
-            {unreadCount > 0 && (
-              <button
-                className={css.markAllBtn}
-                onClick={() => markAllAsRead()}
-              >
-                Mark all as read
-              </button>
-            )}
-          </div> */}
-
           <div className={css.dropdownHeader}>
             <span>Notifications</span>
             <div className={css.headerActions}>

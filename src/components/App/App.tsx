@@ -11,9 +11,9 @@ import PublicRoute from '../PublicRoute';
 import PrivateRoute from '../PrivateRoute';
 import AdminRoute from '../AdminRoute';
 import AdminLayout from '../AdminLayout/AdminLayout';
+
 import SettingsPage from '../../pages/SettingsPage/SettingsPage';
 import ActivityPage from '../../pages/ActivityPage/ActivityPage';
-import { useCurrentUser } from '../../hooks/useCurrentUser';
 
 const AdminPage = lazy(() => import('../../pages/AdminPage/AdminPage'));
 const ArchivePage = lazy(() => import('../../pages/ArchivePage/ArchivePage'));
@@ -35,15 +35,13 @@ const StatsPage = lazy(() => import('../../pages/StatsPage/StatsPage'));
 const UsersPage = lazy(() => import('../../pages/UsersPage/UsersPage'));
 
 function App() {
-  const [isRefreshing, setIsRefreshing] = useState(true);
+  const [isBootstrapping, setIsBootstrapping] = useState(true);
 
   useEffect(() => {
-    refreshSessionApi().finally(() => setIsRefreshing(false));
+    refreshSessionApi().finally(() => setIsBootstrapping(false));
   }, []);
 
-  const { isUserLoading } = useCurrentUser();
-
-  if (isRefreshing || isUserLoading) return <GlobalLoader />;
+  if (isBootstrapping) return <GlobalLoader />;
 
   return (
     <Suspense fallback={<GlobalLoader />}>

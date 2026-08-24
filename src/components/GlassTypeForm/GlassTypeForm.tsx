@@ -1,18 +1,21 @@
 import * as Yup from 'yup';
+import { PulseLoader } from 'react-spinners';
+import type { AxiosError } from 'axios';
+import { ErrorMessage, Field, Form, Formik, useFormikContext } from 'formik';
+import toast from 'react-hot-toast';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { AddNewGlassTypeReq, GlassType } from '../../types/glassType';
-import css from './GlassTypeForm.module.css';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import type { GlassCategory } from '../../types/glassCategory';
+
+import { useAllGlassCategories } from '../../hooks/useAllGlassCategories';
+
 import {
   addNewGlassTypeApi,
   patchGlassTypeApi,
 } from '../../services/glassTypesApi';
-import toast from 'react-hot-toast';
-import { ErrorMessage, Field, Form, Formik, useFormikContext } from 'formik';
-import { PulseLoader } from 'react-spinners';
-import type { GlassCategory } from '../../types/glassCategory';
-import type { AxiosError } from 'axios';
-import { useAllGlassCategories } from '../../hooks/useAllGlassCategories';
+
+import css from './GlassTypeForm.module.css';
 
 const MONOLITHIC_THICKNESS = ['4', '5', '6', '8', '10'];
 const LAMINATED_THICKNESS = ['3+3', '4+4', '5+5', '6+6'];

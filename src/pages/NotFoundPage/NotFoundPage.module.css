@@ -1,0 +1,27 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: auto;
+}
+
+.title {
+  font-size: 72px;
+  margin-bottom: 48px;
+}
+
+.text {
+  font-size: 20px;
+  margin-bottom: 48px;
+}
+
+.link {
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+}
+
+.link:hover {
+  background-color: var(--color-accent-hover);
+}

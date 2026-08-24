@@ -3,11 +3,13 @@ import {
   ArrowDownWideNarrow,
   ArrowUpNarrowWide,
 } from 'lucide-react';
+
 import type { Order, OrdersSortField } from '../../types/order';
 
-import css from './ArchiveOrdersTable.module.css';
 import ArchiveOrderRow from '../ArchiveOrderRow/ArchiveOrderRow';
 import SkeletonArchiveOrders from '../SkeletonArchiveOrders/SkeletonArchiveOrders';
+
+import css from './ArchiveOrdersTable.module.css';
 
 interface OrdersTableProps {
   orders: Order[];

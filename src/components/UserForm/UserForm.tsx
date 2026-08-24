@@ -1,14 +1,16 @@
 import * as Yup from 'yup';
-import type { CreateUserReq, User } from '../../types/user';
-import css from './UserForm.module.css';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createUserApi, patchUserApi } from '../../services/usersApi';
-import toast from 'react-hot-toast';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { PulseLoader } from 'react-spinners';
-
 import { KeyRound, Phone, User as UserIcon } from 'lucide-react';
 import type { AxiosError } from 'axios';
+import { PulseLoader } from 'react-spinners';
+import toast from 'react-hot-toast';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import type { CreateUserReq, User } from '../../types/user';
+
+import { createUserApi, patchUserApi } from '../../services/usersApi';
+
+import css from './UserForm.module.css';
 
 interface UserFormProps {
   onClose: () => void;

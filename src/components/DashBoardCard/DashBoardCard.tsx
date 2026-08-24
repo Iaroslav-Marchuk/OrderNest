@@ -1,4 +1,5 @@
 import { type LucideIcon } from 'lucide-react';
+
 import css from './DashBoardCard.module.css';
 
 interface DashBoardCardProps {

@@ -3,12 +3,13 @@ import {
   ArrowDownWideNarrow,
   ArrowUpNarrowWide,
 } from 'lucide-react';
-import css from './OrdersTable.module.css';
 
 import type { Order, OrdersSortField } from '../../types/order';
 
 import OrderRow from '../OrderRow/OrderRow';
 import SkeletonOrders from '../SkeletonOrders/SkeletonOrders';
+
+import css from './OrdersTable.module.css';
 
 interface OrdersTableProps {
   orders: Order[];

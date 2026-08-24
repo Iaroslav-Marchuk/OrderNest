@@ -1,4 +1,5 @@
 import Container from '../Container/Container';
+
 import css from './Footer.module.css';
 
 function Footer() {

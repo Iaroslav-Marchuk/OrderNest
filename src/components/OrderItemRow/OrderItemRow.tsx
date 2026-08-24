@@ -1,23 +1,28 @@
 import { Check, Ellipsis, Pencil, Play, Trash2, X } from 'lucide-react';
-import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
-import EditOrderItemForm from '../EditOrderItemForm/EditOrderItemForm';
-import ModalOverlay from '../ModalOverlay/ModalOverlay';
-import toast from 'react-hot-toast';
 import type { AxiosError } from 'axios';
+import toast from 'react-hot-toast';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
+
+import type { Order, OrderItem } from '../../types/order';
+
+import { useCurrentUser } from '../../hooks/useCurrentUser';
+
 import {
   completeOrderItemApi,
   deleteOrderItemApi,
   rejectOrderItemApi,
   startOrderItemApi,
 } from '../../services/ordersApi';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
-import type { Order, OrderItem } from '../../types/order';
+
+import { formatGlassLabel, formatSize } from '../../utils/formatText';
+import { formatLocation } from '../../utils/formatLocationLabel';
+
+import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
+import EditOrderItemForm from '../EditOrderItemForm/EditOrderItemForm';
+import ModalOverlay from '../ModalOverlay/ModalOverlay';
 
 import css from './OrderItemRow.module.css';
-import { formatGlassLabel, formatSize } from '../../utils/formatText';
-import { useCurrentUser } from '../../hooks/useCurrentUser';
-import { formatLocation } from '../../utils/formatLocationLabel';
 
 interface OrderItemRowProps {
   item: OrderItem;
@@ -175,105 +180,6 @@ function OrderItemRow({
             '—'
           )}
         </td>
-
-        {/* {isCutter && (
-          <td className={css.td}>
-            {canStart && (
-              <button
-                className={css.btnStart}
-                onClick={() => startItem({ orderId, itemId: item._id })}
-                disabled={isStatusActionPending}
-                title="Start production"
-              >
-                <Play size={16} strokeWidth={1.5} />
-              </button>
-            )}
-          </td>
-        )} */}
-
-        {/* {canManageOrders && (
-          <td className={css.td}>
-            <div
-              className={css.actionsCell}
-              ref={dropdownRef}
-              onClick={e => e.stopPropagation()}
-            >
-              <button
-                className={css.menuBtn}
-                onClick={() => setIsDropdownOpen(prev => !prev)}
-              >
-                <Ellipsis size={16} />
-              </button>
-              {isDropdownOpen && (
-                <div className={css.menu}>
-                  {canStart && (
-                    <button
-                      className={css.btnStart}
-                      onClick={() => {
-                        startItem({ orderId, itemId: item._id });
-                        setIsDropdownOpen(false);
-                      }}
-                      disabled={isStatusActionPending}
-                      title="Start production"
-                    >
-                      <Play size={16} strokeWidth={1.5} />
-                    </button>
-                  )}
-
-                  {canCompleteOrReject && (
-                    <>
-                      <button
-                        className={css.btnComplete}
-                        onClick={() => {
-                          completeItem({ orderId, itemId: item._id });
-                          setIsDropdownOpen(false);
-                        }}
-                        disabled={isStatusActionPending}
-                        title="Mark as completed"
-                      >
-                        <Check size={16} strokeWidth={1.5} />
-                      </button>
-                      <button
-                        className={css.btnReject}
-                        onClick={() => {
-                          setIsRejectConfirmOpen(true);
-                          setIsDropdownOpen(false);
-                        }}
-                        disabled={isStatusActionPending}
-                        title="Reject — creates a rework item"
-                      >
-                        <X size={16} strokeWidth={1.5} />
-                      </button>
-                    </>
-                  )}
-
-                  <button
-                    className={css.btn}
-                    onClick={() => {
-                      setIsEditOpen(true);
-                      setIsDropdownOpen(false);
-                    }}
-                    disabled={isEditLocked}
-                    title={getEditLockReason() ?? 'Edit'}
-                  >
-                    <Pencil size={16} strokeWidth={1.5} />
-                  </button>
-                  <button
-                    className={css.btnDelete}
-                    onClick={() => {
-                      setIsConfirmOpen(true);
-                      setIsDropdownOpen(false);
-                    }}
-                    disabled={isEditLocked}
-                    title={getEditLockReason() ?? 'Delete'}
-                  >
-                    <Trash2 size={16} strokeWidth={1.5} />
-                  </button>
-                </div>
-              )}
-            </div>
-          </td>
-        )} */}
 
         {(isCutter || canManageOrders) && (
           <td className={css.td}>

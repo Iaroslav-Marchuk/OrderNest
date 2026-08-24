@@ -1,18 +1,22 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import Container from '../Container/Container';
-import css from './Header.module.css';
-
-import logo from '/logo.png';
-import Navigation from '../Navigation/Navigation';
+import type { AxiosError } from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, LogOut, UserRound } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import logo from '/logo.png';
+
+import { useCurrentUser } from '../../hooks/useCurrentUser';
+
 import { logoutApi } from '../../services/authApi';
+
+import Container from '../Container/Container';
+import Navigation from '../Navigation/Navigation';
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
-import { useCurrentUser } from '../../hooks/useCurrentUser';
-import type { AxiosError } from 'axios';
+
+import css from './Header.module.css';
 
 function Header() {
   const queryClient = useQueryClient();

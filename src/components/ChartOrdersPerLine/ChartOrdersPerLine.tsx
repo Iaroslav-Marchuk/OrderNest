@@ -8,8 +8,9 @@ import {
   YAxis,
 } from 'recharts';
 
-import css from './ChartOrdersPerLine.module.css';
 import { formatLocation } from '../../utils/formatLocationLabel';
+
+import css from './ChartOrdersPerLine.module.css';
 
 export interface OrdersPerLine {
   location: string;

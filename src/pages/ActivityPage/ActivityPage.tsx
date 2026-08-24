@@ -1,15 +1,16 @@
 import { useSearchParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
-import css from './ActivityPage.module.css';
 import type { SortOrder } from '../../types/common';
+import type { ActivityLogsSortField } from '../../types/activityLogs';
+
+import { useActivityLogs } from '../../hooks/useActivityLogs';
 
 import Pagination from '../../components/Pagination/Pagination';
-
-import type { ActivityLogsSortField } from '../../types/activityLogs';
-import { useActivityLogs } from '../../hooks/useActivityLogs';
 import ActivityLogsFilters from '../../components/ActivityLogsFilters/ActivityLogsFilters';
 import ActivityLogsTable from '../../components/ActivityLogsTable/ActivityLogsTable';
-import { useEffect } from 'react';
+
+import css from './ActivityPage.module.css';
 
 function ActivityPage() {
   const [searchParams, setSearchParams] = useSearchParams();

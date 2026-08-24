@@ -1,17 +1,19 @@
-import css from './ClientsPage.module.css';
-
 import { useState } from 'react';
+import { Plus } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+
+import type { SortOrder } from '../../types/common';
+import type { ClientsSortField } from '../../types/client';
+
+import { useClients } from '../../hooks/useClients';
+
 import ModalOverlay from '../../components/ModalOverlay/ModalOverlay';
 import ClientForm from '../../components/ClientForm/ClientForm';
 import Pagination from '../../components/Pagination/Pagination';
-import { Plus } from 'lucide-react';
-import ClientsTable, {
-  type ClientsSortField,
-} from '../../components/ClientsTable/ClientsTable';
+import ClientsTable from '../../components/ClientsTable/ClientsTable';
 import SearchBox from '../../components/SearchBox/SearchBox';
-import { useSearchParams } from 'react-router-dom';
-import type { SortOrder } from '../../types/common';
-import { useClients } from '../../hooks/useClients';
+
+import css from './ClientsPage.module.css';
 
 function ClientsPage() {
   const [searchParams, setSearchParams] = useSearchParams();

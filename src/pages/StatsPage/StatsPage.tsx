@@ -1,6 +1,4 @@
-import Container from '../../components/Container/Container';
-import Section from '../../components/Section/Section';
-import css from './StatsPage.module.css';
+import { useStats } from '../../hooks/useStats';
 import {
   ActivityIcon,
   Check,
@@ -9,14 +7,18 @@ import {
   History,
   ClockArrowUp,
 } from 'lucide-react';
+
+import Container from '../../components/Container/Container';
+import Section from '../../components/Section/Section';
 import KpiCard from '../../components/KpiCard/KpiCard';
 import ChartCard from '../../components/ChartCard/ChartCard';
 import OldestOrdersTable from '../../components/OldestOrdersTable/OldestOrdersTable';
 import ChartOrdersTrend from '../../components/ChartOrdersTrend/ChartOrdersTrend';
 import ChartOrdersPerLine from '../../components/ChartOrdersPerLine/ChartOrdersPerLine';
-
 import ChartAvgCompletionTimePerLine from '../../components/ChartAvgCompletionTimePerLine/ChartAvgCompletionTimePerLine';
-import { useStats } from '../../hooks/useStats';
+import GlobalLoader from '../../components/GlobalLoader/GlobalLoader';
+
+import css from './StatsPage.module.css';
 
 function StatsPage() {
   const { data, isStatsLoading: isLoading, isStatsError: isError } = useStats();
@@ -25,7 +27,7 @@ function StatsPage() {
     return (
       <Section>
         <Container>
-          <p className={css.state}>Loading stats...</p>
+          <GlobalLoader />
         </Container>
       </Section>
     );

@@ -1,12 +1,15 @@
 import * as Yup from 'yup';
-import css from './ChangePasswordForm.module.css';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { changePasswordApi } from '../../services/authApi';
 import toast from 'react-hot-toast';
 import { ErrorMessage, Field, Form, Formik, type FormikHelpers } from 'formik';
 import { PulseLoader } from 'react-spinners';
-import { setAccessToken } from '../../services/axiosInstance';
+
 import { useCurrentUser } from '../../hooks/useCurrentUser';
+
+import { changePasswordApi } from '../../services/authApi';
+import { setAccessToken } from '../../services/axiosInstance';
+
+import css from './ChangePasswordForm.module.css';
 
 interface ChangePasswordFormProps {
   onSuccess?: () => void;

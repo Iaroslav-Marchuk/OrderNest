@@ -1,17 +1,23 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
-import type { Order } from '../../types/order';
-import css from './OrderRow.module.css';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteOrderApi } from '../../services/ordersApi';
 import toast from 'react-hot-toast';
 import type { AxiosError } from 'axios';
 import { ChevronDown, Ellipsis, Pencil, Trash2 } from 'lucide-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import type { Order } from '../../types/order';
+
+import { useCurrentUser } from '../../hooks/useCurrentUser';
+
+import { formatLocation } from '../../utils/formatLocationLabel';
+
+import { deleteOrderApi } from '../../services/ordersApi';
+
 import OrderItemsTable from '../OrderItemsTable/OrderItemsTable';
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import EditOrderForm from '../EditOrderForm/EditOrderForm';
 import ConfirmContainer from '../ConfirmContainer/ConfirmContainer';
-import { useCurrentUser } from '../../hooks/useCurrentUser';
-import { formatLocation } from '../../utils/formatLocationLabel';
+
+import css from './OrderRow.module.css';
 
 interface OrderRowProps {
   order: Order;

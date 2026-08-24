@@ -1,9 +1,9 @@
 import type { Order, OrderItem } from '../../types/order';
 
-import css from './ArchiveOrderItemRow.module.css';
 import { formatGlassLabel, formatSize } from '../../utils/formatText';
-
 import { formatLocation } from '../../utils/formatLocationLabel';
+
+import css from './ArchiveOrderItemRow.module.css';
 
 interface ArchiveOrderItemRowProps {
   item: OrderItem;

@@ -1,13 +1,15 @@
 import * as Yup from 'yup';
-
-import type { Client, ClientFormValues } from '../../types/client';
-import css from './ClientForm.module.css';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addNewClientApi, patchClientApi } from '../../services/clientsApi';
+import type { AxiosError } from 'axios';
+import { PulseLoader } from 'react-spinners';
 import toast from 'react-hot-toast';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { PulseLoader } from 'react-spinners';
-import type { AxiosError } from 'axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import type { Client, ClientFormValues } from '../../types/client';
+
+import { addNewClientApi, patchClientApi } from '../../services/clientsApi';
+
+import css from './ClientForm.module.css';
 
 interface ClientFormProps {
   onClose: () => void;

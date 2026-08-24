@@ -1,4 +1,5 @@
 import type { GlassCategory } from '../../types/glassCategory';
+
 import css from './GlassCategoriesFilter.module.css';
 
 interface GlassCategoriesFilterProps {
