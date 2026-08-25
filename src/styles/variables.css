@@ -1,23 +1,23 @@
 :root {
   /* Backgrounds */
-  --color-bg-deep: #060d18; /* найтемніший фон, body */
-  --color-bg-base: #0a1628; /* основний фон сторінки */
-  --color-bg-surface: #0f1c2e; /* картки, панелі */
-  --color-bg-elevated: #162a47; /* дропдауни, модалки */
-  --color-bg-border: #1e3a5f; /* межі карток */
+  --color-bg-deep: #060d18;
+  --color-bg-base: #0a1628;
+  --color-bg-surface: #0f1c2e;
+  --color-bg-elevated: #162a47;
+  --color-bg-border: #1e3a5f;
 
   /* Accent — Blue */
-  --color-accent-deep: #0c3575; /* глибокий акцент, тіні */
-  --color-accent-medium: #1558c0; /* вторинні кнопки */
-  --color-accent: #2d7ef7; /* основний акцент — кнопки, CTA */
-  --color-accent-hover: #4fa3ff; /* hover, посилання */
-  --color-accent-pale: #90c8ff; /* підказки, disabled */
+  --color-accent-deep: #0c3575;
+  --color-accent-medium: #1558c0;
+  --color-accent: #2d7ef7;
+  --color-accent-hover: #4fa3ff;
+  --color-accent-pale: #90c8ff;
 
   /* Text */
-  --color-text-primary: #e4eefa; /* основний текст */
-  --color-text-secondary: #8aaccc; /* другорядний текст */
-  --color-text-muted: #5d7fa5; /* підказки, плейсхолдери */
-  --color-text-link: #4fa3ff; /* посилання */
+  --color-text-primary: #e4eefa;
+  --color-text-secondary: #8aaccc;
+  --color-text-muted: #5d7fa5;
+  --color-text-link: #4fa3ff;
 
   /* Semantic */
   --color-success: #4cca88;

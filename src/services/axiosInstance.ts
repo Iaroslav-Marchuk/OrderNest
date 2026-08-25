@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { refreshSession } from './refreshManager';
 
-const BASE_URL = 'http://localhost:3000';
-// const BASE_URL = 'https://minifigs-b.onrender.com';
+// const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://ordernest-b.onrender.com';
 
 type Listener = () => void;
 const listeners = new Set<Listener>();
